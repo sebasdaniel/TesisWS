@@ -64,25 +64,18 @@ public class SIMOP {
             @WebParam(name = "latitud") String latitud, @WebParam(name = "longitud") String longitud,
             @WebParam(name = "nota") String nota) {
         
-//        String sessionId, sessionRoll;
-//        PacientePK sessionPaciente;
-        
         Paciente usuarioPaciente = null;
         
         loggin:{
             for(Usuario user : ejbUsuario.findAll()){
 
                 if(user.getCorreo().equals(correo) && user.getContraseña().equals(clave)){
-    //                sessionId = String.valueOf(user.getId());
-    //                sessionRoll = user.getRoll();
+                    
                     List<Paciente> pac = user.getPacienteList();
 
                     for(Paciente p : pac){
 
                         if(p.getUsuarioID().getCorreo().equals(correo) && p.getUsuarioID().getContraseña().equals(clave)){
-    //                        sessionId = p.getUsuarioID().getId().toString();
-    //                        sessionRoll = p.getUsuarioID().getRoll();
-    //                        sessionPaciente = p.getPacientePK();
                             usuarioPaciente = p;
                             break loggin;
                         }
@@ -108,8 +101,6 @@ public class SIMOP {
         }
         
         Chequeo chequeo = new Chequeo();
-        
-//        Paciente paciente = ejbPaciente.findAll().get(0);
         
         Tip tip = null;
         
@@ -139,8 +130,6 @@ public class SIMOP {
                 sistolica = Integer.parseInt(valor.substring(0, index));
                 diastolica = Integer.parseInt(valor.substring(index+1, valor.length()));
 
-                //System.out.println("sistolica: " + sistolica + "\ndiastolica: " + diastolica);
-
                 String tip1 = null, tip2 = null;
                 int id1 = 0, id2 = 0;
 
@@ -154,19 +143,16 @@ public class SIMOP {
                         if(temTip.getDescripcion().equals("sistolica") && sistolica >= min && sistolica <= max){
                             tip1 = temTip.getEstado();
                             id1 = temTip.getIdtip();
-                            //System.out.println("encontrado1: " + tip1 + "\n" + id1);
                         } else {
                             if(temTip.getDescripcion().equals("diastolica") && diastolica >= min && diastolica <= max){
                                 tip2 = temTip.getEstado();
                                 id2 = temTip.getIdtip();
-                                //System.out.println("encontrado2: " + tip2 + "\n" + id2);
                             }
                         }
                         
                     }
                     
                     if(tip1 != null && tip2 != null){
-                        //System.out.println("encontrado los dos:\n-" + tip1 + "\n-" + tip2);
                         break;
                     }
                 }
@@ -208,7 +194,7 @@ public class SIMOP {
         chequeo.setHora(dHora);
         chequeo.setLatitud(latitud);
         chequeo.setLongitud(longitud);
-        chequeo.setPaciente(usuarioPaciente); //cambiar
+        chequeo.setPaciente(usuarioPaciente);
         chequeo.setTipIdtip(tip != null ? tip : ejbTip.find(21));
         chequeo.setTipochequeo(tipo);
         chequeo.setUnidades(unidades);
@@ -235,7 +221,7 @@ public class SIMOP {
      */
     
     @WebMethod(operationName = "obtenerEstadisticas")
-    public RegistroEstadistico[] obtenerEstadisticas(@WebParam(name = "correo") String correo,
+    public String obtenerEstadisticas(@WebParam(name = "correo") String correo,
             @WebParam(name = "clave") String clave, @WebParam(name = "fechaInicio") String fechaInicio,
             @WebParam(name = "fechaFin") String fechaFin, @WebParam(name = "tipoChequeo") String tipoChequeo,
             @WebParam(name = "modo") int modo, @WebParam(name = "numeroId") String numeroId,
@@ -246,10 +232,11 @@ public class SIMOP {
         // 1 -> el medico o consultorio revisa las estadisticas de un paciente
         // 2 -> se puede revisar las estadisticas de todos los usuarios
         
-        List<RegistroEstadistico> estadisticas = new ArrayList<>();
+        //List<RegistroEstadistico> estadisticas = new ArrayList<>();
+        String salida = "";
         
         SimpleDateFormat formato1, formato2;
-                
+        
         formato1 = new SimpleDateFormat("yyyy-MM-dd");
         formato2 = new SimpleDateFormat("HH:mm:ss");
         
@@ -277,30 +264,46 @@ public class SIMOP {
                     }
                 }
 
-                System.out.println("verifica para retornar null o no");
+                //System.out.println("verifica para retornar null o no");
                 if (usuarioPaciente == null) {
                     return null;
                 }
                 
-                System.out.println("paso retorno null");
+                //System.out.println("paso retorno null");
                 List<Chequeo> cList = ejbChequeo.findAll();
                 
-                for (Chequeo temCheq : cList) {
+                for (Chequeo temp : cList) {
 
-                    if (temCheq.getTipochequeo().equals(tipoChequeo) && temCheq.getPaciente().getPacientePK() == usuarioPaciente.getPacientePK()) {
+                    if (temp.getTipochequeo().equals(tipoChequeo) && temp.getPaciente().getPacientePK() == usuarioPaciente.getPacientePK()) {
 
-                        System.out.println("encontro!!");
+                        //System.out.println("encontro!!");
                         //falta comparar hora
-                        RegistroEstadistico re = new RegistroEstadistico();
-
-                        re.setValor(temCheq.getValor());
-                        re.setUnidades(temCheq.getUnidades());
-                        re.setFecha(formato1.format(temCheq.getFecha()));
-                        re.setHora(formato2.format(temCheq.getHora()));
-                        re.setDescripcion(temCheq.getDescripcion());
-                        estadisticas.add(re);
+//                        RegistroEstadistico re = new RegistroEstadistico();
+//
+//                        re.setValor(temp.getValor());
+//                        re.setUnidades(temp.getUnidades());
+//                        re.setFecha(formato1.format(temp.getFecha()));
+//                        re.setHora(formato2.format(temp.getHora()));
+//                        re.setDescripcion(temp.getDescripcion());
+//                        estadisticas.add(re);
+                        
+                        salida += temp.getValor() + ";" + temp.getUnidades() + ";" + formato1.format(temp.getFecha())
+                                + ";" + formato2.format(temp.getHora()) + ";" + temp.getDescripcion() + "\n";
                     }
                 }
+                
+//                salida = new String[estadisticas.size()][5];
+//                
+//                for(int i=0; i<salida.length; i++){
+//                    
+//                    RegistroEstadistico temp = estadisticas.get(i);
+//                    
+//                    salida[i][0] = temp.getValor();
+//                    salida[i][1] = temp.getUnidades();
+//                    salida[i][2] = temp.getFecha();
+//                    salida[i][3] = temp.getHora();
+//                    salida[i][4] = temp.getDescripcion();
+//                }
                 
                 break;
             case 1:
@@ -311,7 +314,7 @@ public class SIMOP {
                 break;
         }
         
-        return estadisticas.toArray(new RegistroEstadistico[estadisticas.size()]);
+        return salida;
     }
 
     /**
