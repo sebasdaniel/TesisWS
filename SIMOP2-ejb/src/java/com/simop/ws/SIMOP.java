@@ -17,6 +17,8 @@ import com.simop.bean.PacienteFacadeLocal;
 import com.simop.bean.TipFacadeLocal;
 import com.simop.bean.UsuarioFacadeLocal;
 import com.simop.jpa.Antecedente;
+import com.simop.jpa.Consultorio;
+import com.simop.jpa.PacientePK;
 import com.simop.jpa.Usuario;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -230,9 +232,8 @@ public class SIMOP {
         // modo:
         // 0 -> el paciente revisa sus propias estadisticas
         // 1 -> el medico o consultorio revisa las estadisticas de un paciente
-        // 2 -> se puede revisar las estadisticas de todos los usuarios
+        // 2 -> se puede revisar las estadisticas de todos los pacientes
         
-        //List<RegistroEstadistico> estadisticas = new ArrayList<>();
         String salida = "";
         
         SimpleDateFormat formato1, formato2;
@@ -240,15 +241,29 @@ public class SIMOP {
         formato1 = new SimpleDateFormat("yyyy-MM-dd");
         formato2 = new SimpleDateFormat("HH:mm:ss");
         
+        Date fInicio;
+        Date fFin;
+
+        try {
+            fInicio = formato1.parse(fechaInicio);
+            fFin = formato1.parse(fechaFin);
+        } catch (ParseException ex) {
+            System.err.println("error al convertir fecha");
+            Logger.getLogger(SIMOP.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+        
         switch(modo){
+            
             case 0:
+                
                 Paciente usuarioPaciente = null;
 
                 loggin:
                 {
                     for (Usuario user : ejbUsuario.findAll()) {
 
-                        if (user.getCorreo().equals(correo) && user.getContraseña().equals(clave)) {
+                        if (user.getCorreo().equals(correo) && user.getContraseña().equals(clave) && user.getRoll().equals("paciente")) {
                             
                             List<Paciente> pac = user.getPacienteList();
 
@@ -274,42 +289,126 @@ public class SIMOP {
                 
                 for (Chequeo temp : cList) {
 
-                    if (temp.getTipochequeo().equals(tipoChequeo) && temp.getPaciente().getPacientePK() == usuarioPaciente.getPacientePK()) {
-
-                        //System.out.println("encontro!!");
-                        //falta comparar hora
-//                        RegistroEstadistico re = new RegistroEstadistico();
-//
-//                        re.setValor(temp.getValor());
-//                        re.setUnidades(temp.getUnidades());
-//                        re.setFecha(formato1.format(temp.getFecha()));
-//                        re.setHora(formato2.format(temp.getHora()));
-//                        re.setDescripcion(temp.getDescripcion());
-//                        estadisticas.add(re);
+                    if (temp.getTipochequeo().equals(tipoChequeo) && fInicio.before(temp.getFecha()) && fFin.after(temp.getFecha())
+                            && temp.getPaciente().getPacientePK() == usuarioPaciente.getPacientePK()) {
                         
                         salida += temp.getValor() + ";" + temp.getUnidades() + ";" + formato1.format(temp.getFecha())
                                 + ";" + formato2.format(temp.getHora()) + ";" + temp.getDescripcion() + "\n";
                     }
                 }
                 
-//                salida = new String[estadisticas.size()][5];
-//                
-//                for(int i=0; i<salida.length; i++){
-//                    
-//                    RegistroEstadistico temp = estadisticas.get(i);
-//                    
-//                    salida[i][0] = temp.getValor();
-//                    salida[i][1] = temp.getUnidades();
-//                    salida[i][2] = temp.getFecha();
-//                    salida[i][3] = temp.getHora();
-//                    salida[i][4] = temp.getDescripcion();
-//                }
+                break;
+                
+            case 1:
+                
+                Medico usuarioMedico = null;
+                Consultorio usuarioConsultorio = null;
+
+                loggin:
+                {
+                    for (Usuario user : ejbUsuario.findAll()) {
+
+                        if (user.getCorreo().equals(correo) && user.getContraseña().equals(clave)
+                                && (user.getRoll().equals("medico") || user.getRoll().equals("consultorio"))) {
+                            
+                            if(user.getRoll().equals("medico")){
+                                
+                                List<Medico> med = user.getMedicoList();
+
+                                for (Medico m : med) {
+
+                                    if (m.getUsuarioID().getCorreo().equals(correo) && m.getUsuarioID().getContraseña().equals(clave)) {
+
+                                        usuarioMedico = m;
+                                        break loggin;
+                                    }
+                                }
+                            } else if(user.getRoll().equals("consultorio")){
+                                
+                                List<Consultorio> con = user.getConsultorioList();
+
+                                for (Consultorio c : con) {
+
+                                    if (c.getUsuarioID().getCorreo().equals(correo) && c.getUsuarioID().getContraseña().equals(clave)) {
+
+                                        usuarioConsultorio = c;
+                                        break loggin;
+                                    }
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+                
+                if(usuarioMedico == null && usuarioConsultorio == null){
+                    //System.out.println("usuario nulo");
+                    return null;
+                }
+                
+                //Paciente usuarioPaciente2 = new Paciente(Integer.parseInt(numeroId), tipoId);
+                Paciente usuarioPaciente2 = ejbPaciente.find(new PacientePK(Integer.parseInt(numeroId), tipoId));
+                
+                if(usuarioPaciente2 == null){
+                    //System.out.println("el paciente existe: " + usuarioPaciente2.getApellidos());
+                    return null;
+                }
+                
+                List<Chequeo> cList2 = ejbChequeo.findAll();
+                
+                for (Chequeo temp : cList2) {
+
+                    if (temp.getTipochequeo().equals(tipoChequeo) && fInicio.before(temp.getFecha()) && fFin.after(temp.getFecha())
+                            && temp.getPaciente().getPacientePK() == usuarioPaciente2.getPacientePK()) {
+                        
+                        salida += temp.getValor() + ";" + temp.getUnidades() + ";" + formato1.format(temp.getFecha())
+                                + ";" + formato2.format(temp.getHora()) + ";" + temp.getDescripcion() + ";" + temp.getNota()
+                                + "\n";
+                    }
+                }
                 
                 break;
-            case 1:
-                break;
+                
             case 2:
+                
+                boolean usuario = false;
+
+                loggin:
+                {
+                    for (Usuario user : ejbUsuario.findAll()) {
+
+                        if (user.getCorreo().equals(correo) && user.getContraseña().equals(clave)) {
+                            usuario = true;
+                        }
+                    }
+                }
+                
+                if(!usuario){
+                    return null;
+                }
+                
+//                Paciente usuarioPaciente3 = ejbPaciente.find(new PacientePK(Integer.parseInt(numeroId), tipoId));
+//                
+//                if(usuarioPaciente3 == null){
+//                    //System.out.println("el paciente existe: " + usuarioPaciente2.getApellidos());
+//                    return null;
+//                }
+                
+                List<Chequeo> cList3 = ejbChequeo.findAll();
+                
+                for (Chequeo temp : cList3) {
+
+                    if (temp.getTipochequeo().equals(tipoChequeo) && fInicio.before(temp.getFecha()) 
+                            && fFin.after(temp.getFecha())) {
+                        
+                        salida += temp.getValor() + ";" + temp.getUnidades() + ";" + formato1.format(temp.getFecha())
+                                + ";" + formato2.format(temp.getHora()) + ";" + temp.getDescripcion() + ";" 
+                                + temp.getLatitud() + ";" + temp.getLongitud() + "\n";
+                    }
+                }
+                
                 break;
+                
             default:
                 break;
         }
