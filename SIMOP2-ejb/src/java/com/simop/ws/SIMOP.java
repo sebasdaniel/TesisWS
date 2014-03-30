@@ -13,12 +13,16 @@ import com.simop.jpa.Paciente;
 import com.simop.jpa.Tip;
 import com.simop.bean.ChequeoFacadeLocal;
 import com.simop.bean.MedicoFacadeLocal;
+import com.simop.bean.MedicoPacienteFacadeLocal;
 import com.simop.bean.PacienteFacadeLocal;
+import com.simop.bean.SolicitudConsultorioFacadeLocal;
 import com.simop.bean.TipFacadeLocal;
 import com.simop.bean.UsuarioFacadeLocal;
 import com.simop.jpa.Antecedente;
 import com.simop.jpa.Consultorio;
+import com.simop.jpa.MedicoPaciente;
 import com.simop.jpa.PacientePK;
+import com.simop.jpa.SolicitudConsultorio;
 import com.simop.jpa.Usuario;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,7 +56,11 @@ public class SIMOP {
     @EJB
     private MedicoFacadeLocal ejbMedico;
     @EJB
+    private MedicoPacienteFacadeLocal ejbMedicoPaciente;
+    @EJB
     private AntecedenteFacadeLocal ejbAntecedente;
+    @EJB
+    private SolicitudConsultorioFacadeLocal ejbSolicitudConsultorio;
 
     /**
      * Operacion para guardar cualquier tipo de monitoreo que se haga un paciente previamente registrado
@@ -421,32 +429,128 @@ public class SIMOP {
      */
     
     @WebMethod(operationName = "listaPacientes")
-    public ArrayList<RegistroPaciente> listaPacientes() {
+    public String listaPacientes(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
+            @WebParam(name = "soloConsultorio") boolean soloConsultorio, @WebParam(name = "cedulaMedico") int cedulaMedico) {
         
-        List<Paciente> pList = ejbPaciente.findAll();
-        
-        ArrayList<RegistroPaciente> pacientes = new ArrayList<>();
-        
-        for(Paciente p : pList){
-            
-            RegistroPaciente rp = new RegistroPaciente();
-            
-            rp.setNombres(p.getUsuarioID().getNombres());
-            rp.setApellidos(p.getApellidos());
-            rp.setDireccion(p.getUsuarioID().getDireccion());
-            rp.setTelefono(String.valueOf(p.getUsuarioID().getTelefono()));
-            rp.setCorreo(p.getUsuarioID().getCorreo());
-            rp.setSexo(p.getSexo());
-            rp.setEstatura(p.getEstatura());
-            rp.setImc(p.getImc());
-            rp.setGrupoSanguineo(p.getGruposan());
-            rp.setRh(p.getRh() ? "+" : "-");
-            rp.setEdad(p.getEdad());
-            
-            pacientes.add(rp);
+        for (Usuario user : ejbUsuario.findAll()) {
+
+            if (user.getCorreo().equals(correo) && user.getContraseña().equals(clave)
+                    && (user.getRoll().equals("medico") || user.getRoll().equals("consultorio"))) {
+
+                if(user.getRoll().equals("medico")){
+
+                    List<Medico> med = user.getMedicoList();
+
+                    for (Medico m : med) {
+
+                        if (m.getUsuarioID().getCorreo().equals(correo) && m.getUsuarioID().getContraseña().equals(clave)) {
+                            
+                            List<MedicoPaciente> relacion = ejbMedicoPaciente.findAll();
+                            
+                            String salida = "";
+                            
+                            for(MedicoPaciente temp : relacion){
+                                
+                                if(temp.getMedico().getCedulaMedico() == m.getCedulaMedico()){
+                                    
+                                    Paciente p = temp.getPaciente();
+                                    
+                                    salida += p.getUsuarioID().getNombres() + ";"
+                                            + p.getApellidos() + ";"
+                                            + p.getUsuarioID().getDireccion() + ";"
+                                            + p.getUsuarioID().getTelefono() + ";"
+                                            + p.getUsuarioID().getCorreo() + ";"
+                                            + p.getSexo() + ";"
+                                            + p.getEstatura() + ";"
+                                            + p.getImc() + ";"
+                                            + p.getGruposan() + ";"
+                                            + (p.getRh() ? "+" : "-") + ";"
+                                            + p.getEdad() + "\n";
+                                }
+                            }
+                            
+                            return salida;
+                        }
+                    }
+                } else if(user.getRoll().equals("consultorio")){
+
+                    List<Consultorio> con = user.getConsultorioList();
+
+                    for (Consultorio c : con) {
+
+                        if (c.getUsuarioID().getCorreo().equals(correo) && c.getUsuarioID().getContraseña().equals(clave)) {
+                            
+                            if(soloConsultorio){
+                                
+                                List<SolicitudConsultorio> solicitud = ejbSolicitudConsultorio.findAll();
+
+                                String salida = "";
+
+                                for(SolicitudConsultorio temp : solicitud){
+
+                                    if(temp.getConsultorio().getIdconsultorio() == c.getIdconsultorio()){
+
+                                        Paciente p = temp.getPaciente();
+
+                                        salida += p.getUsuarioID().getNombres() + ";"
+                                                + p.getApellidos() + ";"
+                                                + p.getUsuarioID().getDireccion() + ";"
+                                                + p.getUsuarioID().getTelefono() + ";"
+                                                + p.getUsuarioID().getCorreo() + ";"
+                                                + p.getSexo() + ";"
+                                                + p.getEstatura() + ";"
+                                                + p.getImc() + ";"
+                                                + p.getGruposan() + ";"
+                                                + (p.getRh() ? "+" : "-") + ";"
+                                                + p.getEdad() + "\n";
+                                    }
+                                }
+
+                                return salida;
+                                
+                            } else {
+                                
+                                Medico medico = ejbMedico.find(cedulaMedico);
+                                
+                                if(medico == null){
+                                    return null;
+                                }
+                                
+                                List<MedicoPaciente> relacion = ejbMedicoPaciente.findAll();
+
+                                String salida = "";
+
+                                for(MedicoPaciente temp : relacion){
+
+                                    if(temp.getMedico().getCedulaMedico() == medico.getCedulaMedico()){
+
+                                        Paciente p = temp.getPaciente();
+
+                                        salida += p.getUsuarioID().getNombres() + ";"
+                                                + p.getApellidos() + ";"
+                                                + p.getUsuarioID().getDireccion() + ";"
+                                                + p.getUsuarioID().getTelefono() + ";"
+                                                + p.getUsuarioID().getCorreo() + ";"
+                                                + p.getSexo() + ";"
+                                                + p.getEstatura() + ";"
+                                                + p.getImc() + ";"
+                                                + p.getGruposan() + ";"
+                                                + (p.getRh() ? "+" : "-") + ";"
+                                                + p.getEdad() + "\n";
+                                    }
+                                }
+
+                                return salida;
+                                
+                            }
+                        }
+                    }
+                }
+
+            }
         }
         
-        return pacientes;
+        return null;
     }
 
     /**
