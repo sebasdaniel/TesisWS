@@ -16,6 +16,7 @@ import com.simop.bean.MedicoFacadeLocal;
 import com.simop.bean.MedicoPacienteFacadeLocal;
 import com.simop.bean.PacienteFacadeLocal;
 import com.simop.bean.SolicitudConsultorioFacadeLocal;
+import com.simop.bean.SolicitudMedicoFacadeLocal;
 import com.simop.bean.TipFacadeLocal;
 import com.simop.bean.UsuarioFacadeLocal;
 import com.simop.jpa.Antecedente;
@@ -23,6 +24,7 @@ import com.simop.jpa.Consultorio;
 import com.simop.jpa.MedicoPaciente;
 import com.simop.jpa.PacientePK;
 import com.simop.jpa.SolicitudConsultorio;
+import com.simop.jpa.SolicitudMedico;
 import com.simop.jpa.Usuario;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -61,6 +63,8 @@ public class SIMOP {
     private AntecedenteFacadeLocal ejbAntecedente;
     @EJB
     private SolicitudConsultorioFacadeLocal ejbSolicitudConsultorio;
+    @EJB
+    private SolicitudMedicoFacadeLocal ejbSolicitudMedico;
 
     /**
      * Operacion para guardar cualquier tipo de monitoreo que se haga un paciente previamente registrado
@@ -432,19 +436,23 @@ public class SIMOP {
     public String listaPacientes(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
             @WebParam(name = "soloConsultorio") boolean soloConsultorio, @WebParam(name = "cedulaMedico") int cedulaMedico) {
         
+        //System.out.println("entro al metodo");
         for (Usuario user : ejbUsuario.findAll()) {
+            //System.out.println("recorriendo usuarios");
 
             if (user.getCorreo().equals(correo) && user.getContraseña().equals(clave)
                     && (user.getRoll().equals("medico") || user.getRoll().equals("consultorio"))) {
 
+                //System.out.println("encontro usuario");
                 if(user.getRoll().equals("medico")){
 
+                    //System.out.println("encontro que es medico");
                     List<Medico> med = user.getMedicoList();
 
                     for (Medico m : med) {
 
                         if (m.getUsuarioID().getCorreo().equals(correo) && m.getUsuarioID().getContraseña().equals(clave)) {
-                            
+                            //System.out.println("encontro al medico");
                             List<MedicoPaciente> relacion = ejbMedicoPaciente.findAll();
                             
                             String salida = "";
@@ -474,12 +482,13 @@ public class SIMOP {
                     }
                 } else if(user.getRoll().equals("consultorio")){
 
+                    //System.out.println("encontro que es consultorio");
                     List<Consultorio> con = user.getConsultorioList();
 
                     for (Consultorio c : con) {
 
                         if (c.getUsuarioID().getCorreo().equals(correo) && c.getUsuarioID().getContraseña().equals(clave)) {
-                            
+                            //System.out.println("encontro consultorio");
                             if(soloConsultorio){
                                 
                                 List<SolicitudConsultorio> solicitud = ejbSolicitudConsultorio.findAll();
@@ -487,12 +496,23 @@ public class SIMOP {
                                 String salida = "";
 
                                 for(SolicitudConsultorio temp : solicitud){
-
-                                    if(temp.getConsultorio().getIdconsultorio() == c.getIdconsultorio()){
+                                    // NOTA: falta validar que no tengan medico asignado
+                                    if(temp.getConsultorio().getIdconsultorio() == c.getIdconsultorio()
+                                            && temp.getEstado().equals("aprobado")){
 
                                         Paciente p = temp.getPaciente();
-
-                                        salida += p.getUsuarioID().getNombres() + ";"
+                                        
+                                        boolean tieneMedico = false;
+                                        
+                                        for(MedicoPaciente mp : p.getMedicoPacienteList()){
+                                            
+                                            if(mp.getMedico() != null){
+                                                tieneMedico = true;
+                                            }
+                                        }
+                                        
+                                        if(!tieneMedico){
+                                            salida += p.getUsuarioID().getNombres() + ";"
                                                 + p.getApellidos() + ";"
                                                 + p.getUsuarioID().getDireccion() + ";"
                                                 + p.getUsuarioID().getTelefono() + ";"
@@ -503,6 +523,8 @@ public class SIMOP {
                                                 + p.getGruposan() + ";"
                                                 + (p.getRh() ? "+" : "-") + ";"
                                                 + p.getEdad() + "\n";
+                                        }
+                                        
                                     }
                                 }
 
@@ -577,5 +599,87 @@ public class SIMOP {
         }
         
         return medicos;
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "listarSolicitudes")
+    public String listarSolicitudes(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave) {
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(clave)
+                    && (usuario.getRoll().equals("medico") || usuario.getRoll().equals("consultorio"))){
+                
+                switch (usuario.getRoll()) {
+                    
+                    case "medico":
+                        List<Medico> medicos = usuario.getMedicoList();
+                        for(Medico medico : medicos){
+                            if(medico.getUsuarioID().getId() == usuario.getId()){
+                                
+                                List<SolicitudMedico> solicitudes = ejbSolicitudMedico.findAll();
+                                String salida = "";
+                                for(SolicitudMedico solicitud : solicitudes){
+                                    if(solicitud.getEstado().equals("pendiente")){
+                                        
+                                        Paciente p = solicitud.getPaciente();
+
+                                        salida += p.getUsuarioID().getNombres() + ";"
+                                                + p.getApellidos() + ";"
+                                                + p.getUsuarioID().getDireccion() + ";"
+                                                + p.getUsuarioID().getTelefono() + ";"
+                                                + p.getUsuarioID().getCorreo() + ";"
+                                                + p.getSexo() + ";"
+                                                + p.getEstatura() + ";"
+                                                + p.getImc() + ";"
+                                                + p.getGruposan() + ";"
+                                                + (p.getRh() ? "+" : "-") + ";"
+                                                + p.getEdad() + "\n";
+                                    }
+                                }
+                                
+                                return salida;
+                            }
+                        }
+                        break;
+                        
+                    case "consultorio":
+                        List<Consultorio> consultorios = usuario.getConsultorioList();
+                        for(Consultorio consultorio : consultorios){
+                            if(consultorio.getUsuarioID().getId() == usuario.getId()){
+                                
+                                List<SolicitudConsultorio> solicitudes = ejbSolicitudConsultorio.findAll();
+                                String salida = "";
+                                
+                                for(SolicitudConsultorio solicitud : solicitudes){
+                                    if(solicitud.getEstado().equals("pendiente")){
+                                        
+                                        Paciente p = solicitud.getPaciente();
+
+                                        salida += p.getUsuarioID().getNombres() + ";"
+                                                + p.getApellidos() + ";"
+                                                + p.getUsuarioID().getDireccion() + ";"
+                                                + p.getUsuarioID().getTelefono() + ";"
+                                                + p.getUsuarioID().getCorreo() + ";"
+                                                + p.getSexo() + ";"
+                                                + p.getEstatura() + ";"
+                                                + p.getImc() + ";"
+                                                + p.getGruposan() + ";"
+                                                + (p.getRh() ? "+" : "-") + ";"
+                                                + p.getEdad() + "\n";
+                                    }
+                                }
+                                
+                                return salida;
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+        
+        return null;
     }
 }
