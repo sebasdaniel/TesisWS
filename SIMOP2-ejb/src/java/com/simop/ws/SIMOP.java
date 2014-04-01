@@ -12,6 +12,7 @@ import com.simop.jpa.Medico;
 import com.simop.jpa.Paciente;
 import com.simop.jpa.Tip;
 import com.simop.bean.ChequeoFacadeLocal;
+import com.simop.bean.ConsultorioFacadeLocal;
 import com.simop.bean.MedicoFacadeLocal;
 import com.simop.bean.MedicoPacienteFacadeLocal;
 import com.simop.bean.PacienteFacadeLocal;
@@ -65,6 +66,8 @@ public class SIMOP {
     private SolicitudConsultorioFacadeLocal ejbSolicitudConsultorio;
     @EJB
     private SolicitudMedicoFacadeLocal ejbSolicitudMedico;
+    @EJB
+    private ConsultorioFacadeLocal ejbConsultorio;
 
     /**
      * Operacion para guardar cualquier tipo de monitoreo que se haga un paciente previamente registrado
@@ -580,29 +583,33 @@ public class SIMOP {
      */
     
     @WebMethod(operationName = "listaMedicos")
-    public ArrayList<RegistroMedico> listaMedicos() {
+    public String listaMedicos(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave) {
         
-        List<Medico> mlist = ejbMedico.findAll();
+        for (Usuario user : ejbUsuario.findAll()) {
+
+            if (user.getCorreo().equals(correo) && user.getContraseña().equals(clave)) {
+                
+                List<Medico> mlist = ejbMedico.findAll();
         
-        ArrayList<RegistroMedico> medicos = new ArrayList<>();
-        
-        for(Medico m : mlist){
-            
-            RegistroMedico rm = new RegistroMedico();
-            
-            rm.setNombres(m.getUsuarioID().getNombres());
-            rm.setApellidos(m.getApellidos());
-            rm.setSexo(m.getSexo());
-            rm.setNacionalidad(m.getNacionalidad());
-            
-            medicos.add(rm);
+                String salida = "";
+
+                for(Medico m : mlist){
+
+                    salida += m.getUsuarioID().getNombres() + ";"
+                            + m.getApellidos() + ";"
+                            + m.getSexo() + ";"
+                            + m.getNacionalidad() + "\n";
+                }
+
+                return salida;
+            }
         }
         
-        return medicos;
+        return null;
     }
 
     /**
-     * Web service operation
+     * Metodo para obtener las solicitudes pendientes hechas a un medico o consultorio
      */
     @WebMethod(operationName = "listarSolicitudes")
     public String listarSolicitudes(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave) {
@@ -619,7 +626,7 @@ public class SIMOP {
                         for(Medico medico : medicos){
                             if(medico.getUsuarioID().getId() == usuario.getId()){
                                 
-                                List<SolicitudMedico> solicitudes = ejbSolicitudMedico.findAll();
+                                List<SolicitudMedico> solicitudes = medico.getSolicitudMedicoList();//ejbSolicitudMedico.findAll();
                                 String salida = "";
                                 for(SolicitudMedico solicitud : solicitudes){
                                     if(solicitud.getEstado().equals("pendiente")){
@@ -681,5 +688,87 @@ public class SIMOP {
         }
         
         return null;
+    }
+
+    /**
+     * Operacion Web Service para buscar medicos por nombres y/o apellidos
+     */
+    @WebMethod(operationName = "buscarMedico")
+    public String buscarMedico(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
+            @WebParam(name = "nombre") String nombre) {
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(clave)){
+                
+                List<Medico> medicos = ejbMedico.findAll();
+                
+                String salida = "";
+                
+                for(Medico medico : medicos){
+                    
+                    // Usar expresiones regulares para mejorar la busqueda
+                    if(medico.getUsuarioID().getNombres().contains(nombre) || medico.getApellidos().contains(nombre)){
+                        
+                        salida += medico.getUsuarioID().getNombres() + ";"
+                            + medico.getApellidos() + ";"
+                            + medico.getSexo() + ";"
+                            + medico.getNacionalidad() + "\n";
+                    }
+                }
+                
+                return salida;
+            }
+        }
+        
+        return null;
+    }
+
+    /**
+     * Operacion para buscar consultorios por nombre
+     */
+    @WebMethod(operationName = "buscarConsultorio")
+    public String buscarConsultorio(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave, @WebParam(name = "nombre") String nombre) {
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(clave)){
+                
+                List<Consultorio> consultorios = ejbConsultorio.findAll();
+                
+                String salida = "";
+                
+                for(Consultorio consultorio : consultorios){
+                    
+                    // Usar expresiones regulares para mejorar la busqueda
+                    if(consultorio.getUsuarioID().getNombres().contains(nombre)){
+                        
+                        salida += consultorio.getUsuarioID().getNombres() + ";"
+                            + consultorio.getUsuarioID().getDireccion() + ";"
+                            + consultorio.getUsuarioID().getTelefono() + "\n";
+                    }
+                }
+                
+                return salida;
+            }
+        }
+        
+        return null;
+    }
+
+    /**
+     * Metodo para validar si un usuario existe o no
+     */
+    @WebMethod(operationName = "validarUsuario")
+    public String validarUsuario(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave) {
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(clave)){
+                return "ok";
+            }
+        }
+        
+        return "none";
     }
 }
