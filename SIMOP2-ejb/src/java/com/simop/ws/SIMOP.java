@@ -13,6 +13,7 @@ import com.simop.jpa.Paciente;
 import com.simop.jpa.Tip;
 import com.simop.bean.ChequeoFacadeLocal;
 import com.simop.bean.ConsultorioFacadeLocal;
+import com.simop.bean.DiagnosticoFacadeLocal;
 import com.simop.bean.MedicoFacadeLocal;
 import com.simop.bean.MedicoPacienteFacadeLocal;
 import com.simop.bean.PacienteFacadeLocal;
@@ -22,6 +23,7 @@ import com.simop.bean.TipFacadeLocal;
 import com.simop.bean.UsuarioFacadeLocal;
 import com.simop.jpa.Antecedente;
 import com.simop.jpa.Consultorio;
+import com.simop.jpa.Diagnostico;
 import com.simop.jpa.MedicoPaciente;
 import com.simop.jpa.PacientePK;
 import com.simop.jpa.SolicitudConsultorio;
@@ -69,6 +71,8 @@ public class SIMOP {
     private SolicitudMedicoFacadeLocal ejbSolicitudMedico;
     @EJB
     private ConsultorioFacadeLocal ejbConsultorio;
+    @EJB
+    private DiagnosticoFacadeLocal ejbDiagnostico;
 
     /**
      * Operacion para guardar cualquier tipo de monitoreo que se haga un paciente previamente registrado
@@ -764,11 +768,35 @@ public class SIMOP {
      * Metodo para validar si un usuario existe o no
      */
     @WebMethod(operationName = "validarUsuario")
-    public String validarUsuario(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave) {
+    public String validarUsuario(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
+            @WebParam(name = "roll") int roll) {
+        
+        // roll:
+        // 0 -> paciente
+        // 1 -> medico
+        // 2 -> consultorio
+        
+        String rollUsuario;
+        
+        switch(roll){
+            case 0:
+                rollUsuario = "paciente";
+                break;
+            case 1:
+                rollUsuario = "medico";
+                break;
+            case 2:
+                rollUsuario = "consultorio";
+                break;
+            default:
+                return "none";
+        }
         
         for(Usuario usuario : ejbUsuario.findAll()){
             
-            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(clave)){
+            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(clave)
+                    && usuario.getRoll().equals(rollUsuario)){
+                
                 return usuario.getNombres();
             }
         }
@@ -777,7 +805,7 @@ public class SIMOP {
     }
 
     /**
-     * Operacion que permite al peciente enviarle solicitud al medico o consutorio
+     * Operacion que permite al peciente enviarle solicitud al medico o consultorio
      */
     @WebMethod(operationName = "hacerSolicitud")
     public String hacerSolicitud(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
@@ -876,7 +904,7 @@ public class SIMOP {
         
         for(Usuario usuario : ejbUsuario.findAll()){
             
-            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals("clave")
+            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(clave)
                     && usuario.getRoll().equals("paciente")){
                 
                 List<Paciente> pacientes = usuario.getPacienteList();
@@ -884,12 +912,35 @@ public class SIMOP {
                 for(Paciente paciente : pacientes){
                     
                     if(paciente.getUsuarioID().getId() == usuario.getId()){
-                        // TODO: obtener la lista de chequeos del paciente
-                        // y los respesctivos diagnosticos que correspondan a los chequeos
+                        
+                        List<Diagnostico> diagnosticos = ejbDiagnostico.findAll();
+                        
+                        String salida = "";
+                        
+                        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
+                        
+                        for(Diagnostico diagnostico : diagnosticos){
+                            
+                            PacientePK cheqPacientePK = diagnostico.getChequeoIdchequeo().getPaciente().getPacientePK();
+                            
+                            // comparar si diagnostico ha sido visto o no
+                            if(cheqPacientePK.getNumid() == paciente.getPacientePK().getNumid()
+                                    && cheqPacientePK.getTipoid().equals(paciente.getPacientePK().getTipoid())){
+                                
+                                salida += diagnostico.getIddiagnostico() + ";"
+                                        + formatoFecha.format(diagnostico.getFecha()) + ";"
+                                        + formatoHora.format(diagnostico.getHora()) + ";"
+                                        + diagnostico.getContenido() + "\n";
+                            }
+                        }
+                        
+                        return salida;
                     }
                 }
             }
         }
-        return null;
+        
+        return "none";
     }
 }
