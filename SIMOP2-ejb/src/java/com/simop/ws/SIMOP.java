@@ -444,6 +444,16 @@ public class SIMOP {
     public String listaPacientes(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
             @WebParam(name = "soloConsultorio") boolean soloConsultorio, @WebParam(name = "cedulaMedico") int cedulaMedico) {
         
+        // Un medico obtiene la lista de todos sus pacientes, solo se nesesita correo y clave, pero los otros
+        // parametros no pueden ser nulos, se recomienda 'soloConsultorio = false' y 'cedulaMedico = 0'.
+        // Un consultorio puede obtener la lista de todos los pacientes asociados a este, para ello ademas
+        // de los datos de sesion de la cuenta se nesesita como parametro:
+        //  - 'soloConsultorio = true'
+        //  - 'cedulaMedico = 0'
+        // El consultorio tambien puede consultar la lista de pacientes de un medico asociado a dicho consultorio,
+        // para ellos se modifican los anteriores parametros, quedando 'soloConsultorio = false' y la correspondiente
+        // cedula del medico al que se le quiere consultar la lista de pacientes.
+        
         //System.out.println("entro al metodo");
         for (Usuario user : ejbUsuario.findAll()) {
             //System.out.println("recorriendo usuarios");
