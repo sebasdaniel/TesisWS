@@ -471,14 +471,12 @@ public class SIMOP {
                                     
                                     Paciente p = temp.getPaciente();
                                     
-                                    salida += p.getUsuarioID().getNombres() + ";"
+                                    salida += p.getPacientePK().getTipoid() + ";"
+                                            + p.getPacientePK().getNumid() + ";"
+                                            + p.getUsuarioID().getNombres() + ";"
                                             + p.getApellidos() + ";"
-                                            + p.getUsuarioID().getDireccion() + ";"
                                             + p.getUsuarioID().getTelefono() + ";"
-                                            + p.getUsuarioID().getCorreo() + ";"
                                             + p.getSexo() + ";"
-                                            + p.getEstatura() + ";"
-                                            + p.getImc() + ";"
                                             + p.getGruposan() + ";"
                                             + (p.getRh() ? "+" : "-") + ";"
                                             + p.getEdad() + "\n";
@@ -504,6 +502,7 @@ public class SIMOP {
                                 String salida = "";
 
                                 for(SolicitudConsultorio temp : solicitud){
+                                    
                                     // NOTA: falta validar que no tengan medico asignado
                                     if(temp.getConsultorio().getIdconsultorio() == c.getIdconsultorio()
                                             && temp.getEstado().equals("aprobado")){
@@ -520,17 +519,16 @@ public class SIMOP {
                                         }
                                         
                                         if(!tieneMedico){
-                                            salida += p.getUsuarioID().getNombres() + ";"
-                                                + p.getApellidos() + ";"
-                                                + p.getUsuarioID().getDireccion() + ";"
-                                                + p.getUsuarioID().getTelefono() + ";"
-                                                + p.getUsuarioID().getCorreo() + ";"
-                                                + p.getSexo() + ";"
-                                                + p.getEstatura() + ";"
-                                                + p.getImc() + ";"
-                                                + p.getGruposan() + ";"
-                                                + (p.getRh() ? "+" : "-") + ";"
-                                                + p.getEdad() + "\n";
+                                            
+                                            salida += p.getPacientePK().getTipoid() + ";"
+                                                    + p.getPacientePK().getNumid() + ";"
+                                                    + p.getUsuarioID().getNombres() + ";"
+                                                    + p.getApellidos() + ";"
+                                                    + p.getUsuarioID().getTelefono() + ";"
+                                                    + p.getSexo() + ";"
+                                                    + p.getGruposan() + ";"
+                                                    + (p.getRh() ? "+" : "-") + ";"
+                                                    + p.getEdad() + "\n";
                                         }
                                         
                                     }
@@ -556,14 +554,12 @@ public class SIMOP {
 
                                         Paciente p = temp.getPaciente();
 
-                                        salida += p.getUsuarioID().getNombres() + ";"
+                                        salida += p.getPacientePK().getTipoid() + ";"
+                                                + p.getPacientePK().getNumid() + ";"
+                                                + p.getUsuarioID().getNombres() + ";"
                                                 + p.getApellidos() + ";"
-                                                + p.getUsuarioID().getDireccion() + ";"
                                                 + p.getUsuarioID().getTelefono() + ";"
-                                                + p.getUsuarioID().getCorreo() + ";"
                                                 + p.getSexo() + ";"
-                                                + p.getEstatura() + ";"
-                                                + p.getImc() + ";"
                                                 + p.getGruposan() + ";"
                                                 + (p.getRh() ? "+" : "-") + ";"
                                                 + p.getEdad() + "\n";
@@ -639,14 +635,12 @@ public class SIMOP {
                                         
                                         Paciente p = solicitud.getPaciente();
 
-                                        salida += p.getUsuarioID().getNombres() + ";"
+                                        salida += p.getPacientePK().getTipoid() + ";"
+                                                + p.getPacientePK().getNumid() + ";"
+                                                + p.getUsuarioID().getNombres() + ";"
                                                 + p.getApellidos() + ";"
-                                                + p.getUsuarioID().getDireccion() + ";"
                                                 + p.getUsuarioID().getTelefono() + ";"
-                                                + p.getUsuarioID().getCorreo() + ";"
                                                 + p.getSexo() + ";"
-                                                + p.getEstatura() + ";"
-                                                + p.getImc() + ";"
                                                 + p.getGruposan() + ";"
                                                 + (p.getRh() ? "+" : "-") + ";"
                                                 + p.getEdad() + "\n";
@@ -671,14 +665,12 @@ public class SIMOP {
                                         
                                         Paciente p = solicitud.getPaciente();
 
-                                        salida += p.getUsuarioID().getNombres() + ";"
+                                        salida += p.getPacientePK().getTipoid() + ";"
+                                                + p.getPacientePK().getNumid() + ";"
+                                                + p.getUsuarioID().getNombres() + ";"
                                                 + p.getApellidos() + ";"
-                                                + p.getUsuarioID().getDireccion() + ";"
                                                 + p.getUsuarioID().getTelefono() + ";"
-                                                + p.getUsuarioID().getCorreo() + ";"
                                                 + p.getSexo() + ";"
-                                                + p.getEstatura() + ";"
-                                                + p.getImc() + ";"
                                                 + p.getGruposan() + ";"
                                                 + (p.getRh() ? "+" : "-") + ";"
                                                 + p.getEdad() + "\n";
@@ -735,7 +727,8 @@ public class SIMOP {
      * Operacion para buscar consultorios por nombre
      */
     @WebMethod(operationName = "buscarConsultorio")
-    public String buscarConsultorio(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave, @WebParam(name = "nombre") String nombre) {
+    public String buscarConsultorio(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
+            @WebParam(name = "nombre") String nombre) {
         
         for(Usuario usuario : ejbUsuario.findAll()){
             
@@ -812,8 +805,8 @@ public class SIMOP {
             @WebParam(name = "entidad") int entidad, @WebParam(name = "id") int id) {
         
         // entidad:
-        // 0 -> medico
-        // 1 -> consultorio
+        // 0 -> al medico
+        // 1 -> al consultorio
         
         for(Usuario usuario : ejbUsuario.findAll()){
             
@@ -897,7 +890,7 @@ public class SIMOP {
     }
 
     /**
-     * Web service operation
+     * Operacion para que un paciente obtenga los diagnosticos hechos por su medico
      */
     @WebMethod(operationName = "obtenerDiagnosticos")
     public String obtenerDiagnosticos(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave) {
@@ -943,4 +936,79 @@ public class SIMOP {
         
         return "none";
     }
+
+    /**
+     * Operacion mediante la cual un medico obtiene una lista de los antecedentes de todos sus pacientes
+     */
+    @WebMethod(operationName = "obtenerAlertas")
+    public String obtenerAlertas(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave) {
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(clave)
+                    && usuario.getRoll().equals("medico")){
+                
+                List<Medico> medicos = usuario.getMedicoList();
+                
+                for(Medico medico : medicos){
+                    
+                    if(medico.getUsuarioID().getId() == usuario.getId()){
+                        
+                        List<MedicoPaciente> atenciones = ejbMedicoPaciente.findAll();
+                        
+                        List<Paciente> misPacientes = new ArrayList<>();
+                        
+                        for(MedicoPaciente atencion : atenciones){
+                            
+                            if(atencion.getMedico().getCedulaMedico() == medico.getCedulaMedico()){
+                                
+                                misPacientes.add(atencion.getPaciente());
+                            }
+                        }
+                        
+                        if(misPacientes.isEmpty()){
+                            return "";
+                        }
+                        
+                        String salida = "";
+                        
+                        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
+                        
+                        List<Antecedente> antecedentes = ejbAntecedente.findAll();
+                        
+                        for(Paciente paciente : misPacientes){
+                            
+                            for(Antecedente antecedente : antecedentes){
+                                
+                                Paciente temp = antecedente.getPaciente();
+                                if(temp.getPacientePK().getNumid() == paciente.getPacientePK().getNumid() &&
+                                        temp.getPacientePK().getTipoid().equals(paciente.getPacientePK().getTipoid())){
+                                    
+                                    Chequeo c = antecedente.getChequeoIdchequeo();
+                                    
+                                    salida += temp.getPacientePK().getTipoid() + ";"
+                                            + temp.getPacientePK().getNumid() + ";"
+                                            + temp.getUsuarioID().getNombres() + " "
+                                            + temp.getApellidos() + ";"
+                                            + formatoFecha.format(c.getFecha()) + ";"
+                                            + formatoHora.format(c.getHora()) + ";"
+                                            + c.getTipochequeo() + ";"
+                                            + c.getValor() + ";"
+                                            + c.getUnidades() + ";"
+                                            + c.getTipIdtip().getEstado() + "\n";
+                                }
+                            }
+                        }
+                        
+                        return salida;
+                    }
+                }
+                
+            }
+        }
+        
+        return "";
+    }
+    
 }
