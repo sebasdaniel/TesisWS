@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
  * @author 53B45
  */
 @Embeddable
-public class MedicoPacientePK implements Serializable {
+public class AtiendePK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "medico_cedula_medico")
@@ -33,10 +33,10 @@ public class MedicoPacientePK implements Serializable {
     @Column(name = "paciente_tipoid")
     private String pacienteTipoid;
 
-    public MedicoPacientePK() {
+    public AtiendePK() {
     }
 
-    public MedicoPacientePK(int medicoCedulaMedico, int pacienteNumid, String pacienteTipoid) {
+    public AtiendePK(int medicoCedulaMedico, int pacienteNumid, String pacienteTipoid) {
         this.medicoCedulaMedico = medicoCedulaMedico;
         this.pacienteNumid = pacienteNumid;
         this.pacienteTipoid = pacienteTipoid;
@@ -78,10 +78,10 @@ public class MedicoPacientePK implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof MedicoPacientePK)) {
+        if (!(object instanceof AtiendePK)) {
             return false;
         }
-        MedicoPacientePK other = (MedicoPacientePK) object;
+        AtiendePK other = (AtiendePK) object;
         if (this.medicoCedulaMedico != other.medicoCedulaMedico) {
             return false;
         }
@@ -96,7 +96,7 @@ public class MedicoPacientePK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.simop.jpa.MedicoPacientePK[ medicoCedulaMedico=" + medicoCedulaMedico + ", pacienteNumid=" + pacienteNumid + ", pacienteTipoid=" + pacienteTipoid + " ]";
+        return "com.simop.jpa.AtiendePK[ medicoCedulaMedico=" + medicoCedulaMedico + ", pacienteNumid=" + pacienteNumid + ", pacienteTipoid=" + pacienteTipoid + " ]";
     }
     
 }

@@ -108,8 +108,6 @@ public class Chequeo implements Serializable {
     @JoinColumn(name = "tip_idtip", referencedColumnName = "idtip")
     @ManyToOne(optional = false)
     private Tip tipIdtip;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chequeoIdchequeo")
-    private List<Diagnostico> diagnosticoList;
 
     public Chequeo() {
     }
@@ -232,15 +230,6 @@ public class Chequeo implements Serializable {
 
     public void setTipIdtip(Tip tipIdtip) {
         this.tipIdtip = tipIdtip;
-    }
-
-    @XmlTransient
-    public List<Diagnostico> getDiagnosticoList() {
-        return diagnosticoList;
-    }
-
-    public void setDiagnosticoList(List<Diagnostico> diagnosticoList) {
-        this.diagnosticoList = diagnosticoList;
     }
 
     @Override

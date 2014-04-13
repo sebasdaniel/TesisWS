@@ -6,7 +6,7 @@
 
 package com.simop.bean;
 
-import com.simop.jpa.MedicoPaciente;
+import com.simop.jpa.Atiende;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,7 +16,7 @@ import javax.persistence.PersistenceContext;
  * @author 53B45
  */
 @Stateless
-public class MedicoPacienteFacade extends AbstractFacade<MedicoPaciente> implements MedicoPacienteFacadeLocal {
+public class AtiendeFacade extends AbstractFacade<Atiende> implements AtiendeFacadeLocal {
     @PersistenceContext(unitName = "SIMOP2-ejbPU")
     private EntityManager em;
 
@@ -25,8 +25,8 @@ public class MedicoPacienteFacade extends AbstractFacade<MedicoPaciente> impleme
         return em;
     }
 
-    public MedicoPacienteFacade() {
-        super(MedicoPaciente.class);
+    public AtiendeFacade() {
+        super(Atiende.class);
     }
     
 }

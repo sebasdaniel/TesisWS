@@ -7,7 +7,9 @@
 package com.simop.jpa;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,8 +20,10 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -30,7 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Antecedente.findAll", query = "SELECT a FROM Antecedente a"),
-    @NamedQuery(name = "Antecedente.findByIdantecedente", query = "SELECT a FROM Antecedente a WHERE a.idantecedente = :idantecedente")})
+    @NamedQuery(name = "Antecedente.findByIdantecedente", query = "SELECT a FROM Antecedente a WHERE a.idantecedente = :idantecedente"),
+    @NamedQuery(name = "Antecedente.findByVista", query = "SELECT a FROM Antecedente a WHERE a.vista = :vista")})
 public class Antecedente implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -38,6 +43,8 @@ public class Antecedente implements Serializable {
     @Basic(optional = false)
     @Column(name = "idantecedente")
     private Integer idantecedente;
+    @Column(name = "vista")
+    private Boolean vista;
     @JoinColumn(name = "chequeo_idchequeo", referencedColumnName = "idchequeo")
     @ManyToOne(optional = false)
     private Chequeo chequeoIdchequeo;
@@ -46,6 +53,8 @@ public class Antecedente implements Serializable {
         @JoinColumn(name = "paciente_tipoid", referencedColumnName = "tipoid")})
     @ManyToOne(optional = false)
     private Paciente paciente;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "antecedenteIdantecedente")
+    private List<Diagnostico> diagnosticoList;
 
     public Antecedente() {
     }
@@ -62,6 +71,14 @@ public class Antecedente implements Serializable {
         this.idantecedente = idantecedente;
     }
 
+    public Boolean getVista() {
+        return vista;
+    }
+
+    public void setVista(Boolean vista) {
+        this.vista = vista;
+    }
+
     public Chequeo getChequeoIdchequeo() {
         return chequeoIdchequeo;
     }
@@ -76,6 +93,15 @@ public class Antecedente implements Serializable {
 
     public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
+    }
+
+    @XmlTransient
+    public List<Diagnostico> getDiagnosticoList() {
+        return diagnosticoList;
+    }
+
+    public void setDiagnosticoList(List<Diagnostico> diagnosticoList) {
+        this.diagnosticoList = diagnosticoList;
     }
 
     @Override

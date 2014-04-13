@@ -58,8 +58,9 @@ public class Medico implements Serializable {
     private String sexo;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "numTP")
-    private int numTP;
+    private String numTP;
     @Basic(optional = false)
     @NotNull
     @Column(name = "nummaxpacientes")
@@ -72,14 +73,14 @@ public class Medico implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "medicoCedulaMedico")
     private List<Especialidad> especialidadList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "medico")
+    private List<Atiende> atiendeList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "medico")
     private List<SolicitudMedico> solicitudMedicoList;
     @JoinColumn(name = "usuario_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Usuario usuarioID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "medicoCedulaMedico")
     private List<Diagnostico> diagnosticoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "medico")
-    private List<MedicoPaciente> medicoPacienteList;
 
     public Medico() {
     }
@@ -88,7 +89,7 @@ public class Medico implements Serializable {
         this.cedulaMedico = cedulaMedico;
     }
 
-    public Medico(Integer cedulaMedico, String apellidos, String sexo, int numTP, int nummaxpacientes, String nacionalidad) {
+    public Medico(Integer cedulaMedico, String apellidos, String sexo, String numTP, int nummaxpacientes, String nacionalidad) {
         this.cedulaMedico = cedulaMedico;
         this.apellidos = apellidos;
         this.sexo = sexo;
@@ -121,11 +122,11 @@ public class Medico implements Serializable {
         this.sexo = sexo;
     }
 
-    public int getNumTP() {
+    public String getNumTP() {
         return numTP;
     }
 
-    public void setNumTP(int numTP) {
+    public void setNumTP(String numTP) {
         this.numTP = numTP;
     }
 
@@ -155,6 +156,15 @@ public class Medico implements Serializable {
     }
 
     @XmlTransient
+    public List<Atiende> getAtiendeList() {
+        return atiendeList;
+    }
+
+    public void setAtiendeList(List<Atiende> atiendeList) {
+        this.atiendeList = atiendeList;
+    }
+
+    @XmlTransient
     public List<SolicitudMedico> getSolicitudMedicoList() {
         return solicitudMedicoList;
     }
@@ -178,15 +188,6 @@ public class Medico implements Serializable {
 
     public void setDiagnosticoList(List<Diagnostico> diagnosticoList) {
         this.diagnosticoList = diagnosticoList;
-    }
-
-    @XmlTransient
-    public List<MedicoPaciente> getMedicoPacienteList() {
-        return medicoPacienteList;
-    }
-
-    public void setMedicoPacienteList(List<MedicoPaciente> medicoPacienteList) {
-        this.medicoPacienteList = medicoPacienteList;
     }
 
     @Override

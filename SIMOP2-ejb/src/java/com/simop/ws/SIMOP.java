@@ -15,7 +15,7 @@ import com.simop.bean.ChequeoFacadeLocal;
 import com.simop.bean.ConsultorioFacadeLocal;
 import com.simop.bean.DiagnosticoFacadeLocal;
 import com.simop.bean.MedicoFacadeLocal;
-import com.simop.bean.MedicoPacienteFacadeLocal;
+import com.simop.bean.AtiendeFacadeLocal;
 import com.simop.bean.PacienteFacadeLocal;
 import com.simop.bean.SolicitudConsultorioFacadeLocal;
 import com.simop.bean.SolicitudMedicoFacadeLocal;
@@ -24,10 +24,12 @@ import com.simop.bean.UsuarioFacadeLocal;
 import com.simop.jpa.Antecedente;
 import com.simop.jpa.Consultorio;
 import com.simop.jpa.Diagnostico;
-import com.simop.jpa.MedicoPaciente;
+import com.simop.jpa.Atiende;
 import com.simop.jpa.PacientePK;
 import com.simop.jpa.SolicitudConsultorio;
+import com.simop.jpa.SolicitudConsultorioPK;
 import com.simop.jpa.SolicitudMedico;
+import com.simop.jpa.SolicitudMedicoPK;
 import com.simop.jpa.Usuario;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -62,7 +64,7 @@ public class SIMOP {
     @EJB
     private MedicoFacadeLocal ejbMedico;
     @EJB
-    private MedicoPacienteFacadeLocal ejbMedicoPaciente;
+    private AtiendeFacadeLocal ejbAtiende;
     @EJB
     private AntecedenteFacadeLocal ejbAntecedente;
     @EJB
@@ -91,13 +93,13 @@ public class SIMOP {
         loggin:{
             for(Usuario user : ejbUsuario.findAll()){
 
-                if(user.getCorreo().equals(correo) && user.getContraseña().equals(clave)){
+                if(user.getEmail().equals(correo) && user.getClave().equals(clave)){
                     
                     List<Paciente> pac = user.getPacienteList();
 
                     for(Paciente p : pac){
 
-                        if(p.getUsuarioID().getCorreo().equals(correo) && p.getUsuarioID().getContraseña().equals(clave)){
+                        if(p.getUsuarioID().getEmail().equals(correo) && p.getUsuarioID().getClave().equals(clave)){
                             usuarioPaciente = p;
                             break loggin;
                         }
@@ -283,13 +285,13 @@ public class SIMOP {
                 {
                     for (Usuario user : ejbUsuario.findAll()) {
 
-                        if (user.getCorreo().equals(correo) && user.getContraseña().equals(clave) && user.getRoll().equals("paciente")) {
+                        if (user.getEmail().equals(correo) && user.getClave().equals(clave) && user.getRoll().equals("paciente")) {
                             
                             List<Paciente> pac = user.getPacienteList();
 
                             for (Paciente p : pac) {
 
-                                if (p.getUsuarioID().getCorreo().equals(correo) && p.getUsuarioID().getContraseña().equals(clave)) {
+                                if (p.getUsuarioID().getEmail().equals(correo) && p.getUsuarioID().getClave().equals(clave)) {
                                     
                                     usuarioPaciente = p;
                                     break loggin;
@@ -328,7 +330,7 @@ public class SIMOP {
                 {
                     for (Usuario user : ejbUsuario.findAll()) {
 
-                        if (user.getCorreo().equals(correo) && user.getContraseña().equals(clave)
+                        if (user.getEmail().equals(correo) && user.getClave().equals(clave)
                                 && (user.getRoll().equals("medico") || user.getRoll().equals("consultorio"))) {
                             
                             if(user.getRoll().equals("medico")){
@@ -337,7 +339,7 @@ public class SIMOP {
 
                                 for (Medico m : med) {
 
-                                    if (m.getUsuarioID().getCorreo().equals(correo) && m.getUsuarioID().getContraseña().equals(clave)) {
+                                    if (m.getUsuarioID().getEmail().equals(correo) && m.getUsuarioID().getClave().equals(clave)) {
 
                                         usuarioMedico = m;
                                         break loggin;
@@ -349,7 +351,7 @@ public class SIMOP {
 
                                 for (Consultorio c : con) {
 
-                                    if (c.getUsuarioID().getCorreo().equals(correo) && c.getUsuarioID().getContraseña().equals(clave)) {
+                                    if (c.getUsuarioID().getEmail().equals(correo) && c.getUsuarioID().getClave().equals(clave)) {
 
                                         usuarioConsultorio = c;
                                         break loggin;
@@ -397,7 +399,7 @@ public class SIMOP {
                 {
                     for (Usuario user : ejbUsuario.findAll()) {
 
-                        if (user.getCorreo().equals(correo) && user.getContraseña().equals(clave)) {
+                        if (user.getEmail().equals(correo) && user.getClave().equals(clave)) {
                             usuario = true;
                         }
                     }
@@ -458,7 +460,7 @@ public class SIMOP {
         for (Usuario user : ejbUsuario.findAll()) {
             //System.out.println("recorriendo usuarios");
 
-            if (user.getCorreo().equals(correo) && user.getContraseña().equals(clave)
+            if (user.getEmail().equals(correo) && user.getClave().equals(clave)
                     && (user.getRoll().equals("medico") || user.getRoll().equals("consultorio"))) {
 
                 //System.out.println("encontro usuario");
@@ -469,13 +471,13 @@ public class SIMOP {
 
                     for (Medico m : med) {
 
-                        if (m.getUsuarioID().getCorreo().equals(correo) && m.getUsuarioID().getContraseña().equals(clave)) {
+                        if (m.getUsuarioID().getEmail().equals(correo) && m.getUsuarioID().getClave().equals(clave)) {
                             //System.out.println("encontro al medico");
-                            List<MedicoPaciente> relacion = ejbMedicoPaciente.findAll();
+                            List<Atiende> relacion = ejbAtiende.findAll();
                             
                             String salida = "";
                             
-                            for(MedicoPaciente temp : relacion){
+                            for(Atiende temp : relacion){
                                 
                                 if(temp.getMedico().getCedulaMedico() == m.getCedulaMedico()){
                                     
@@ -487,9 +489,7 @@ public class SIMOP {
                                             + p.getApellidos() + ";"
                                             + p.getUsuarioID().getTelefono() + ";"
                                             + p.getSexo() + ";"
-                                            + p.getGruposan() + ";"
-                                            + (p.getRh() ? "+" : "-") + ";"
-                                            + p.getEdad() + "\n";
+                                            + p.getFechanac()+ "\n";
                                 }
                             }
                             
@@ -503,7 +503,7 @@ public class SIMOP {
 
                     for (Consultorio c : con) {
 
-                        if (c.getUsuarioID().getCorreo().equals(correo) && c.getUsuarioID().getContraseña().equals(clave)) {
+                        if (c.getUsuarioID().getEmail().equals(correo) && c.getUsuarioID().getClave().equals(clave)) {
                             //System.out.println("encontro consultorio");
                             if(soloConsultorio){
                                 
@@ -521,7 +521,7 @@ public class SIMOP {
                                         
                                         boolean tieneMedico = false;
                                         
-                                        for(MedicoPaciente mp : p.getMedicoPacienteList()){
+                                        for(Atiende mp : p.getAtiendeList()){
                                             
                                             if(mp.getMedico() != null){
                                                 tieneMedico = true;
@@ -536,9 +536,7 @@ public class SIMOP {
                                                     + p.getApellidos() + ";"
                                                     + p.getUsuarioID().getTelefono() + ";"
                                                     + p.getSexo() + ";"
-                                                    + p.getGruposan() + ";"
-                                                    + (p.getRh() ? "+" : "-") + ";"
-                                                    + p.getEdad() + "\n";
+                                                    + p.getFechanac()+ "\n";
                                         }
                                         
                                     }
@@ -554,11 +552,11 @@ public class SIMOP {
                                     return null;
                                 }
                                 
-                                List<MedicoPaciente> relacion = ejbMedicoPaciente.findAll();
+                                List<Atiende> relacion = ejbAtiende.findAll();
 
                                 String salida = "";
 
-                                for(MedicoPaciente temp : relacion){
+                                for(Atiende temp : relacion){
 
                                     if(temp.getMedico().getCedulaMedico() == medico.getCedulaMedico()){
 
@@ -570,9 +568,7 @@ public class SIMOP {
                                                 + p.getApellidos() + ";"
                                                 + p.getUsuarioID().getTelefono() + ";"
                                                 + p.getSexo() + ";"
-                                                + p.getGruposan() + ";"
-                                                + (p.getRh() ? "+" : "-") + ";"
-                                                + p.getEdad() + "\n";
+                                                + p.getFechanac()+ "\n";
                                     }
                                 }
 
@@ -586,7 +582,7 @@ public class SIMOP {
             }
         }
         
-        return null;
+        return "";
     }
 
     /**
@@ -598,7 +594,7 @@ public class SIMOP {
         
         for (Usuario user : ejbUsuario.findAll()) {
 
-            if (user.getCorreo().equals(correo) && user.getContraseña().equals(clave)) {
+            if (user.getEmail().equals(correo) && user.getClave().equals(clave)) {
                 
                 List<Medico> mlist = ejbMedico.findAll();
         
@@ -628,8 +624,10 @@ public class SIMOP {
         
         for(Usuario usuario : ejbUsuario.findAll()){
             
-            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(clave)
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)
                     && (usuario.getRoll().equals("medico") || usuario.getRoll().equals("consultorio"))){
+                
+                SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
                 
                 switch (usuario.getRoll()) {
                     
@@ -638,8 +636,11 @@ public class SIMOP {
                         for(Medico medico : medicos){
                             if(medico.getUsuarioID().getId() == usuario.getId()){
                                 
-                                List<SolicitudMedico> solicitudes = medico.getSolicitudMedicoList();//ejbSolicitudMedico.findAll();
+                                List<SolicitudMedico> solicitudes = medico.getSolicitudMedicoList();
                                 String salida = "";
+                                
+                                
+                                
                                 for(SolicitudMedico solicitud : solicitudes){
                                     if(solicitud.getEstado().equals("pendiente")){
                                         
@@ -651,9 +652,8 @@ public class SIMOP {
                                                 + p.getApellidos() + ";"
                                                 + p.getUsuarioID().getTelefono() + ";"
                                                 + p.getSexo() + ";"
-                                                + p.getGruposan() + ";"
-                                                + (p.getRh() ? "+" : "-") + ";"
-                                                + p.getEdad() + "\n";
+                                                + p.getFechanac()+ ";"
+                                                + formato.format(solicitud.getFechaSolicitud()) + "\n";
                                     }
                                 }
                                 
@@ -681,9 +681,8 @@ public class SIMOP {
                                                 + p.getApellidos() + ";"
                                                 + p.getUsuarioID().getTelefono() + ";"
                                                 + p.getSexo() + ";"
-                                                + p.getGruposan() + ";"
-                                                + (p.getRh() ? "+" : "-") + ";"
-                                                + p.getEdad() + "\n";
+                                                + p.getFechanac()+ ";"
+                                                + formato.format(solicitud.getFechaSolicitud()) + "\n";
                                     }
                                 }
                                 
@@ -695,7 +694,7 @@ public class SIMOP {
             }
         }
         
-        return null;
+        return "";
     }
 
     /**
@@ -707,7 +706,7 @@ public class SIMOP {
         
         for(Usuario usuario : ejbUsuario.findAll()){
             
-            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(clave)){
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)){
                 
                 List<Medico> medicos = ejbMedico.findAll();
                 
@@ -742,7 +741,7 @@ public class SIMOP {
         
         for(Usuario usuario : ejbUsuario.findAll()){
             
-            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(clave)){
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)){
                 
                 List<Consultorio> consultorios = ejbConsultorio.findAll();
                 
@@ -797,7 +796,7 @@ public class SIMOP {
         
         for(Usuario usuario : ejbUsuario.findAll()){
             
-            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(clave)
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)
                     && usuario.getRoll().equals(rollUsuario)){
                 
                 return usuario.getNombres();
@@ -820,7 +819,7 @@ public class SIMOP {
         
         for(Usuario usuario : ejbUsuario.findAll()){
             
-            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(clave)
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)
                     && usuario.getRoll().equals("paciente")){
                 
                 switch(entidad){
@@ -907,7 +906,7 @@ public class SIMOP {
         
         for(Usuario usuario : ejbUsuario.findAll()){
             
-            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(clave)
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)
                     && usuario.getRoll().equals("paciente")){
                 
                 List<Paciente> pacientes = usuario.getPacienteList();
@@ -925,7 +924,7 @@ public class SIMOP {
                         
                         for(Diagnostico diagnostico : diagnosticos){
                             
-                            PacientePK cheqPacientePK = diagnostico.getChequeoIdchequeo().getPaciente().getPacientePK();
+                            PacientePK cheqPacientePK = diagnostico.getAntecedenteIdantecedente().getPaciente().getPacientePK();
                             
                             // comparar si diagnostico ha sido visto o no
                             if(cheqPacientePK.getNumid() == paciente.getPacientePK().getNumid()
@@ -955,7 +954,7 @@ public class SIMOP {
         
         for(Usuario usuario : ejbUsuario.findAll()){
             
-            if(usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(clave)
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)
                     && usuario.getRoll().equals("medico")){
                 
                 List<Medico> medicos = usuario.getMedicoList();
@@ -964,11 +963,11 @@ public class SIMOP {
                     
                     if(medico.getUsuarioID().getId() == usuario.getId()){
                         
-                        List<MedicoPaciente> atenciones = ejbMedicoPaciente.findAll();
+                        List<Atiende> atenciones = ejbAtiende.findAll();
                         
                         List<Paciente> misPacientes = new ArrayList<>();
                         
-                        for(MedicoPaciente atencion : atenciones){
+                        for(Atiende atencion : atenciones){
                             
                             if(atencion.getMedico().getCedulaMedico() == medico.getCedulaMedico()){
                                 
@@ -997,7 +996,8 @@ public class SIMOP {
                                     
                                     Chequeo c = antecedente.getChequeoIdchequeo();
                                     
-                                    salida += temp.getPacientePK().getTipoid() + ";"
+                                    salida += antecedente.getIdantecedente() + ";"
+                                            + temp.getPacientePK().getTipoid() + ";"
                                             + temp.getPacientePK().getNumid() + ";"
                                             + temp.getUsuarioID().getNombres() + " "
                                             + temp.getApellidos() + ";"
@@ -1006,7 +1006,9 @@ public class SIMOP {
                                             + c.getTipochequeo() + ";"
                                             + c.getValor() + ";"
                                             + c.getUnidades() + ";"
-                                            + c.getTipIdtip().getEstado() + "\n";
+                                            + c.getTipIdtip().getEstado() + ";"
+                                            + c.getLatitud() + ";"
+                                            + c.getLongitud() + "\n";
                                 }
                             }
                         }
@@ -1019,6 +1021,192 @@ public class SIMOP {
         }
         
         return "";
+    }
+    
+    /**
+     * Operacion mediante la cual un medico obtiene una lista de los antecedentes de un paciente determinado
+     */
+    @WebMethod(operationName = "obtenerAlertasPaciente")
+    public String obtenerAlertasPaciente(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
+            @WebParam(name = "tipoId") String tipoId, @WebParam(name = "numeroId") String numeroId) {
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)
+                    && usuario.getRoll().equals("medico")){
+                
+                List<Medico> medicos = usuario.getMedicoList();
+                
+                for(Medico medico : medicos){
+                    
+                    if(medico.getUsuarioID().getId() == usuario.getId()){
+                        
+                        //List<MedicoPaciente> atenciones = ejbAtiende.findAll();
+                        
+                        Paciente paciente = ejbPaciente.find(new PacientePK(Integer.parseInt(numeroId), tipoId));
+                        
+                        if(paciente == null){
+                            return "";
+                        }
+                        
+//                        if(misPacientes.isEmpty()){
+//                            return "";
+//                        }
+                        
+                        String salida = "";
+                        
+                        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
+                        
+                        List<Antecedente> antecedentes = ejbAntecedente.findAll();
+                            
+                        for(Antecedente antecedente : antecedentes){
+
+                            Paciente temp = antecedente.getPaciente();
+                            
+                            if(temp.getPacientePK().getNumid() == paciente.getPacientePK().getNumid() &&
+                                    temp.getPacientePK().getTipoid().equals(paciente.getPacientePK().getTipoid())){
+
+                                Chequeo c = antecedente.getChequeoIdchequeo();
+
+                                salida += antecedente.getIdantecedente() + ";"
+                                        + temp.getPacientePK().getTipoid() + ";"
+                                        + temp.getPacientePK().getNumid() + ";"
+                                        + temp.getUsuarioID().getNombres() + " "
+                                        + temp.getApellidos() + ";"
+                                        + formatoFecha.format(c.getFecha()) + ";"
+                                        + formatoHora.format(c.getHora()) + ";"
+                                        + c.getTipochequeo() + ";"
+                                        + c.getValor() + ";"
+                                        + c.getUnidades() + ";"
+                                        + c.getTipIdtip().getEstado() + ";"
+                                        + c.getLatitud() + ";"
+                                        + c.getLongitud() + "\n";;
+                            }
+                        }
+                        
+                        return salida;
+                    }
+                }
+                
+            }
+        }
+        
+        return "";
+    }
+
+    /**
+     * Operacion mediante la cula un medico le hace un diagnostico a un paciente a traves de sus alertas
+     */
+    @WebMethod(operationName = "hacerDiagnostico")
+    public String hacerDiagnostico(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
+            @WebParam(name = "idAntecedente") String idAntecedente, @WebParam(name = "contenido") String contenido) {
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)
+                    && usuario.getRoll().equals("medico")){
+                
+                List<Medico> medicos = ejbMedico.findAll();
+                
+                for(Medico medico :  medicos){
+                    
+                    if(medico.getUsuarioID().getId() == usuario.getId()){
+                        
+                        Antecedente antecedente = ejbAntecedente.find(Integer.parseInt(idAntecedente));
+                        
+                        Diagnostico diagnostico = new Diagnostico();
+                        
+                        diagnostico.setFecha(Calendar.getInstance().getTime());
+                        diagnostico.setHora(Calendar.getInstance().getTime());
+                        diagnostico.setContenido(contenido);
+                        diagnostico.setMedicoCedulaMedico(medico);
+                        diagnostico.setAntecedenteIdantecedente(antecedente);
+                        
+                        ejbDiagnostico.create(diagnostico);
+                        
+                        return "ok";
+                    }
+                }
+            }
+        }
+        
+        return "fail";
+    }
+
+    /**
+     * Operacion mediante la cual un medico o consultorio puede aprobar la solicitud hecha por un paciente
+     */
+    @WebMethod(operationName = "aprobarSolicitud")
+    public String aprobarSolicitud(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
+            @WebParam(name = "tipoId") String tipoId, @WebParam(name = "numeroId") String numeroId) {
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)
+                    && (usuario.getRoll().equals("medico") || usuario.getRoll().equals("consultorio"))){
+                
+                switch (usuario.getRoll()) {
+                    
+                    case "medico":
+                        
+                        List<Medico> medicos = usuario.getMedicoList();
+                        
+                        for(Medico medico : medicos){
+                            
+                            if(medico.getUsuarioID().getId() == usuario.getId()){
+                                
+                                SolicitudMedicoPK key = new SolicitudMedicoPK(medico.getCedulaMedico(),
+                                        Integer.parseInt(numeroId), tipoId);
+                                
+                                SolicitudMedico solicitud = ejbSolicitudMedico.find(key);
+                                
+                                if(solicitud == null){
+                                    return "fail";
+                                }
+                                
+                                solicitud.setEstado("aprobado");
+                                solicitud.setFechaAprobacionSolicitud(Calendar.getInstance().getTime());
+                                
+                                ejbSolicitudMedico.edit(solicitud);
+                                
+                                return "ok";
+                            }
+                        }
+                        
+                        break;
+                        
+                    case "consultorio":
+                        List<Consultorio> consultorios = usuario.getConsultorioList();
+                        
+                        for(Consultorio consultorio : consultorios){
+                            
+                            if(consultorio.getUsuarioID().getId() == usuario.getId()){
+                                
+                                SolicitudConsultorioPK key2 = new SolicitudConsultorioPK(consultorio.getIdconsultorio(),
+                                        Integer.parseInt(numeroId), tipoId);
+                                
+                                SolicitudConsultorio solicitud2 = ejbSolicitudConsultorio.find(key2);
+                                
+                                if(solicitud2 == null){
+                                    return "fail";
+                                }
+                                
+                                solicitud2.setEstado("aprobado");
+                                solicitud2.setFechaAprobacionSolicitud(Calendar.getInstance().getTime());
+                                
+                                ejbSolicitudConsultorio.edit(solicitud2);
+                                
+                                return "ok";
+                            }
+                        }
+                        
+                        break;
+                }
+            }
+        }
+        
+        return "fail";
     }
     
 }

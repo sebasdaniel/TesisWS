@@ -28,18 +28,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author 53B45
  */
 @Entity
-@Table(name = "medico_paciente")
+@Table(name = "atiende")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "MedicoPaciente.findAll", query = "SELECT m FROM MedicoPaciente m"),
-    @NamedQuery(name = "MedicoPaciente.findByMedicoCedulaMedico", query = "SELECT m FROM MedicoPaciente m WHERE m.medicoPacientePK.medicoCedulaMedico = :medicoCedulaMedico"),
-    @NamedQuery(name = "MedicoPaciente.findByPacienteNumid", query = "SELECT m FROM MedicoPaciente m WHERE m.medicoPacientePK.pacienteNumid = :pacienteNumid"),
-    @NamedQuery(name = "MedicoPaciente.findByPacienteTipoid", query = "SELECT m FROM MedicoPaciente m WHERE m.medicoPacientePK.pacienteTipoid = :pacienteTipoid"),
-    @NamedQuery(name = "MedicoPaciente.findByFechaInicioAtencion", query = "SELECT m FROM MedicoPaciente m WHERE m.fechaInicioAtencion = :fechaInicioAtencion")})
-public class MedicoPaciente implements Serializable {
+    @NamedQuery(name = "Atiende.findAll", query = "SELECT a FROM Atiende a"),
+    @NamedQuery(name = "Atiende.findByMedicoCedulaMedico", query = "SELECT a FROM Atiende a WHERE a.atiendePK.medicoCedulaMedico = :medicoCedulaMedico"),
+    @NamedQuery(name = "Atiende.findByPacienteNumid", query = "SELECT a FROM Atiende a WHERE a.atiendePK.pacienteNumid = :pacienteNumid"),
+    @NamedQuery(name = "Atiende.findByPacienteTipoid", query = "SELECT a FROM Atiende a WHERE a.atiendePK.pacienteTipoid = :pacienteTipoid"),
+    @NamedQuery(name = "Atiende.findByFechaInicioAtencion", query = "SELECT a FROM Atiende a WHERE a.fechaInicioAtencion = :fechaInicioAtencion")})
+public class Atiende implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected MedicoPacientePK medicoPacientePK;
+    protected AtiendePK atiendePK;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_inicio_atencion")
@@ -54,28 +54,28 @@ public class MedicoPaciente implements Serializable {
     @ManyToOne(optional = false)
     private Medico medico;
 
-    public MedicoPaciente() {
+    public Atiende() {
     }
 
-    public MedicoPaciente(MedicoPacientePK medicoPacientePK) {
-        this.medicoPacientePK = medicoPacientePK;
+    public Atiende(AtiendePK atiendePK) {
+        this.atiendePK = atiendePK;
     }
 
-    public MedicoPaciente(MedicoPacientePK medicoPacientePK, Date fechaInicioAtencion) {
-        this.medicoPacientePK = medicoPacientePK;
+    public Atiende(AtiendePK atiendePK, Date fechaInicioAtencion) {
+        this.atiendePK = atiendePK;
         this.fechaInicioAtencion = fechaInicioAtencion;
     }
 
-    public MedicoPaciente(int medicoCedulaMedico, int pacienteNumid, String pacienteTipoid) {
-        this.medicoPacientePK = new MedicoPacientePK(medicoCedulaMedico, pacienteNumid, pacienteTipoid);
+    public Atiende(int medicoCedulaMedico, int pacienteNumid, String pacienteTipoid) {
+        this.atiendePK = new AtiendePK(medicoCedulaMedico, pacienteNumid, pacienteTipoid);
     }
 
-    public MedicoPacientePK getMedicoPacientePK() {
-        return medicoPacientePK;
+    public AtiendePK getAtiendePK() {
+        return atiendePK;
     }
 
-    public void setMedicoPacientePK(MedicoPacientePK medicoPacientePK) {
-        this.medicoPacientePK = medicoPacientePK;
+    public void setAtiendePK(AtiendePK atiendePK) {
+        this.atiendePK = atiendePK;
     }
 
     public Date getFechaInicioAtencion() {
@@ -105,18 +105,18 @@ public class MedicoPaciente implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (medicoPacientePK != null ? medicoPacientePK.hashCode() : 0);
+        hash += (atiendePK != null ? atiendePK.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof MedicoPaciente)) {
+        if (!(object instanceof Atiende)) {
             return false;
         }
-        MedicoPaciente other = (MedicoPaciente) object;
-        if ((this.medicoPacientePK == null && other.medicoPacientePK != null) || (this.medicoPacientePK != null && !this.medicoPacientePK.equals(other.medicoPacientePK))) {
+        Atiende other = (Atiende) object;
+        if ((this.atiendePK == null && other.atiendePK != null) || (this.atiendePK != null && !this.atiendePK.equals(other.atiendePK))) {
             return false;
         }
         return true;
@@ -124,7 +124,7 @@ public class MedicoPaciente implements Serializable {
 
     @Override
     public String toString() {
-        return "com.simop.jpa.MedicoPaciente[ medicoPacientePK=" + medicoPacientePK + " ]";
+        return "com.simop.jpa.Atiende[ atiendePK=" + atiendePK + " ]";
     }
     
 }

@@ -37,7 +37,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Diagnostico.findAll", query = "SELECT d FROM Diagnostico d"),
     @NamedQuery(name = "Diagnostico.findByIddiagnostico", query = "SELECT d FROM Diagnostico d WHERE d.iddiagnostico = :iddiagnostico"),
     @NamedQuery(name = "Diagnostico.findByFecha", query = "SELECT d FROM Diagnostico d WHERE d.fecha = :fecha"),
-    @NamedQuery(name = "Diagnostico.findByHora", query = "SELECT d FROM Diagnostico d WHERE d.hora = :hora")})
+    @NamedQuery(name = "Diagnostico.findByHora", query = "SELECT d FROM Diagnostico d WHERE d.hora = :hora"),
+    @NamedQuery(name = "Diagnostico.findByVista", query = "SELECT d FROM Diagnostico d WHERE d.vista = :vista")})
 public class Diagnostico implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -61,9 +62,11 @@ public class Diagnostico implements Serializable {
     @Size(min = 1, max = 65535)
     @Column(name = "contenido")
     private String contenido;
-    @JoinColumn(name = "chequeo_idchequeo", referencedColumnName = "idchequeo")
+    @Column(name = "vista")
+    private Boolean vista;
+    @JoinColumn(name = "antecedente_idantecedente", referencedColumnName = "idantecedente")
     @ManyToOne(optional = false)
-    private Chequeo chequeoIdchequeo;
+    private Antecedente antecedenteIdantecedente;
     @JoinColumn(name = "medico_cedula_medico", referencedColumnName = "cedula_medico")
     @ManyToOne(optional = false)
     private Medico medicoCedulaMedico;
@@ -114,12 +117,20 @@ public class Diagnostico implements Serializable {
         this.contenido = contenido;
     }
 
-    public Chequeo getChequeoIdchequeo() {
-        return chequeoIdchequeo;
+    public Boolean getVista() {
+        return vista;
     }
 
-    public void setChequeoIdchequeo(Chequeo chequeoIdchequeo) {
-        this.chequeoIdchequeo = chequeoIdchequeo;
+    public void setVista(Boolean vista) {
+        this.vista = vista;
+    }
+
+    public Antecedente getAntecedenteIdantecedente() {
+        return antecedenteIdantecedente;
+    }
+
+    public void setAntecedenteIdantecedente(Antecedente antecedenteIdantecedente) {
+        this.antecedenteIdantecedente = antecedenteIdantecedente;
     }
 
     public Medico getMedicoCedulaMedico() {

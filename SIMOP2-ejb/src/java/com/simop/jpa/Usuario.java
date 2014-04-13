@@ -40,8 +40,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findByDireccion", query = "SELECT u FROM Usuario u WHERE u.direccion = :direccion"),
     @NamedQuery(name = "Usuario.findByTelefono", query = "SELECT u FROM Usuario u WHERE u.telefono = :telefono"),
     @NamedQuery(name = "Usuario.findByRoll", query = "SELECT u FROM Usuario u WHERE u.roll = :roll"),
-    @NamedQuery(name = "Usuario.findByCorreo", query = "SELECT u FROM Usuario u WHERE u.correo = :correo"),
-    @NamedQuery(name = "Usuario.findByContrase\u00f1a", query = "SELECT u FROM Usuario u WHERE u.contrase\u00f1a = :contrase\u00f1a"),
+    @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email"),
+    @NamedQuery(name = "Usuario.findByClave", query = "SELECT u FROM Usuario u WHERE u.clave = :clave"),
     @NamedQuery(name = "Usuario.findByImagen", query = "SELECT u FROM Usuario u WHERE u.imagen = :imagen")})
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -69,16 +69,17 @@ public class Usuario implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "roll")
     private String roll;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Correo electrónico no válido")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
-    @Column(name = "correo")
-    private String correo;
+    @Column(name = "email")
+    private String email;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
-    @Column(name = "contrase\u00f1a")
-    private String contraseña;
+    @Column(name = "clave")
+    private String clave;
     @Size(max = 45)
     @Column(name = "imagen")
     private String imagen;
@@ -99,14 +100,14 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(Integer id, String nombres, String direccion, int telefono, String roll, String correo, String contraseña) {
+    public Usuario(Integer id, String nombres, String direccion, int telefono, String roll, String email, String clave) {
         this.id = id;
         this.nombres = nombres;
         this.direccion = direccion;
         this.telefono = telefono;
         this.roll = roll;
-        this.correo = correo;
-        this.contraseña = contraseña;
+        this.email = email;
+        this.clave = clave;
     }
 
     public Integer getId() {
@@ -149,20 +150,20 @@ public class Usuario implements Serializable {
         this.roll = roll;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getClave() {
+        return clave;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setClave(String clave) {
+        this.clave = clave;
     }
 
     public String getImagen() {
