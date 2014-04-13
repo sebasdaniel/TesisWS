@@ -16,6 +16,9 @@ import com.simop.bean.ConsultorioFacadeLocal;
 import com.simop.bean.DiagnosticoFacadeLocal;
 import com.simop.bean.MedicoFacadeLocal;
 import com.simop.bean.AtiendeFacadeLocal;
+import com.simop.bean.DepartamentoFacadeLocal;
+import com.simop.bean.EspecialidadFacadeLocal;
+import com.simop.bean.MunicipioFacadeLocal;
 import com.simop.bean.PacienteFacadeLocal;
 import com.simop.bean.SolicitudConsultorioFacadeLocal;
 import com.simop.bean.SolicitudMedicoFacadeLocal;
@@ -25,6 +28,9 @@ import com.simop.jpa.Antecedente;
 import com.simop.jpa.Consultorio;
 import com.simop.jpa.Diagnostico;
 import com.simop.jpa.Atiende;
+import com.simop.jpa.Departamento;
+import com.simop.jpa.Especialidad;
+import com.simop.jpa.Municipio;
 import com.simop.jpa.PacientePK;
 import com.simop.jpa.SolicitudConsultorio;
 import com.simop.jpa.SolicitudConsultorioPK;
@@ -75,6 +81,12 @@ public class SIMOP {
     private ConsultorioFacadeLocal ejbConsultorio;
     @EJB
     private DiagnosticoFacadeLocal ejbDiagnostico;
+    @EJB
+    private MunicipioFacadeLocal ejbMunicipio;
+    @EJB
+    private EspecialidadFacadeLocal ejbEspecialidad;
+    @EJB
+    private DepartamentoFacadeLocal ejbDepartamento;
 
     /**
      * Operacion para guardar cualquier tipo de monitoreo que se haga un paciente previamente registrado
@@ -1207,6 +1219,181 @@ public class SIMOP {
         }
         
         return "fail";
+    }
+
+    /**
+     * Operacion para registrar consultorio
+     */
+    @WebMethod(operationName = "registrarConsultorio")
+    public String registrarConsultorio(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
+            @WebParam(name = "nombre") String nombre, @WebParam(name = "direccion") String direccion,
+            @WebParam(name = "telefono") int telefono, @WebParam(name = "idMunicipio") int idMunicipio) {
+        
+        Municipio municipio = ejbMunicipio.find(idMunicipio);
+        
+        if(municipio == null){
+            return "fail";
+        }
+        
+        Usuario usuario = new Usuario();
+        
+        usuario.setEmail(correo);
+        usuario.setClave(clave);
+        usuario.setNombres(nombre);
+        usuario.setDireccion(direccion);
+        usuario.setTelefono(telefono);
+        usuario.setMunicipioIdmunicipio(municipio);
+        usuario.setRoll("consultorio");
+        
+        Consultorio consultorio = new Consultorio();
+        consultorio.setUsuarioID(usuario);
+        
+        ejbUsuario.create(usuario);
+        ejbConsultorio.create(consultorio);
+        
+        return "ok";
+    }
+
+    /**
+     * operacion para registrar medico
+     */
+    @WebMethod(operationName = "registrarMedico")
+    public String registrarMedico(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
+            @WebParam(name = "nombres") String nombres, @WebParam(name = "apellidos") String apellidos,
+            @WebParam(name = "sexo") String sexo, @WebParam(name = "numeroTP") String numeroTP,
+            @WebParam(name = "nacionalidad") String nacionalidad, @WebParam(name = "especializacion") String especializacion,
+            @WebParam(name = "direccion") String direccion, @WebParam(name = "telefono") int telefono,
+            @WebParam(name = "idMunicipio") int idMunicipio) {
+        
+        Municipio municipio = ejbMunicipio.find(idMunicipio);
+        
+        if(municipio == null){
+            return "fail";
+        }
+        
+        Usuario usuario = new Usuario();
+        
+        usuario.setEmail(correo);
+        usuario.setClave(clave);
+        usuario.setNombres(nombres);
+        usuario.setDireccion(direccion);
+        usuario.setTelefono(telefono);
+        usuario.setMunicipioIdmunicipio(municipio);
+        usuario.setRoll("medico");
+        
+        Medico medico = new Medico();
+        
+        medico.setApellidos(apellidos);
+        medico.setSexo(sexo);
+        medico.setNumTP(numeroTP);
+        medico.setNummaxpacientes(30);
+        medico.setNacionalidad(nacionalidad);
+        medico.setUsuarioID(usuario);
+        
+        Especialidad esp = new Especialidad();
+        esp.setNombre(especializacion);
+        esp.setMedicoCedulaMedico(medico);
+        
+        ejbUsuario.create(usuario);
+        ejbMedico.create(medico);
+        ejbEspecialidad.create(esp);
+        
+        return "ok";
+    }
+
+    /**
+     * operacion para registrar paciente
+     */
+    @WebMethod(operationName = "registrarPaciente")
+    public String registrarPaciente(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
+            @WebParam(name = "tipoId") String tipoId, @WebParam(name = "numeroId") int numeroId,
+            @WebParam(name = "nombres") String nombres, @WebParam(name = "apellidos") String apellidos,
+            @WebParam(name = "sexo") String sexo, @WebParam(name = "fechaNacimiento") String fechaNacimiento,
+            @WebParam(name = "direccion") String direccion, @WebParam(name = "telefono") int telefono,
+            @WebParam(name = "idMunicipio") int idMunicipio) {
+        
+        Municipio municipio = ejbMunicipio.find(idMunicipio);
+        
+        if(municipio == null){
+            return "fail";
+        }
+        
+        Usuario usuario = new Usuario();
+        
+        usuario.setEmail(correo);
+        usuario.setClave(clave);
+        usuario.setNombres(nombres);
+        usuario.setDireccion(direccion);
+        usuario.setTelefono(telefono);
+        usuario.setMunicipioIdmunicipio(municipio);
+        usuario.setRoll("paciente");
+        
+        Date fNac;
+        try {
+            fNac = new SimpleDateFormat("yyyy-MM-dd").parse(fechaNacimiento);
+        } catch (ParseException ex) {
+            Logger.getLogger(SIMOP.class.getName()).log(Level.SEVERE, null, ex);
+            return "fail";
+        }
+        
+        Paciente paciente = new Paciente(numeroId, tipoId);
+        
+        paciente.setApellidos(apellidos);
+        paciente.setSexo(sexo);
+        paciente.setFechanac(fNac);
+        paciente.setUsuarioID(usuario);
+        
+        ejbUsuario.create(usuario);
+        ejbPaciente.create(paciente);
+        
+        return "ok";
+    }
+
+    /**
+     * Operacion para obtener una lista de todos los departamentos
+     */
+    @WebMethod(operationName = "listaDepartamento")
+    public String listaDepartamento() {
+        
+        List<Departamento> departamentos = ejbDepartamento.findAll();
+        
+        String salida = "";
+        
+        for(Departamento departamento : departamentos){
+            
+            salida += departamento.getIddepartamento() + ";"
+                    + departamento.getNombre() + "\n";
+        }
+        
+        return salida;
+    }
+
+    /**
+     * Operacion medante la cual se obtiene una lista de todos los municipios de una departamento dado
+     */
+    @WebMethod(operationName = "listaMunicipios")
+    public String listaMunicipios(@WebParam(name = "idDepartamento") int idDepartamento) {
+        
+        Departamento departamento = ejbDepartamento.find(idDepartamento);
+        
+        if(departamento == null){
+            return "fail";
+        }
+        
+        List<Municipio> municipios = departamento.getMunicipioList();
+        
+        String salida = "";
+        
+        for(Municipio municipio : municipios){
+            
+            if(municipio.getDepartamentoIddepartamento().getIddepartamento() == departamento.getIddepartamento()){
+                
+                salida += municipio.getIdmunicipio() + ";"
+                        + municipio.getNombre() + "\n";
+            }
+        }
+        
+        return salida;
     }
     
 }
