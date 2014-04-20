@@ -651,8 +651,6 @@ public class SIMOP {
                                 List<SolicitudMedico> solicitudes = medico.getSolicitudMedicoList();
                                 String salida = "";
                                 
-                                
-                                
                                 for(SolicitudMedico solicitud : solicitudes){
                                     if(solicitud.getEstado().equals("pendiente")){
                                         
@@ -1182,6 +1180,20 @@ public class SIMOP {
                                 
                                 ejbSolicitudMedico.edit(solicitud);
                                 
+                                Paciente paciente = ejbPaciente.find(new PacientePK(Integer.parseInt(numeroId), tipoId));
+                                
+                                if(paciente == null){
+                                    return "fail";
+                                }
+                                
+                                Atiende atiende = new Atiende(medico.getCedulaMedico(), paciente.getPacientePK().getNumid(),
+                                        paciente.getPacientePK().getTipoid());
+//                                atiende.setMedico(medico);
+//                                atiende.setPaciente(paciente);
+                                atiende.setFechaInicioAtencion(Calendar.getInstance().getTime());
+                                
+                                ejbAtiende.create(atiende);
+                                
                                 return "ok";
                             }
                         }
@@ -1259,11 +1271,11 @@ public class SIMOP {
      */
     @WebMethod(operationName = "registrarMedico")
     public String registrarMedico(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
-            @WebParam(name = "nombres") String nombres, @WebParam(name = "apellidos") String apellidos,
-            @WebParam(name = "sexo") String sexo, @WebParam(name = "numeroTP") String numeroTP,
-            @WebParam(name = "nacionalidad") String nacionalidad, @WebParam(name = "especializacion") String especializacion,
-            @WebParam(name = "direccion") String direccion, @WebParam(name = "telefono") int telefono,
-            @WebParam(name = "idMunicipio") int idMunicipio) {
+            @WebParam(name = "cedula") int cedula, @WebParam(name = "nombres") String nombres,
+            @WebParam(name = "apellidos") String apellidos, @WebParam(name = "sexo") String sexo,
+            @WebParam(name = "numeroTP") String numeroTP, @WebParam(name = "nacionalidad") String nacionalidad,
+            @WebParam(name = "especializacion") String especializacion, @WebParam(name = "direccion") String direccion,
+            @WebParam(name = "telefono") int telefono, @WebParam(name = "idMunicipio") int idMunicipio) {
         
         Municipio municipio = ejbMunicipio.find(idMunicipio);
         
@@ -1283,6 +1295,7 @@ public class SIMOP {
         
         Medico medico = new Medico();
         
+        //medico.setCedulaMedico(cedula);
         medico.setApellidos(apellidos);
         medico.setSexo(sexo);
         medico.setNumTP(numeroTP);
@@ -1394,6 +1407,51 @@ public class SIMOP {
         }
         
         return salida;
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "recuperarClave")
+    public String recuperarClave(@WebParam(name = "correo") String correo) {
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getEmail().equals(correo)){
+                
+                SendMail sender = new SendMail();
+        
+                sender.send(usuario.getClave());
+                
+                return "ok";
+            }
+        }
+        
+        return "fail";
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "registrarGCM")
+    public String registrarGCM(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave) {
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)){
+                
+                if(usuario.getRoll().equals("paciente") || usuario.getRoll().equals("medico")){
+                    
+                    // establecer el gcm id
+                    GCM.send(clave, clave);
+                    return "ok";
+                }
+                
+                return "fail";
+            }
+        }
+        
+        return "fail";
     }
     
 }

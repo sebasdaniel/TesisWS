@@ -14,6 +14,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -70,6 +72,11 @@ public class Medico implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "nacionalidad")
     private String nacionalidad;
+    @JoinTable(name = "medico_has_consultorio", joinColumns = {
+        @JoinColumn(name = "medico_cedula_medico", referencedColumnName = "cedula_medico")}, inverseJoinColumns = {
+        @JoinColumn(name = "consultorio_idconsultorio", referencedColumnName = "idconsultorio")})
+    @ManyToMany
+    private List<Consultorio> consultorioList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "medicoCedulaMedico")
     private List<Especialidad> especialidadList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "medico")
@@ -144,6 +151,15 @@ public class Medico implements Serializable {
 
     public void setNacionalidad(String nacionalidad) {
         this.nacionalidad = nacionalidad;
+    }
+
+    @XmlTransient
+    public List<Consultorio> getConsultorioList() {
+        return consultorioList;
+    }
+
+    public void setConsultorioList(List<Consultorio> consultorioList) {
+        this.consultorioList = consultorioList;
     }
 
     @XmlTransient

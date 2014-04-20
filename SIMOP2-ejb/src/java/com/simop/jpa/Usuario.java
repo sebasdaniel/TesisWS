@@ -22,6 +22,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -42,7 +43,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findByRoll", query = "SELECT u FROM Usuario u WHERE u.roll = :roll"),
     @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email"),
     @NamedQuery(name = "Usuario.findByClave", query = "SELECT u FROM Usuario u WHERE u.clave = :clave"),
-    @NamedQuery(name = "Usuario.findByImagen", query = "SELECT u FROM Usuario u WHERE u.imagen = :imagen")})
+    @NamedQuery(name = "Usuario.findByImagen", query = "SELECT u FROM Usuario u WHERE u.imagen = :imagen"),
+    @NamedQuery(name = "Usuario.findByGcmRegId", query = "SELECT u FROM Usuario u WHERE u.gcmRegId = :gcmRegId")})
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -69,7 +71,7 @@ public class Usuario implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "roll")
     private String roll;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Correo electrónico no válido")//if the field contains email address consider using this annotation to enforce field validation
+    @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Correo electrónico no válido")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -83,6 +85,9 @@ public class Usuario implements Serializable {
     @Size(max = 45)
     @Column(name = "imagen")
     private String imagen;
+    @Size(max = 45)
+    @Column(name = "gcm_reg_id")
+    private String gcmRegId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioID")
     private List<Paciente> pacienteList;
     @JoinColumn(name = "municipio_idmunicipio", referencedColumnName = "idmunicipio")
@@ -172,6 +177,14 @@ public class Usuario implements Serializable {
 
     public void setImagen(String imagen) {
         this.imagen = imagen;
+    }
+
+    public String getGcmRegId() {
+        return gcmRegId;
+    }
+
+    public void setGcmRegId(String gcmRegId) {
+        this.gcmRegId = gcmRegId;
     }
 
     @XmlTransient

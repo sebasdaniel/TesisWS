@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -41,6 +42,8 @@ public class Consultorio implements Serializable {
     @Basic(optional = false)
     @Column(name = "idconsultorio")
     private Integer idconsultorio;
+    @ManyToMany(mappedBy = "consultorioList")
+    private List<Medico> medicoList;
     @JoinColumn(name = "usuario_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Usuario usuarioID;
@@ -60,6 +63,15 @@ public class Consultorio implements Serializable {
 
     public void setIdconsultorio(Integer idconsultorio) {
         this.idconsultorio = idconsultorio;
+    }
+
+    @XmlTransient
+    public List<Medico> getMedicoList() {
+        return medicoList;
+    }
+
+    public void setMedicoList(List<Medico> medicoList) {
+        this.medicoList = medicoList;
     }
 
     public Usuario getUsuarioID() {
