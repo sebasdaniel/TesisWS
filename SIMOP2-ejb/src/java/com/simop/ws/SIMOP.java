@@ -1267,54 +1267,6 @@ public class SIMOP {
     }
 
     /**
-     * operacion para registrar medico
-     */
-    @WebMethod(operationName = "registrarMedico")
-    public String registrarMedico(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
-            @WebParam(name = "cedula") int cedula, @WebParam(name = "nombres") String nombres,
-            @WebParam(name = "apellidos") String apellidos, @WebParam(name = "sexo") String sexo,
-            @WebParam(name = "numeroTP") String numeroTP, @WebParam(name = "nacionalidad") String nacionalidad,
-            @WebParam(name = "especializacion") String especializacion, @WebParam(name = "direccion") String direccion,
-            @WebParam(name = "telefono") int telefono, @WebParam(name = "idMunicipio") int idMunicipio) {
-        
-        Municipio municipio = ejbMunicipio.find(idMunicipio);
-        
-        if(municipio == null){
-            return "fail";
-        }
-        
-        Usuario usuario = new Usuario();
-        
-        usuario.setEmail(correo);
-        usuario.setClave(clave);
-        usuario.setNombres(nombres);
-        usuario.setDireccion(direccion);
-        usuario.setTelefono(telefono);
-        usuario.setMunicipioIdmunicipio(municipio);
-        usuario.setRoll("medico");
-        
-        Medico medico = new Medico();
-        
-        //medico.setCedulaMedico(cedula);
-        medico.setApellidos(apellidos);
-        medico.setSexo(sexo);
-        medico.setNumTP(numeroTP);
-        medico.setNummaxpacientes(30);
-        medico.setNacionalidad(nacionalidad);
-        medico.setUsuarioID(usuario);
-        
-        Especialidad esp = new Especialidad();
-        esp.setNombre(especializacion);
-        esp.setMedicoCedulaMedico(medico);
-        
-        ejbUsuario.create(usuario);
-        ejbMedico.create(medico);
-        ejbEspecialidad.create(esp);
-        
-        return "ok";
-    }
-
-    /**
      * operacion para registrar paciente
      */
     @WebMethod(operationName = "registrarPaciente")
@@ -1452,6 +1404,54 @@ public class SIMOP {
         }
         
         return "fail";
+    }
+
+    /**
+     * Operacion para registrar medico
+     */
+    @WebMethod(operationName = "registrarMedico")
+    public String registrarMedico(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
+            @WebParam(name = "cedula") int cedula, @WebParam(name = "nombres") String nombres,
+            @WebParam(name = "apellidos") String apellidos, @WebParam(name = "sexo") String sexo,
+            @WebParam(name = "numeroTP") String numeroTP, @WebParam(name = "nacionalidad") String nacionalidad,
+            @WebParam(name = "especializacion") String especializacion, @WebParam(name = "direccion") String direccion,
+            @WebParam(name = "telefono") int telefono, @WebParam(name = "idMunicipio") int idMunicipio) {
+        
+        Municipio municipio = ejbMunicipio.find(idMunicipio);
+        
+        if(municipio == null){
+            return "fail";
+        }
+        
+        Usuario usuario = new Usuario();
+        
+        usuario.setEmail(correo);
+        usuario.setClave(clave);
+        usuario.setNombres(nombres);
+        usuario.setDireccion(direccion);
+        usuario.setTelefono(telefono);
+        usuario.setMunicipioIdmunicipio(municipio);
+        usuario.setRoll("medico");
+        
+        Medico medico = new Medico();
+        
+        medico.setCedulaMedico(cedula);
+        medico.setApellidos(apellidos);
+        medico.setSexo(sexo);
+        medico.setNumTP(numeroTP);
+        medico.setNummaxpacientes(30);
+        medico.setNacionalidad(nacionalidad);
+        medico.setUsuarioID(usuario);
+        
+        Especialidad esp = new Especialidad();
+        esp.setNombre(especializacion);
+        esp.setMedicoCedulaMedico(medico);
+        
+        ejbUsuario.create(usuario);
+        ejbMedico.create(medico);
+        ejbEspecialidad.create(esp);
+        
+        return "ok";
     }
     
 }
