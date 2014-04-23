@@ -6,6 +6,120 @@
       <xsd:import namespace="http://ws.simop.com/" schemaLocation="SIMOP_schema1.xsd"/>
     </xsd:schema>
   </types>
+  <message name="registrarConsultorio">
+    <part name="parameters" element="tns:registrarConsultorio"/>
+  </message>
+  <message name="registrarConsultorioResponse">
+    <part name="parameters" element="tns:registrarConsultorioResponse"/>
+  </message>
+  <message name="registrarPaciente">
+    <part name="parameters" element="tns:registrarPaciente"/>
+  </message>
+  <message name="registrarPacienteResponse">
+    <part name="parameters" element="tns:registrarPacienteResponse"/>
+  </message>
+  <message name="listaPacientes">
+    <part name="parameters" element="tns:listaPacientes"/>
+  </message>
+  <message name="listaPacientesResponse">
+    <part name="parameters" element="tns:listaPacientesResponse"/>
+  </message>
+  <message name="aprobarSolicitud">
+    <part name="parameters" element="tns:aprobarSolicitud"/>
+  </message>
+  <message name="aprobarSolicitudResponse">
+    <part name="parameters" element="tns:aprobarSolicitudResponse"/>
+  </message>
+  <message name="recuperarClave">
+    <part name="parameters" element="tns:recuperarClave"/>
+  </message>
+  <message name="recuperarClaveResponse">
+    <part name="parameters" element="tns:recuperarClaveResponse"/>
+  </message>
+  <message name="listaDepartamento">
+    <part name="parameters" element="tns:listaDepartamento"/>
+  </message>
+  <message name="listaDepartamentoResponse">
+    <part name="parameters" element="tns:listaDepartamentoResponse"/>
+  </message>
+  <message name="buscarConsultorio">
+    <part name="parameters" element="tns:buscarConsultorio"/>
+  </message>
+  <message name="buscarConsultorioResponse">
+    <part name="parameters" element="tns:buscarConsultorioResponse"/>
+  </message>
+  <message name="hacerDiagnostico">
+    <part name="parameters" element="tns:hacerDiagnostico"/>
+  </message>
+  <message name="hacerDiagnosticoResponse">
+    <part name="parameters" element="tns:hacerDiagnosticoResponse"/>
+  </message>
+  <message name="obtenerAlertas">
+    <part name="parameters" element="tns:obtenerAlertas"/>
+  </message>
+  <message name="obtenerAlertasResponse">
+    <part name="parameters" element="tns:obtenerAlertasResponse"/>
+  </message>
+  <message name="hacerSolicitud">
+    <part name="parameters" element="tns:hacerSolicitud"/>
+  </message>
+  <message name="hacerSolicitudResponse">
+    <part name="parameters" element="tns:hacerSolicitudResponse"/>
+  </message>
+  <message name="obtenerEstadisticas">
+    <part name="parameters" element="tns:obtenerEstadisticas"/>
+  </message>
+  <message name="obtenerEstadisticasResponse">
+    <part name="parameters" element="tns:obtenerEstadisticasResponse"/>
+  </message>
+  <message name="validarUsuario">
+    <part name="parameters" element="tns:validarUsuario"/>
+  </message>
+  <message name="validarUsuarioResponse">
+    <part name="parameters" element="tns:validarUsuarioResponse"/>
+  </message>
+  <message name="listarSolicitudes">
+    <part name="parameters" element="tns:listarSolicitudes"/>
+  </message>
+  <message name="listarSolicitudesResponse">
+    <part name="parameters" element="tns:listarSolicitudesResponse"/>
+  </message>
+  <message name="obtenerDiagnosticos">
+    <part name="parameters" element="tns:obtenerDiagnosticos"/>
+  </message>
+  <message name="obtenerDiagnosticosResponse">
+    <part name="parameters" element="tns:obtenerDiagnosticosResponse"/>
+  </message>
+  <message name="obtenerAlertasPaciente">
+    <part name="parameters" element="tns:obtenerAlertasPaciente"/>
+  </message>
+  <message name="obtenerAlertasPacienteResponse">
+    <part name="parameters" element="tns:obtenerAlertasPacienteResponse"/>
+  </message>
+  <message name="listaMunicipios">
+    <part name="parameters" element="tns:listaMunicipios"/>
+  </message>
+  <message name="listaMunicipiosResponse">
+    <part name="parameters" element="tns:listaMunicipiosResponse"/>
+  </message>
+  <message name="obtenerHistorial">
+    <part name="parameters" element="tns:obtenerHistorial"/>
+  </message>
+  <message name="obtenerHistorialResponse">
+    <part name="parameters" element="tns:obtenerHistorialResponse"/>
+  </message>
+  <message name="registrarMedico">
+    <part name="parameters" element="tns:registrarMedico"/>
+  </message>
+  <message name="registrarMedicoResponse">
+    <part name="parameters" element="tns:registrarMedicoResponse"/>
+  </message>
+  <message name="guardarChequeo">
+    <part name="parameters" element="tns:guardarChequeo"/>
+  </message>
+  <message name="guardarChequeoResponse">
+    <part name="parameters" element="tns:guardarChequeoResponse"/>
+  </message>
   <message name="listaMedicos">
     <part name="parameters" element="tns:listaMedicos"/>
   </message>
@@ -18,115 +132,89 @@
   <message name="buscarMedicoResponse">
     <part name="parameters" element="tns:buscarMedicoResponse"/>
   </message>
-  <message name="guardarChequeo">
-    <part name="parameters" element="tns:guardarChequeo"/>
+  <message name="registrarGCM">
+    <part name="parameters" element="tns:registrarGCM"/>
   </message>
-  <message name="guardarChequeoResponse">
-    <part name="parameters" element="tns:guardarChequeoResponse"/>
-  </message>
-  <message name="obtenerEstadisticas">
-    <part name="parameters" element="tns:obtenerEstadisticas"/>
-  </message>
-  <message name="obtenerEstadisticasResponse">
-    <part name="parameters" element="tns:obtenerEstadisticasResponse"/>
-  </message>
-  <message name="listaPacientes">
-    <part name="parameters" element="tns:listaPacientes"/>
-  </message>
-  <message name="listaPacientesResponse">
-    <part name="parameters" element="tns:listaPacientesResponse"/>
-  </message>
-  <message name="listarSolicitudes">
-    <part name="parameters" element="tns:listarSolicitudes"/>
-  </message>
-  <message name="listarSolicitudesResponse">
-    <part name="parameters" element="tns:listarSolicitudesResponse"/>
-  </message>
-  <message name="buscarConsultorio">
-    <part name="parameters" element="tns:buscarConsultorio"/>
-  </message>
-  <message name="buscarConsultorioResponse">
-    <part name="parameters" element="tns:buscarConsultorioResponse"/>
-  </message>
-  <message name="validarUsuario">
-    <part name="parameters" element="tns:validarUsuario"/>
-  </message>
-  <message name="validarUsuarioResponse">
-    <part name="parameters" element="tns:validarUsuarioResponse"/>
-  </message>
-  <message name="hacerSolicitud">
-    <part name="parameters" element="tns:hacerSolicitud"/>
-  </message>
-  <message name="hacerSolicitudResponse">
-    <part name="parameters" element="tns:hacerSolicitudResponse"/>
-  </message>
-  <message name="obtenerHistorial">
-    <part name="parameters" element="tns:obtenerHistorial"/>
-  </message>
-  <message name="obtenerHistorialResponse">
-    <part name="parameters" element="tns:obtenerHistorialResponse"/>
-  </message>
-  <message name="obtenerDiagnosticos">
-    <part name="parameters" element="tns:obtenerDiagnosticos"/>
-  </message>
-  <message name="obtenerDiagnosticosResponse">
-    <part name="parameters" element="tns:obtenerDiagnosticosResponse"/>
-  </message>
-  <message name="obtenerAlertas">
-    <part name="parameters" element="tns:obtenerAlertas"/>
-  </message>
-  <message name="obtenerAlertasResponse">
-    <part name="parameters" element="tns:obtenerAlertasResponse"/>
-  </message>
-  <message name="obtenerAlertasPaciente">
-    <part name="parameters" element="tns:obtenerAlertasPaciente"/>
-  </message>
-  <message name="obtenerAlertasPacienteResponse">
-    <part name="parameters" element="tns:obtenerAlertasPacienteResponse"/>
-  </message>
-  <message name="hacerDiagnostico">
-    <part name="parameters" element="tns:hacerDiagnostico"/>
-  </message>
-  <message name="hacerDiagnosticoResponse">
-    <part name="parameters" element="tns:hacerDiagnosticoResponse"/>
-  </message>
-  <message name="aprobarSolicitud">
-    <part name="parameters" element="tns:aprobarSolicitud"/>
-  </message>
-  <message name="aprobarSolicitudResponse">
-    <part name="parameters" element="tns:aprobarSolicitudResponse"/>
-  </message>
-  <message name="registrarConsultorio">
-    <part name="parameters" element="tns:registrarConsultorio"/>
-  </message>
-  <message name="registrarConsultorioResponse">
-    <part name="parameters" element="tns:registrarConsultorioResponse"/>
-  </message>
-  <message name="registrarMedico">
-    <part name="parameters" element="tns:registrarMedico"/>
-  </message>
-  <message name="registrarMedicoResponse">
-    <part name="parameters" element="tns:registrarMedicoResponse"/>
-  </message>
-  <message name="registrarPaciente">
-    <part name="parameters" element="tns:registrarPaciente"/>
-  </message>
-  <message name="registrarPacienteResponse">
-    <part name="parameters" element="tns:registrarPacienteResponse"/>
-  </message>
-  <message name="listaDepartamento">
-    <part name="parameters" element="tns:listaDepartamento"/>
-  </message>
-  <message name="listaDepartamentoResponse">
-    <part name="parameters" element="tns:listaDepartamentoResponse"/>
-  </message>
-  <message name="listaMunicipios">
-    <part name="parameters" element="tns:listaMunicipios"/>
-  </message>
-  <message name="listaMunicipiosResponse">
-    <part name="parameters" element="tns:listaMunicipiosResponse"/>
+  <message name="registrarGCMResponse">
+    <part name="parameters" element="tns:registrarGCMResponse"/>
   </message>
   <portType name="SIMOP">
+    <operation name="registrarConsultorio">
+      <input wsam:Action="http://ws.simop.com/SIMOP/registrarConsultorioRequest" message="tns:registrarConsultorio"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/registrarConsultorioResponse" message="tns:registrarConsultorioResponse"/>
+    </operation>
+    <operation name="registrarPaciente">
+      <input wsam:Action="http://ws.simop.com/SIMOP/registrarPacienteRequest" message="tns:registrarPaciente"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/registrarPacienteResponse" message="tns:registrarPacienteResponse"/>
+    </operation>
+    <operation name="listaPacientes">
+      <input wsam:Action="http://ws.simop.com/SIMOP/listaPacientesRequest" message="tns:listaPacientes"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/listaPacientesResponse" message="tns:listaPacientesResponse"/>
+    </operation>
+    <operation name="aprobarSolicitud">
+      <input wsam:Action="http://ws.simop.com/SIMOP/aprobarSolicitudRequest" message="tns:aprobarSolicitud"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/aprobarSolicitudResponse" message="tns:aprobarSolicitudResponse"/>
+    </operation>
+    <operation name="recuperarClave">
+      <input wsam:Action="http://ws.simop.com/SIMOP/recuperarClaveRequest" message="tns:recuperarClave"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/recuperarClaveResponse" message="tns:recuperarClaveResponse"/>
+    </operation>
+    <operation name="listaDepartamento">
+      <input wsam:Action="http://ws.simop.com/SIMOP/listaDepartamentoRequest" message="tns:listaDepartamento"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/listaDepartamentoResponse" message="tns:listaDepartamentoResponse"/>
+    </operation>
+    <operation name="buscarConsultorio">
+      <input wsam:Action="http://ws.simop.com/SIMOP/buscarConsultorioRequest" message="tns:buscarConsultorio"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/buscarConsultorioResponse" message="tns:buscarConsultorioResponse"/>
+    </operation>
+    <operation name="hacerDiagnostico">
+      <input wsam:Action="http://ws.simop.com/SIMOP/hacerDiagnosticoRequest" message="tns:hacerDiagnostico"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/hacerDiagnosticoResponse" message="tns:hacerDiagnosticoResponse"/>
+    </operation>
+    <operation name="obtenerAlertas">
+      <input wsam:Action="http://ws.simop.com/SIMOP/obtenerAlertasRequest" message="tns:obtenerAlertas"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/obtenerAlertasResponse" message="tns:obtenerAlertasResponse"/>
+    </operation>
+    <operation name="hacerSolicitud">
+      <input wsam:Action="http://ws.simop.com/SIMOP/hacerSolicitudRequest" message="tns:hacerSolicitud"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/hacerSolicitudResponse" message="tns:hacerSolicitudResponse"/>
+    </operation>
+    <operation name="obtenerEstadisticas">
+      <input wsam:Action="http://ws.simop.com/SIMOP/obtenerEstadisticasRequest" message="tns:obtenerEstadisticas"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/obtenerEstadisticasResponse" message="tns:obtenerEstadisticasResponse"/>
+    </operation>
+    <operation name="validarUsuario">
+      <input wsam:Action="http://ws.simop.com/SIMOP/validarUsuarioRequest" message="tns:validarUsuario"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/validarUsuarioResponse" message="tns:validarUsuarioResponse"/>
+    </operation>
+    <operation name="listarSolicitudes">
+      <input wsam:Action="http://ws.simop.com/SIMOP/listarSolicitudesRequest" message="tns:listarSolicitudes"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/listarSolicitudesResponse" message="tns:listarSolicitudesResponse"/>
+    </operation>
+    <operation name="obtenerDiagnosticos">
+      <input wsam:Action="http://ws.simop.com/SIMOP/obtenerDiagnosticosRequest" message="tns:obtenerDiagnosticos"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/obtenerDiagnosticosResponse" message="tns:obtenerDiagnosticosResponse"/>
+    </operation>
+    <operation name="obtenerAlertasPaciente">
+      <input wsam:Action="http://ws.simop.com/SIMOP/obtenerAlertasPacienteRequest" message="tns:obtenerAlertasPaciente"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/obtenerAlertasPacienteResponse" message="tns:obtenerAlertasPacienteResponse"/>
+    </operation>
+    <operation name="listaMunicipios">
+      <input wsam:Action="http://ws.simop.com/SIMOP/listaMunicipiosRequest" message="tns:listaMunicipios"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/listaMunicipiosResponse" message="tns:listaMunicipiosResponse"/>
+    </operation>
+    <operation name="obtenerHistorial">
+      <input wsam:Action="http://ws.simop.com/SIMOP/obtenerHistorialRequest" message="tns:obtenerHistorial"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/obtenerHistorialResponse" message="tns:obtenerHistorialResponse"/>
+    </operation>
+    <operation name="registrarMedico">
+      <input wsam:Action="http://ws.simop.com/SIMOP/registrarMedicoRequest" message="tns:registrarMedico"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/registrarMedicoResponse" message="tns:registrarMedicoResponse"/>
+    </operation>
+    <operation name="guardarChequeo">
+      <input wsam:Action="http://ws.simop.com/SIMOP/guardarChequeoRequest" message="tns:guardarChequeo"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/guardarChequeoResponse" message="tns:guardarChequeoResponse"/>
+    </operation>
     <operation name="listaMedicos">
       <input wsam:Action="http://ws.simop.com/SIMOP/listaMedicosRequest" message="tns:listaMedicos"/>
       <output wsam:Action="http://ws.simop.com/SIMOP/listaMedicosResponse" message="tns:listaMedicosResponse"/>
@@ -135,81 +223,184 @@
       <input wsam:Action="http://ws.simop.com/SIMOP/buscarMedicoRequest" message="tns:buscarMedico"/>
       <output wsam:Action="http://ws.simop.com/SIMOP/buscarMedicoResponse" message="tns:buscarMedicoResponse"/>
     </operation>
-    <operation name="guardarChequeo">
-      <input wsam:Action="http://ws.simop.com/SIMOP/guardarChequeoRequest" message="tns:guardarChequeo"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/guardarChequeoResponse" message="tns:guardarChequeoResponse"/>
-    </operation>
-    <operation name="obtenerEstadisticas">
-      <input wsam:Action="http://ws.simop.com/SIMOP/obtenerEstadisticasRequest" message="tns:obtenerEstadisticas"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/obtenerEstadisticasResponse" message="tns:obtenerEstadisticasResponse"/>
-    </operation>
-    <operation name="listaPacientes">
-      <input wsam:Action="http://ws.simop.com/SIMOP/listaPacientesRequest" message="tns:listaPacientes"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/listaPacientesResponse" message="tns:listaPacientesResponse"/>
-    </operation>
-    <operation name="listarSolicitudes">
-      <input wsam:Action="http://ws.simop.com/SIMOP/listarSolicitudesRequest" message="tns:listarSolicitudes"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/listarSolicitudesResponse" message="tns:listarSolicitudesResponse"/>
-    </operation>
-    <operation name="buscarConsultorio">
-      <input wsam:Action="http://ws.simop.com/SIMOP/buscarConsultorioRequest" message="tns:buscarConsultorio"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/buscarConsultorioResponse" message="tns:buscarConsultorioResponse"/>
-    </operation>
-    <operation name="validarUsuario">
-      <input wsam:Action="http://ws.simop.com/SIMOP/validarUsuarioRequest" message="tns:validarUsuario"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/validarUsuarioResponse" message="tns:validarUsuarioResponse"/>
-    </operation>
-    <operation name="hacerSolicitud">
-      <input wsam:Action="http://ws.simop.com/SIMOP/hacerSolicitudRequest" message="tns:hacerSolicitud"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/hacerSolicitudResponse" message="tns:hacerSolicitudResponse"/>
-    </operation>
-    <operation name="obtenerHistorial">
-      <input wsam:Action="http://ws.simop.com/SIMOP/obtenerHistorialRequest" message="tns:obtenerHistorial"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/obtenerHistorialResponse" message="tns:obtenerHistorialResponse"/>
-    </operation>
-    <operation name="obtenerDiagnosticos">
-      <input wsam:Action="http://ws.simop.com/SIMOP/obtenerDiagnosticosRequest" message="tns:obtenerDiagnosticos"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/obtenerDiagnosticosResponse" message="tns:obtenerDiagnosticosResponse"/>
-    </operation>
-    <operation name="obtenerAlertas">
-      <input wsam:Action="http://ws.simop.com/SIMOP/obtenerAlertasRequest" message="tns:obtenerAlertas"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/obtenerAlertasResponse" message="tns:obtenerAlertasResponse"/>
-    </operation>
-    <operation name="obtenerAlertasPaciente">
-      <input wsam:Action="http://ws.simop.com/SIMOP/obtenerAlertasPacienteRequest" message="tns:obtenerAlertasPaciente"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/obtenerAlertasPacienteResponse" message="tns:obtenerAlertasPacienteResponse"/>
-    </operation>
-    <operation name="hacerDiagnostico">
-      <input wsam:Action="http://ws.simop.com/SIMOP/hacerDiagnosticoRequest" message="tns:hacerDiagnostico"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/hacerDiagnosticoResponse" message="tns:hacerDiagnosticoResponse"/>
-    </operation>
-    <operation name="aprobarSolicitud">
-      <input wsam:Action="http://ws.simop.com/SIMOP/aprobarSolicitudRequest" message="tns:aprobarSolicitud"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/aprobarSolicitudResponse" message="tns:aprobarSolicitudResponse"/>
-    </operation>
-    <operation name="registrarConsultorio">
-      <input wsam:Action="http://ws.simop.com/SIMOP/registrarConsultorioRequest" message="tns:registrarConsultorio"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/registrarConsultorioResponse" message="tns:registrarConsultorioResponse"/>
-    </operation>
-    <operation name="registrarMedico">
-      <input wsam:Action="http://ws.simop.com/SIMOP/registrarMedicoRequest" message="tns:registrarMedico"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/registrarMedicoResponse" message="tns:registrarMedicoResponse"/>
-    </operation>
-    <operation name="registrarPaciente">
-      <input wsam:Action="http://ws.simop.com/SIMOP/registrarPacienteRequest" message="tns:registrarPaciente"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/registrarPacienteResponse" message="tns:registrarPacienteResponse"/>
-    </operation>
-    <operation name="listaDepartamento">
-      <input wsam:Action="http://ws.simop.com/SIMOP/listaDepartamentoRequest" message="tns:listaDepartamento"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/listaDepartamentoResponse" message="tns:listaDepartamentoResponse"/>
-    </operation>
-    <operation name="listaMunicipios">
-      <input wsam:Action="http://ws.simop.com/SIMOP/listaMunicipiosRequest" message="tns:listaMunicipios"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/listaMunicipiosResponse" message="tns:listaMunicipiosResponse"/>
+    <operation name="registrarGCM">
+      <input wsam:Action="http://ws.simop.com/SIMOP/registrarGCMRequest" message="tns:registrarGCM"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/registrarGCMResponse" message="tns:registrarGCMResponse"/>
     </operation>
   </portType>
   <binding name="SIMOPPortBinding" type="tns:SIMOP">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="registrarConsultorio">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="registrarPaciente">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="listaPacientes">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="aprobarSolicitud">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="recuperarClave">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="listaDepartamento">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="buscarConsultorio">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="hacerDiagnostico">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="obtenerAlertas">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="hacerSolicitud">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="obtenerEstadisticas">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="validarUsuario">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="listarSolicitudes">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="obtenerDiagnosticos">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="obtenerAlertasPaciente">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="listaMunicipios">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="obtenerHistorial">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="registrarMedico">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="guardarChequeo">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
     <operation name="listaMedicos">
       <soap:operation soapAction=""/>
       <input>
@@ -228,160 +419,7 @@
         <soap:body use="literal"/>
       </output>
     </operation>
-    <operation name="guardarChequeo">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="obtenerEstadisticas">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="listaPacientes">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="listarSolicitudes">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="buscarConsultorio">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="validarUsuario">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="hacerSolicitud">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="obtenerHistorial">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="obtenerDiagnosticos">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="obtenerAlertas">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="obtenerAlertasPaciente">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="hacerDiagnostico">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="aprobarSolicitud">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="registrarConsultorio">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="registrarMedico">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="registrarPaciente">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="listaDepartamento">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="listaMunicipios">
+    <operation name="registrarGCM">
       <soap:operation soapAction=""/>
       <input>
         <soap:body use="literal"/>

@@ -65,9 +65,17 @@
 
   <xs:element name="obtenerHistorialResponse" type="tns:obtenerHistorialResponse"/>
 
+  <xs:element name="recuperarClave" type="tns:recuperarClave"/>
+
+  <xs:element name="recuperarClaveResponse" type="tns:recuperarClaveResponse"/>
+
   <xs:element name="registrarConsultorio" type="tns:registrarConsultorio"/>
 
   <xs:element name="registrarConsultorioResponse" type="tns:registrarConsultorioResponse"/>
+
+  <xs:element name="registrarGCM" type="tns:registrarGCM"/>
+
+  <xs:element name="registrarGCMResponse" type="tns:registrarGCMResponse"/>
 
   <xs:element name="registrarMedico" type="tns:registrarMedico"/>
 
@@ -85,6 +93,7 @@
     <xs:sequence>
       <xs:element name="correo" type="xs:string" minOccurs="0"/>
       <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="cedula" type="xs:int"/>
       <xs:element name="nombres" type="xs:string" minOccurs="0"/>
       <xs:element name="apellidos" type="xs:string" minOccurs="0"/>
       <xs:element name="sexo" type="xs:string" minOccurs="0"/>
@@ -103,6 +112,20 @@
     </xs:sequence>
   </xs:complexType>
 
+  <xs:complexType name="buscarConsultorio">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="nombre" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="buscarConsultorioResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="hacerDiagnostico">
     <xs:sequence>
       <xs:element name="correo" type="xs:string" minOccurs="0"/>
@@ -113,20 +136,6 @@
   </xs:complexType>
 
   <xs:complexType name="hacerDiagnosticoResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="buscarConsultorio">
-    <xs:sequence>
-      <xs:element name="correo" type="xs:string" minOccurs="0"/>
-      <xs:element name="clave" type="xs:string" minOccurs="0"/>
-      <xs:element name="nombre" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="buscarConsultorioResponse">
     <xs:sequence>
       <xs:element name="return" type="xs:string" minOccurs="0"/>
     </xs:sequence>
@@ -256,13 +265,15 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="listaMunicipios">
+  <xs:complexType name="registrarGCM">
     <xs:sequence>
-      <xs:element name="idDepartamento" type="xs:int"/>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="regGCM" type="xs:string" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="listaMunicipiosResponse">
+  <xs:complexType name="registrarGCMResponse">
     <xs:sequence>
       <xs:element name="return" type="xs:string" minOccurs="0"/>
     </xs:sequence>
@@ -284,6 +295,18 @@
     </xs:sequence>
   </xs:complexType>
 
+  <xs:complexType name="listaMunicipios">
+    <xs:sequence>
+      <xs:element name="idDepartamento" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="listaMunicipiosResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="listaMedicos">
     <xs:sequence>
       <xs:element name="correo" type="xs:string" minOccurs="0"/>
@@ -292,6 +315,18 @@
   </xs:complexType>
 
   <xs:complexType name="listaMedicosResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="recuperarClave">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="recuperarClaveResponse">
     <xs:sequence>
       <xs:element name="return" type="xs:string" minOccurs="0"/>
     </xs:sequence>
@@ -310,6 +345,19 @@
     </xs:sequence>
   </xs:complexType>
 
+  <xs:complexType name="obtenerDiagnosticos">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerDiagnosticosResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="listaPacientes">
     <xs:sequence>
       <xs:element name="correo" type="xs:string" minOccurs="0"/>
@@ -320,19 +368,6 @@
   </xs:complexType>
 
   <xs:complexType name="listaPacientesResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="obtenerDiagnosticos">
-    <xs:sequence>
-      <xs:element name="correo" type="xs:string" minOccurs="0"/>
-      <xs:element name="clave" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="obtenerDiagnosticosResponse">
     <xs:sequence>
       <xs:element name="return" type="xs:string" minOccurs="0"/>
     </xs:sequence>

@@ -20,7 +20,8 @@ import java.util.logging.Logger;
  */
 public class GCM {
     
-    public static void send(String regId, String msg){
+    public static boolean send(String key, String regId, String msg){
+        
         try {
             URL url = new URL("https://android.googleapis.com/gcm/send");
             
@@ -31,7 +32,7 @@ public class GCM {
             conn.setRequestProperty("Authorization", "key=AIzaSyAOyF6k6jSvPAR7HYZsHxVrC_ku_RHJTbo");
             conn.setDoOutput(true);
             
-            String body = "collapse_key=alerta&registration_id=42&data.msg=probando";
+            String body = "collapse_key=" + key + "&registration_id=" + regId + "&data.msg=" + msg;
             
             conn.setRequestProperty("Content-Length", Integer.toString(body.length()));
             conn.getOutputStream().write(body.getBytes("UTF8"));
@@ -39,21 +40,28 @@ public class GCM {
             int responseCode = conn.getResponseCode();
             System.out.println("response code: " + responseCode);
             
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
+            if(responseCode == HttpURLConnection.HTTP_OK){
+                
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+
+                while((inputLine = in.readLine()) != null){
+                    response.append(inputLine);
+                }
+
+                in.close();
+
+                System.out.println("Response: " + response.toString());
             
-            while((inputLine = in.readLine()) != null){
-                response.append(inputLine);
+                return true;
             }
-            
-            in.close();
-            
-            System.out.println("Response: " + response.toString());
             
         } catch (IOException ex) {
             Logger.getLogger(GCM.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        return false;
     }
     
 }

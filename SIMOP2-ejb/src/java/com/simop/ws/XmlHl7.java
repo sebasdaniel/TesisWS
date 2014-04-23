@@ -135,7 +135,7 @@ public class XmlHl7 {
             nodoName.appendChild(nodoGiven);
             
             nodoGiven = document.createElement("given");
-            nodoValorGiven = document.createTextNode("Daniel"); // Segujndo nombre
+            nodoValorGiven = document.createTextNode("Daniel"); // Segundo nombre
             nodoGiven.appendChild(nodoValorGiven);
             
             nodoName.appendChild(nodoGiven);
@@ -169,6 +169,225 @@ public class XmlHl7 {
             
             nodoPatientRole.appendChild(nodoPatient);
             
+            Element nodoProviderOrganization = document.createElement("providerOrganization");
+            nodoProviderOrganization.setAttribute("classCode", "ORG");
+            nodoProviderOrganization.setAttribute("determinerCode", "INSTANCE");
+            
+            nodoId = document.createElement("id");
+            nodoId.setAttribute("root", "2.16.840.1.113883.19.57.2.1.2.1");
+            nodoId.setAttribute("extension", "234170024801");
+            nodoId.setAttribute("assigningAuthorityName", "MinSalud");
+            
+            nodoProviderOrganization.appendChild(nodoId);
+            
+            nodoName = document.createElement("name");
+            Text nodoValorName = document.createTextNode("CONSULTORIO");
+            nodoName.appendChild(nodoValorName);
+            
+            nodoProviderOrganization.appendChild(nodoName);
+            
+            Element nodoTelecom = document.createElement("telecom");
+            nodoTelecom.setAttribute("value", "tel: +57(4) 773.55.54");
+            
+            nodoProviderOrganization.appendChild(nodoTelecom);
+            
+            nodoTelecom = document.createElement("telecom");
+            nodoTelecom.setAttribute("value", "fax: +57(4) 773.51.61");
+            
+            nodoProviderOrganization.appendChild(nodoTelecom);
+            
+            nodoAddr = document.createElement("addr");
+            
+            nodoCity = document.createElement("city");
+            nodoCity.appendChild(document.createTextNode("Lorica"));
+            
+            nodoAddr.appendChild(nodoCity);
+            
+            nodoState = document.createElement("state");
+            nodoState.appendChild(document.createTextNode("Cordoba"));
+            
+            nodoAddr.appendChild(nodoState);
+            
+            Element nodoCountry = document.createElement("country");
+            nodoCountry.appendChild(document.createTextNode("Colombia"));
+            
+            nodoAddr.appendChild(nodoCountry);
+            
+            nodoProviderOrganization.appendChild(nodoAddr);
+            nodoPatientRole.appendChild(nodoProviderOrganization);
+            nodoRecordTarget.appendChild(nodoPatientRole);
+            
+            raiz.appendChild(nodoRecordTarget);
+            
+            Element nodoAuthor = document.createElement("author");
+            nodoAuthor.setAttribute("typeCode", "AUT");
+            nodoAuthor.setAttribute("contextControlCode", "OP");
+            
+            Element nodoTime = document.createElement("time");
+            nodoTime.setAttribute("value", "20140311195200");
+            
+            nodoAuthor.appendChild(nodoTime);
+            
+            Element nodoAssignedAuthor = document.createElement("assignedAuthor");
+            
+            nodoId = document.createElement("id");
+            nodoId.setAttribute("root", "2.16.840.1.113883.19.57.2.1.1.1.1");
+            nodoId.setAttribute("extension", "123456321");
+            nodoId.setAttribute("assigningAuthorityName", "MinSalud");
+            
+            nodoAssignedAuthor.appendChild(nodoId);
+            
+            Element nodoAssignedPerson = document.createElement("assignedPerson");
+            nodoAssignedPerson.setAttribute("classCode", "PSN");
+            nodoAssignedPerson.setAttribute("determinerCode", "INSTANCE");
+            
+            nodoName = document.createElement("name");
+            nodoGiven = document.createElement("given");
+            nodoName.appendChild(nodoGiven);
+            
+            nodoFamily = document.createElement("family");
+            nodoName.appendChild(nodoFamily);
+            
+            nodoAssignedPerson.appendChild(nodoName);
+            nodoAssignedAuthor.appendChild(nodoAssignedPerson);
+            nodoAuthor.appendChild(nodoAssignedAuthor);
+            
+            raiz.appendChild(nodoAuthor);
+            
+            Element nodoCustodian = document.createElement("custodian");
+            nodoCustodian.setAttribute("typeCode", "CST");
+            
+            Element nodoAssignedCustodian = document.createElement("assignedCustodian");
+            nodoAssignedCustodian.setAttribute("classCode", "ASSIGNED");
+            
+            Element nodoRepresentedCustodianOrganization = document.createElement("representedCustodianOrganization");
+            nodoRepresentedCustodianOrganization.setAttribute("classCode", "ORG");
+            nodoRepresentedCustodianOrganization.setAttribute("determinerCode", "INSTANCE");
+            
+            nodoId = document.createElement("id");
+            nodoId.setAttribute("root", "2.16.840.1.113883.19.57.2.1.2.1");
+            nodoId.setAttribute("extension", "234170024801");
+            nodoId.setAttribute("assigningAuthorityName", "MinSalud");
+            
+            nodoRepresentedCustodianOrganization.appendChild(nodoId);
+            
+            nodoName = document.createElement("name");
+            nodoName.appendChild(document.createTextNode("CONSULTORIO"));
+            
+            nodoRepresentedCustodianOrganization.appendChild(nodoName);
+            nodoAssignedCustodian.appendChild(nodoRepresentedCustodianOrganization);
+            nodoCustodian.appendChild(nodoAssignedCustodian);
+            
+            raiz.appendChild(nodoCustodian);
+            
+            Element nodoComponent = document.createElement("component");
+            nodoComponent.setAttribute("typeCode", "COMP");
+            nodoComponent.setAttribute("contextConductionInd", "true");
+            
+            Element nodoStructuredBody = document.createElement("structuredBody");
+            nodoStructuredBody.setAttribute("classCode", "DOCBODY");
+            nodoStructuredBody.setAttribute("moodCode", "EVN");
+            
+            Element nodoComponent2 = document.createElement("component");
+            nodoComponent2.setAttribute("typeCode", "COMP");
+            nodoComponent2.setAttribute("contextConductionInd", "true");
+            
+            Element nodoSection = document.createElement("section");
+            nodoSection.setAttribute("classCode", "DOCSECT");
+            nodoSection.setAttribute("moodCode", "EVN");
+            
+            nodoCode = document.createElement("code");
+            nodoCode.setAttribute("code", "72231-4");
+            nodoCode.setAttribute("codeSystem", "2.16.840.1.113883.6.1");
+            nodoCode.setAttribute("codeSystemName", "LOINC");
+            nodoCode.setAttribute("displayName", "CONSULTATION NOTE");
+            
+            nodoSection.appendChild(nodoCode);
+            
+            nodoTitle = document.createElement("title");
+            nodoTitle.appendChild(document.createTextNode("NOTA DE EVOLUCIÓN"));
+            
+            nodoSection.appendChild(nodoTitle);
+            
+            // el core:
+            Element nodoText = document.createElement("text");
+            Element nodoTable = document.createElement("table");
+            Element nodoThead = document.createElement("thead");
+            Element nodoTr = document.createElement("tr");
+            
+            Element nodoTh = document.createElement("th");
+            nodoTh.appendChild(document.createTextNode("Tipo de Prueba"));
+            nodoTr.appendChild(nodoTh);
+            
+            nodoTh = document.createElement("th");
+            nodoTh.appendChild(document.createTextNode("Valor Resultado"));
+            nodoTr.appendChild(nodoTh);
+            
+            nodoTh = document.createElement("th");
+            nodoTh.appendChild(document.createTextNode("Unidades Resultado"));
+            nodoTr.appendChild(nodoTh);
+            
+            nodoTh = document.createElement("th");
+            nodoTh.appendChild(document.createTextNode("Rango"));
+            nodoTr.appendChild(nodoTh);
+            
+            nodoTh = document.createElement("th");
+            nodoTh.appendChild(document.createTextNode("Estado"));
+            nodoTr.appendChild(nodoTh);
+            
+            nodoTh = document.createElement("th");
+            nodoTh.appendChild(document.createTextNode("Descripción"));
+            nodoTr.appendChild(nodoTh);
+            
+            nodoThead.appendChild(nodoTr);
+            
+            nodoTable.appendChild(nodoThead);
+            
+            Element nodoTbody = document.createElement("tbody");
+            
+            nodoTr = document.createElement("tr");
+            
+            Element nodoTd = document.createElement("td");
+            nodoTd.appendChild(document.createTextNode("Presión"));
+            nodoTr.appendChild(nodoTd);
+            
+            nodoTd = document.createElement("th");
+            nodoTd.appendChild(document.createTextNode("100/60"));
+            nodoTr.appendChild(nodoTd);
+            
+            nodoTd = document.createElement("th");
+            nodoTd.appendChild(document.createTextNode("mmHg"));
+            nodoTr.appendChild(nodoTd);
+            
+            nodoTd = document.createElement("th");
+            nodoTd.appendChild(document.createTextNode("120/80"));
+            nodoTr.appendChild(nodoTd);
+            
+            nodoTd = document.createElement("th");
+            nodoTd.appendChild(document.createTextNode("Bajo"));
+            nodoTr.appendChild(nodoTd);
+            
+            nodoTd = document.createElement("th");
+            nodoTd.appendChild(document.createTextNode("prueba realizada en reposo"));
+            nodoTr.appendChild(nodoTd);
+            
+            nodoTbody.appendChild(nodoTr);
+            
+            nodoTable.appendChild(nodoTbody);
+            
+            Element nodoParagraph = document.createElement("paragraph");
+            nodoParagraph.appendChild(document.createTextNode("Se le recomienda ingerir de manera urgente un alimento"
+                    + " con alto contenido en azúcar"));
+            
+            nodoText.appendChild(nodoParagraph);
+            nodoSection.appendChild(nodoText);
+            nodoComponent2.appendChild(nodoSection);
+            nodoStructuredBody.appendChild(nodoComponent2);
+            nodoComponent.appendChild(nodoStructuredBody);
+            
+            raiz.appendChild(nodoComponent);
+            
+            
 //            Text nodoValorCampo = document.createTextNode("Contenido del elemento hijo");
 //            
 //            nodoNombreCampo.setAttribute("ejAtributo", "si funciona");
@@ -187,7 +406,7 @@ public class XmlHl7 {
                 salida = writer.getBuffer().toString();
                 
             } catch (TransformerException e) {
-                System.err.println(e);
+                System.err.println("Ha ocurrido una exception:\n" + e);
             }
             
         } catch (ParserConfigurationException ex) {

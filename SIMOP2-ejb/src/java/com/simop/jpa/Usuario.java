@@ -85,7 +85,7 @@ public class Usuario implements Serializable {
     @Size(max = 45)
     @Column(name = "imagen")
     private String imagen;
-    @Size(max = 45)
+    @Size(max = 300)
     @Column(name = "gcm_reg_id")
     private String gcmRegId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioID")
