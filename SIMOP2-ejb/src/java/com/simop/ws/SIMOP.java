@@ -246,17 +246,6 @@ public class SIMOP {
             antecedente.setChequeoIdchequeo(chequeo);
             antecedente.setPaciente(usuarioPaciente);
             ejbAntecedente.create(antecedente);
-            
-            for(Atiende atiende : usuarioPaciente.getAtiendeList()){
-                
-                if(atiende.getPaciente().getUsuarioID().getId() == usuarioPaciente.getUsuarioID().getId()){
-                    
-                    GCM.send("alerta", atiende.getMedico().getUsuarioID().getGcmRegId(),
-                            usuarioPaciente.getUsuarioID().getNombres() + " " + usuarioPaciente.getApellidos()
-                            + "\n" + chequeo.getTipochequeo() + " " + chequeo.getValor() + " " + chequeo.getUnidades());
-                }
-            }
-            
         }
         
         return tip != null ? tip.getContenido() : chequeo.getTipIdtip().getContenido();
@@ -511,7 +500,6 @@ public class SIMOP {
                                             + p.getUsuarioID().getNombres() + ";"
                                             + p.getApellidos() + ";"
                                             + p.getUsuarioID().getTelefono() + ";"
-                                            + p.getUsuarioID().getEmail() + ";"
                                             + p.getSexo() + ";"
                                             + p.getFechanac()+ "\n";
                                 }
@@ -629,8 +617,8 @@ public class SIMOP {
                     salida += m.getCedulaMedico() + ";"
                             + m.getUsuarioID().getNombres() + ";"
                             + m.getApellidos() + ";"
-                            + m.getUsuarioID().getTelefono() + ";"
-                            + m.getUsuarioID().getEmail() + "\n";
+                            + m.getSexo() + ";"
+                            + m.getNacionalidad() + "\n";
                 }
 
                 return salida;
@@ -1147,14 +1135,6 @@ public class SIMOP {
                         
                         ejbDiagnostico.create(diagnostico);
                         
-                        String regGcm = antecedente.getPaciente().getUsuarioID().getGcmRegId();
-                        
-                        if(regGcm != null && !regGcm.equals("")){
-                            
-                            GCM.send("diagnostico", regGcm,
-                                    contenido.substring(0, (contenido.length() < 20 ? contenido.length() : 20)));
-                        }
-                        
                         return "ok";
                     }
                 }
@@ -1403,6 +1383,30 @@ public class SIMOP {
     }
 
     /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "registrarGCM")
+    public String registrarGCM(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave) {
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)){
+                
+                if(usuario.getRoll().equals("paciente") || usuario.getRoll().equals("medico")){
+                    
+                    // establecer el gcm id
+                    GCM.send(clave, clave);
+                    return "ok";
+                }
+                
+                return "fail";
+            }
+        }
+        
+        return "fail";
+    }
+
+    /**
      * Operacion para registrar medico
      */
     @WebMethod(operationName = "registrarMedico")
@@ -1448,59 +1452,6 @@ public class SIMOP {
         ejbEspecialidad.create(esp);
         
         return "ok";
-    }
-
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "registrarGCM")
-    public String registrarGCM(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
-            @WebParam(name = "regGCM") String regGCM) {
-        
-        for(Usuario usuario : ejbUsuario.findAll()){
-            
-            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)){
-                
-                if(usuario.getRoll().equals("paciente") || usuario.getRoll().equals("medico")){
-                    
-                    usuario.setGcmRegId(regGCM);
-                    
-                    ejbUsuario.edit(usuario);
-                    
-                    GCM.send("registro", regGCM, "mensaje que todabia no se utiliza");
-                    
-                    return "ok";
-                }
-                
-                return "fail1";
-            }
-        }
-        
-        return "fail2";
-    }
-
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "probarMensajes")
-    public String probarMensajes(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
-            @WebParam(name = "mensaje") String mensaje) {
-        
-        for(Usuario usuario : ejbUsuario.findAll()){
-            
-            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)){
-                
-                if(usuario.getRoll().equals("paciente") || usuario.getRoll().equals("medico")){
-                    
-                    return GCM.send("prueba", usuario.getGcmRegId(), mensaje) ? "ok" : "fail";
-                    
-                    //return "ok";
-                }
-                
-                return "fail";
-            }
-        }
-        return "fail";
     }
     
 }
