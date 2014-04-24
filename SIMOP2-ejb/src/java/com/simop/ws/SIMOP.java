@@ -251,9 +251,15 @@ public class SIMOP {
                 
                 if(atiende.getPaciente().getUsuarioID().getId() == usuarioPaciente.getUsuarioID().getId()){
                     
-                    GCM.send("alerta", atiende.getMedico().getUsuarioID().getGcmRegId(),
-                            usuarioPaciente.getUsuarioID().getNombres() + " " + usuarioPaciente.getApellidos()
-                            + "\n" + chequeo.getTipochequeo() + " " + chequeo.getValor() + " " + chequeo.getUnidades());
+                    String regId = atiende.getMedico().getUsuarioID().getGcmRegId();
+                    
+                    if(regId != null && !regId.isEmpty()){
+                        
+                        GCM.send("alerta", regId, usuarioPaciente.getUsuarioID().getNombres() + " "
+                                + usuarioPaciente.getApellidos() + "\n" + chequeo.getTipochequeo() + " "
+                                + chequeo.getValor() + " " + chequeo.getUnidades());
+                    }
+                    
                 }
             }
             
@@ -915,9 +921,57 @@ public class SIMOP {
             @WebParam(name = "modo") int modo, @WebParam(name = "pacienteTipoId") String pacienteTipoId,
             @WebParam(name = "pacienteNumId") String pacienteNumId) {
         
-        XmlHl7 historial = new XmlHl7();
+        // modo:
+        //  0 -> un paciente consulta su historial
+        //  1 -> un medico consulta el historial de un paciente
+        //  2 -> un consultorio obtiene el historial de una paciente
         
-        return historial.getXmlInString();
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)){
+                
+                switch(modo){
+                    case 0:
+                        for(Paciente paciente : usuario.getPacienteList()){
+                            
+                            if(paciente.getUsuarioID().getId() == usuario.getId()){
+                                // encontramos al paciente
+                                
+                                XmlHl7 historial = new XmlHl7();
+        
+                                return historial.getXmlInString();
+                            }
+                        }
+                        break;
+                    case 1:
+                        Paciente paciente = ejbPaciente.find(new PacientePK(Integer.parseInt(pacienteNumId), pacienteTipoId));
+                        
+                        if(paciente == null){
+                            return "fail";
+                        }
+                        
+                        // encontramos al paciete
+                        XmlHl7 historial = new XmlHl7();
+        
+                        return historial.getXmlInString();
+                        //break;
+                    case 2:
+                        Paciente paciente2 = ejbPaciente.find(new PacientePK(Integer.parseInt(pacienteNumId), pacienteTipoId));
+                        
+                        if(paciente2 == null){
+                            return "fail";
+                        }
+                        
+                        // encontramos al paciete
+                        XmlHl7 historial2 = new XmlHl7();
+        
+                        return historial2.getXmlInString();
+                        //break;
+                }
+            }
+        }
+        
+        return "fail";
     }
 
     /**
@@ -1467,7 +1521,7 @@ public class SIMOP {
                     
                     ejbUsuario.edit(usuario);
                     
-                    GCM.send("registro", regGCM, "mensaje que todabia no se utiliza");
+                    //GCM.send("registro", regGCM, "mensaje que todabia no se utiliza");
                     
                     return "ok";
                 }
