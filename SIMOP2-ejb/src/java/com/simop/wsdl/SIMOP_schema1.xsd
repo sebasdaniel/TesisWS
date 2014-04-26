@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xs:schema version="1.0" targetNamespace="http://ws.simop.com/" xmlns:tns="http://ws.simop.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+  <xs:element name="actualizarConsultorio" type="tns:actualizarConsultorio"/>
+
+  <xs:element name="actualizarConsultorioResponse" type="tns:actualizarConsultorioResponse"/>
+
   <xs:element name="aprobarSolicitud" type="tns:aprobarSolicitud"/>
 
   <xs:element name="aprobarSolicitudResponse" type="tns:aprobarSolicitudResponse"/>
@@ -29,6 +33,10 @@
 
   <xs:element name="listaDepartamentoResponse" type="tns:listaDepartamentoResponse"/>
 
+  <xs:element name="listaMedicoConsultorio" type="tns:listaMedicoConsultorio"/>
+
+  <xs:element name="listaMedicoConsultorioResponse" type="tns:listaMedicoConsultorioResponse"/>
+
   <xs:element name="listaMedicos" type="tns:listaMedicos"/>
 
   <xs:element name="listaMedicosResponse" type="tns:listaMedicosResponse"/>
@@ -52,6 +60,10 @@
   <xs:element name="obtenerAlertasPacienteResponse" type="tns:obtenerAlertasPacienteResponse"/>
 
   <xs:element name="obtenerAlertasResponse" type="tns:obtenerAlertasResponse"/>
+
+  <xs:element name="obtenerDatosCuenta" type="tns:obtenerDatosCuenta"/>
+
+  <xs:element name="obtenerDatosCuentaResponse" type="tns:obtenerDatosCuentaResponse"/>
 
   <xs:element name="obtenerDiagnosticos" type="tns:obtenerDiagnosticos"/>
 
@@ -106,29 +118,6 @@
   </xs:complexType>
 
   <xs:complexType name="probarMensajesResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="registrarMedico">
-    <xs:sequence>
-      <xs:element name="correo" type="xs:string" minOccurs="0"/>
-      <xs:element name="clave" type="xs:string" minOccurs="0"/>
-      <xs:element name="cedula" type="xs:int"/>
-      <xs:element name="nombres" type="xs:string" minOccurs="0"/>
-      <xs:element name="apellidos" type="xs:string" minOccurs="0"/>
-      <xs:element name="sexo" type="xs:string" minOccurs="0"/>
-      <xs:element name="numeroTP" type="xs:string" minOccurs="0"/>
-      <xs:element name="nacionalidad" type="xs:string" minOccurs="0"/>
-      <xs:element name="especializacion" type="xs:string" minOccurs="0"/>
-      <xs:element name="direccion" type="xs:string" minOccurs="0"/>
-      <xs:element name="telefono" type="xs:int"/>
-      <xs:element name="idMunicipio" type="xs:int"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="registrarMedicoResponse">
     <xs:sequence>
       <xs:element name="return" type="xs:string" minOccurs="0"/>
     </xs:sequence>
@@ -195,50 +184,14 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="listarSolicitudes">
+  <xs:complexType name="listaMedicoConsultorio">
     <xs:sequence>
       <xs:element name="correo" type="xs:string" minOccurs="0"/>
       <xs:element name="clave" type="xs:string" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="listarSolicitudesResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="validarUsuario">
-    <xs:sequence>
-      <xs:element name="correo" type="xs:string" minOccurs="0"/>
-      <xs:element name="clave" type="xs:string" minOccurs="0"/>
-      <xs:element name="roll" type="xs:int"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="validarUsuarioResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="guardarChequeo">
-    <xs:sequence>
-      <xs:element name="correo" type="xs:string" minOccurs="0"/>
-      <xs:element name="clave" type="xs:string" minOccurs="0"/>
-      <xs:element name="tipo" type="xs:string" minOccurs="0"/>
-      <xs:element name="valor" type="xs:string" minOccurs="0"/>
-      <xs:element name="unidades" type="xs:string" minOccurs="0"/>
-      <xs:element name="fecha" type="xs:string" minOccurs="0"/>
-      <xs:element name="hora" type="xs:string" minOccurs="0"/>
-      <xs:element name="descripcion" type="xs:string" minOccurs="0"/>
-      <xs:element name="latitud" type="xs:string" minOccurs="0"/>
-      <xs:element name="longitud" type="xs:string" minOccurs="0"/>
-      <xs:element name="nota" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="guardarChequeoResponse">
+  <xs:complexType name="listaMedicoConsultorioResponse">
     <xs:sequence>
       <xs:element name="return" type="xs:string" minOccurs="0"/>
     </xs:sequence>
@@ -249,54 +202,6 @@
   </xs:complexType>
 
   <xs:complexType name="listaDepartamentoResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="buscarMedico">
-    <xs:sequence>
-      <xs:element name="correo" type="xs:string" minOccurs="0"/>
-      <xs:element name="clave" type="xs:string" minOccurs="0"/>
-      <xs:element name="nombre" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="buscarMedicoResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="obtenerEstadisticas">
-    <xs:sequence>
-      <xs:element name="correo" type="xs:string" minOccurs="0"/>
-      <xs:element name="clave" type="xs:string" minOccurs="0"/>
-      <xs:element name="fechaInicio" type="xs:string" minOccurs="0"/>
-      <xs:element name="fechaFin" type="xs:string" minOccurs="0"/>
-      <xs:element name="tipoChequeo" type="xs:string" minOccurs="0"/>
-      <xs:element name="modo" type="xs:int"/>
-      <xs:element name="numeroId" type="xs:string" minOccurs="0"/>
-      <xs:element name="tipoId" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="obtenerEstadisticasResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="rechazarSolicitud">
-    <xs:sequence>
-      <xs:element name="correo" type="xs:string" minOccurs="0"/>
-      <xs:element name="clave" type="xs:string" minOccurs="0"/>
-      <xs:element name="tipoId" type="xs:string" minOccurs="0"/>
-      <xs:element name="numeroId" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="rechazarSolicitudResponse">
     <xs:sequence>
       <xs:element name="return" type="xs:string" minOccurs="0"/>
     </xs:sequence>
@@ -328,42 +233,14 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="obtenerHistorial">
-    <xs:sequence>
-      <xs:element name="correo" type="xs:string" minOccurs="0"/>
-      <xs:element name="clave" type="xs:string" minOccurs="0"/>
-      <xs:element name="modo" type="xs:int"/>
-      <xs:element name="pacienteTipoId" type="xs:string" minOccurs="0"/>
-      <xs:element name="pacienteNumId" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="obtenerHistorialResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="recuperarClave">
-    <xs:sequence>
-      <xs:element name="correo" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="recuperarClaveResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="listaMedicos">
+  <xs:complexType name="obtenerDatosCuenta">
     <xs:sequence>
       <xs:element name="correo" type="xs:string" minOccurs="0"/>
       <xs:element name="clave" type="xs:string" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="listaMedicosResponse">
+  <xs:complexType name="obtenerDatosCuentaResponse">
     <xs:sequence>
       <xs:element name="return" type="xs:string" minOccurs="0"/>
     </xs:sequence>
@@ -377,21 +254,6 @@
   </xs:complexType>
 
   <xs:complexType name="obtenerAlertasResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="listaPacientes">
-    <xs:sequence>
-      <xs:element name="correo" type="xs:string" minOccurs="0"/>
-      <xs:element name="clave" type="xs:string" minOccurs="0"/>
-      <xs:element name="soloConsultorio" type="xs:boolean"/>
-      <xs:element name="cedulaMedico" type="xs:int"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="listaPacientesResponse">
     <xs:sequence>
       <xs:element name="return" type="xs:string" minOccurs="0"/>
     </xs:sequence>
@@ -442,6 +304,202 @@
   </xs:complexType>
 
   <xs:complexType name="obtenerAlertasPacienteResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="registrarMedico">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="cedula" type="xs:int"/>
+      <xs:element name="nombres" type="xs:string" minOccurs="0"/>
+      <xs:element name="apellidos" type="xs:string" minOccurs="0"/>
+      <xs:element name="sexo" type="xs:string" minOccurs="0"/>
+      <xs:element name="numeroTP" type="xs:string" minOccurs="0"/>
+      <xs:element name="nacionalidad" type="xs:string" minOccurs="0"/>
+      <xs:element name="especializacion" type="xs:string" minOccurs="0"/>
+      <xs:element name="direccion" type="xs:string" minOccurs="0"/>
+      <xs:element name="telefono" type="xs:int"/>
+      <xs:element name="idMunicipio" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="registrarMedicoResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="actualizarConsultorio">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="nuevoCorreo" type="xs:string" minOccurs="0"/>
+      <xs:element name="nuevaClave" type="xs:string" minOccurs="0"/>
+      <xs:element name="nombre" type="xs:string" minOccurs="0"/>
+      <xs:element name="direccion" type="xs:string" minOccurs="0"/>
+      <xs:element name="telefono" type="xs:int"/>
+      <xs:element name="idMunicipio" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="actualizarConsultorioResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="validarUsuario">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="roll" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="validarUsuarioResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="listarSolicitudes">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="listarSolicitudesResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="guardarChequeo">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="tipo" type="xs:string" minOccurs="0"/>
+      <xs:element name="valor" type="xs:string" minOccurs="0"/>
+      <xs:element name="unidades" type="xs:string" minOccurs="0"/>
+      <xs:element name="fecha" type="xs:string" minOccurs="0"/>
+      <xs:element name="hora" type="xs:string" minOccurs="0"/>
+      <xs:element name="descripcion" type="xs:string" minOccurs="0"/>
+      <xs:element name="latitud" type="xs:string" minOccurs="0"/>
+      <xs:element name="longitud" type="xs:string" minOccurs="0"/>
+      <xs:element name="nota" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="guardarChequeoResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="buscarMedico">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="tipoBusqueda" type="xs:int"/>
+      <xs:element name="criterio" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="buscarMedicoResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerEstadisticas">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="fechaInicio" type="xs:string" minOccurs="0"/>
+      <xs:element name="fechaFin" type="xs:string" minOccurs="0"/>
+      <xs:element name="tipoChequeo" type="xs:string" minOccurs="0"/>
+      <xs:element name="modo" type="xs:int"/>
+      <xs:element name="numeroId" type="xs:string" minOccurs="0"/>
+      <xs:element name="tipoId" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerEstadisticasResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="rechazarSolicitud">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="tipoId" type="xs:string" minOccurs="0"/>
+      <xs:element name="numeroId" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="rechazarSolicitudResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerHistorial">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="modo" type="xs:int"/>
+      <xs:element name="pacienteTipoId" type="xs:string" minOccurs="0"/>
+      <xs:element name="pacienteNumId" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="obtenerHistorialResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="listaMedicos">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="listaMedicosResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="recuperarClave">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="recuperarClaveResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="listaPacientes">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="soloConsultorio" type="xs:boolean"/>
+      <xs:element name="cedulaMedico" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="listaPacientesResponse">
     <xs:sequence>
       <xs:element name="return" type="xs:string" minOccurs="0"/>
     </xs:sequence>

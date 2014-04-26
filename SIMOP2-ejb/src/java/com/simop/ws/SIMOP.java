@@ -737,35 +737,63 @@ public class SIMOP {
     }
 
     /**
-     * Operacion Web Service para buscar medicos por nombres y/o apellidos
+     * Operacion Web Service para buscar medicos por nombres y/o apellidos o cedula
      */
     @WebMethod(operationName = "buscarMedico")
     public String buscarMedico(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
-            @WebParam(name = "nombre") String nombre) {
+            @WebParam(name = "tipoBusqueda") int tipoBusqueda, @WebParam(name = "criterio") String criterio) {
+        
+        // tipoBusqueda:
+        // 0 -> por nombre o apellido
+        // 1 -> por nuemero de cedula
         
         for(Usuario usuario : ejbUsuario.findAll()){
             
             if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)){
                 
-                List<Medico> medicos = ejbMedico.findAll();
-                
-                String salida = "";
-                
-                for(Medico medico : medicos){
+                switch(tipoBusqueda){
                     
-                    // Usar expresiones regulares para mejorar la busqueda
-                    if(medico.getUsuarioID().getNombres().contains(nombre) || medico.getApellidos().contains(nombre)){
+                    case 0:
+                        List<Medico> medicos = ejbMedico.findAll();
                         
-                        salida += medico.getCedulaMedico() + ";"
+                        String salida = "";
+
+                        for(Medico medico : medicos){
+
+                            // Usar expresiones regulares para mejorar la busqueda
+                            if(medico.getUsuarioID().getNombres().contains(criterio)
+                                    || medico.getApellidos().contains(criterio)){
+
+                                salida += medico.getCedulaMedico() + ";"
+                                        + medico.getUsuarioID().getNombres() + ";"
+                                        + medico.getApellidos() + ";"
+                                        + medico.getUsuarioID().getTelefono() + ";"
+                                        + medico.getUsuarioID().getEmail() + ";"
+                                        + medico.getSexo() + "\n";
+                            }
+                        }
+
+                        return salida;
+//                        break;
+                        
+                    case 1:
+                        Medico medico = ejbMedico.find(Integer.parseInt(criterio));
+                        
+                        if(medico == null){
+                            return "fail";
+                        }
+                        
+                        String salida2 = medico.getCedulaMedico() + ";"
                                 + medico.getUsuarioID().getNombres() + ";"
                                 + medico.getApellidos() + ";"
                                 + medico.getUsuarioID().getTelefono() + ";"
                                 + medico.getUsuarioID().getEmail() + ";"
-                                + medico.getSexo() + "\n";
-                    }
+                                + medico.getSexo();
+                        
+                        return salida2;
+//                        break;
                 }
                 
-                return salida;
             }
         }
         
@@ -1738,7 +1766,7 @@ public class SIMOP {
     }
 
     /**
-     * Web service operation
+     * Metodo para obtener la lista de medicos de un consultorio
      */
     @WebMethod(operationName = "listaMedicoConsultorio")
     public String listaMedicoConsultorio(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave) {
@@ -1768,6 +1796,42 @@ public class SIMOP {
                     
                 }
                 
+            }
+        }
+        
+        return "fail";
+    }
+
+    /**
+     * Metodo para actualizar los datos de un consultorio
+     */
+    @WebMethod(operationName = "actualizarConsultorio")
+    public String actualizarConsultorio(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
+            @WebParam(name = "nuevoCorreo") String nuevoCorreo, @WebParam(name = "nuevaClave") String nuevaClave,
+            @WebParam(name = "nombre") String nombre, @WebParam(name = "direccion") String direccion,
+            @WebParam(name = "telefono") int telefono, @WebParam(name = "idMunicipio") int idMunicipio) {
+        
+        Municipio municipio = ejbMunicipio.find(idMunicipio);
+        
+        if(municipio == null){
+            return "fail";
+        }
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)
+                    && usuario.getRoll().equals("consultorio")){
+                
+                usuario.setEmail(nuevoCorreo);
+                usuario.setClave(nuevaClave);
+                usuario.setNombres(nombre);
+                usuario.setDireccion(direccion);
+                usuario.setTelefono(telefono);
+                usuario.setMunicipioIdmunicipio(municipio);
+                
+                ejbUsuario.edit(usuario);
+                
+                return "ok";
             }
         }
         
