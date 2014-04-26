@@ -1321,6 +1321,95 @@ public class SIMOP {
         
         return "fail";
     }
+    
+    /**
+     * Operacion mediante la cual un medico o consultorio puede desaprobar la solicitud hecha por un paciente
+     */
+    @WebMethod(operationName = "rechazarSolicitud")
+    public String rechazarSolicitud(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
+            @WebParam(name = "tipoId") String tipoId, @WebParam(name = "numeroId") String numeroId) {
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)
+                    && (usuario.getRoll().equals("medico") || usuario.getRoll().equals("consultorio"))){
+                
+                switch (usuario.getRoll()) {
+                    
+                    case "medico":
+                        
+                        List<Medico> medicos = usuario.getMedicoList();
+                        
+                        for(Medico medico : medicos){
+                            
+                            if(medico.getUsuarioID().getId() == usuario.getId()){
+                                
+                                SolicitudMedicoPK key = new SolicitudMedicoPK(medico.getCedulaMedico(),
+                                        Integer.parseInt(numeroId), tipoId);
+                                
+                                SolicitudMedico solicitud = ejbSolicitudMedico.find(key);
+                                
+                                if(solicitud == null){
+                                    return "fail";
+                                }
+                                
+                                solicitud.setEstado("desaprobado");
+                                solicitud.setFechaAprobacionSolicitud(Calendar.getInstance().getTime());
+                                
+                                ejbSolicitudMedico.edit(solicitud);
+                                
+                                Paciente paciente = ejbPaciente.find(new PacientePK(Integer.parseInt(numeroId), tipoId));
+                                
+                                if(paciente == null){
+                                    return "fail";
+                                }
+                                
+                                Atiende atiende = new Atiende(medico.getCedulaMedico(), paciente.getPacientePK().getNumid(),
+                                        paciente.getPacientePK().getTipoid());
+//                                atiende.setMedico(medico);
+//                                atiende.setPaciente(paciente);
+                                atiende.setFechaInicioAtencion(Calendar.getInstance().getTime());
+                                
+                                ejbAtiende.create(atiende);
+                                
+                                return "ok";
+                            }
+                        }
+                        
+                        break;
+                        
+                    case "consultorio":
+                        List<Consultorio> consultorios = usuario.getConsultorioList();
+                        
+                        for(Consultorio consultorio : consultorios){
+                            
+                            if(consultorio.getUsuarioID().getId() == usuario.getId()){
+                                
+                                SolicitudConsultorioPK key2 = new SolicitudConsultorioPK(consultorio.getIdconsultorio(),
+                                        Integer.parseInt(numeroId), tipoId);
+                                
+                                SolicitudConsultorio solicitud2 = ejbSolicitudConsultorio.find(key2);
+                                
+                                if(solicitud2 == null){
+                                    return "fail";
+                                }
+                                
+                                solicitud2.setEstado("desaprobado");
+                                solicitud2.setFechaAprobacionSolicitud(Calendar.getInstance().getTime());
+                                
+                                ejbSolicitudConsultorio.edit(solicitud2);
+                                
+                                return "ok";
+                            }
+                        }
+                        
+                        break;
+                }
+            }
+        }
+        
+        return "fail";
+    }
 
     /**
      * Operacion para registrar consultorio
