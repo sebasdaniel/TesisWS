@@ -1733,7 +1733,45 @@ public class SIMOP {
                 }
             }
         }
-        return null;
+        
+        return "fail";
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "listaMedicoConsultorio")
+    public String listaMedicoConsultorio(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave) {
+        
+        for (Usuario user : ejbUsuario.findAll()) {
+
+            if (user.getEmail().equals(correo) && user.getClave().equals(clave) && user.getRoll().equals("consultorio")) {
+                
+                for(Consultorio consultorio : user.getConsultorioList()){
+                    
+                    if(consultorio.getUsuarioID().getId() == user.getId()){
+                        
+                        String salida = "";
+                        
+                        for(Medico medico : consultorio.getMedicoList()){
+                            
+                            salida += medico.getCedulaMedico() + ";"
+                                + medico.getUsuarioID().getNombres() + ";"
+                                + medico.getApellidos() + ";"
+                                + medico.getUsuarioID().getTelefono() + ";"
+                                + medico.getUsuarioID().getEmail() + ";"
+                                + medico.getSexo() + "\n";
+                        }
+                        
+                        return salida;
+                    }
+                    
+                }
+                
+            }
+        }
+        
+        return "fail";
     }
     
 }
