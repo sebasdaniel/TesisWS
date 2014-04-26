@@ -225,6 +225,9 @@ public class SIMOP {
         }
         // fin obtener tip
         
+        nota = nota.replaceAll("\n", " ");
+        nota = nota.trim();
+        
         chequeo.setDescripcion(descripcion);
         chequeo.setFecha(dFecha);
         chequeo.setHora(dHora);
@@ -493,6 +496,9 @@ public class SIMOP {
                     && (user.getRoll().equals("medico") || user.getRoll().equals("consultorio"))) {
 
                 //System.out.println("encontro usuario");
+                
+                SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                
                 if(user.getRoll().equals("medico")){
 
                     //System.out.println("encontro que es medico");
@@ -519,7 +525,7 @@ public class SIMOP {
                                             + p.getUsuarioID().getTelefono() + ";"
                                             + p.getUsuarioID().getEmail() + ";"
                                             + p.getSexo() + ";"
-                                            + p.getFechanac()+ "\n";
+                                            + Edad.calcularEdad(formato.format(p.getFechanac())) + "\n";
                                 }
                             }
                             
@@ -565,8 +571,9 @@ public class SIMOP {
                                                     + p.getUsuarioID().getNombres() + ";"
                                                     + p.getApellidos() + ";"
                                                     + p.getUsuarioID().getTelefono() + ";"
+                                                    + p.getUsuarioID().getEmail() + ";"
                                                     + p.getSexo() + ";"
-                                                    + p.getFechanac()+ "\n";
+                                                    + Edad.calcularEdad(formato.format(p.getFechanac())) + "\n";
                                         }
                                         
                                     }
@@ -593,12 +600,13 @@ public class SIMOP {
                                         Paciente p = temp.getPaciente();
 
                                         salida += p.getPacientePK().getTipoid() + ";"
-                                                + p.getPacientePK().getNumid() + ";"
-                                                + p.getUsuarioID().getNombres() + ";"
-                                                + p.getApellidos() + ";"
-                                                + p.getUsuarioID().getTelefono() + ";"
-                                                + p.getSexo() + ";"
-                                                + p.getFechanac()+ "\n";
+                                                    + p.getPacientePK().getNumid() + ";"
+                                                    + p.getUsuarioID().getNombres() + ";"
+                                                    + p.getApellidos() + ";"
+                                                    + p.getUsuarioID().getTelefono() + ";"
+                                                    + p.getUsuarioID().getEmail() + ";"
+                                                    + p.getSexo() + ";"
+                                                    + Edad.calcularEdad(formato.format(p.getFechanac())) + "\n";
                                     }
                                 }
 
@@ -612,7 +620,7 @@ public class SIMOP {
             }
         }
         
-        return "";
+        return "fail";
     }
 
     /**
@@ -636,14 +644,15 @@ public class SIMOP {
                             + m.getUsuarioID().getNombres() + ";"
                             + m.getApellidos() + ";"
                             + m.getUsuarioID().getTelefono() + ";"
-                            + m.getUsuarioID().getEmail() + "\n";
+                            + m.getUsuarioID().getEmail() + ";"
+                            + m.getSexo() + "\n";
                 }
 
                 return salida;
             }
         }
         
-        return null;
+        return "fail";
     }
 
     /**
@@ -679,8 +688,9 @@ public class SIMOP {
                                                 + p.getUsuarioID().getNombres() + ";"
                                                 + p.getApellidos() + ";"
                                                 + p.getUsuarioID().getTelefono() + ";"
+                                                + p.getUsuarioID().getEmail() + ";"
                                                 + p.getSexo() + ";"
-                                                + p.getFechanac()+ ";"
+                                                + Edad.calcularEdad(formato.format(p.getFechanac())) + ";"
                                                 + formato.format(solicitud.getFechaSolicitud()) + "\n";
                                     }
                                 }
@@ -708,8 +718,9 @@ public class SIMOP {
                                                 + p.getUsuarioID().getNombres() + ";"
                                                 + p.getApellidos() + ";"
                                                 + p.getUsuarioID().getTelefono() + ";"
+                                                + p.getUsuarioID().getEmail() + ";"
                                                 + p.getSexo() + ";"
-                                                + p.getFechanac()+ ";"
+                                                + Edad.calcularEdad(formato.format(p.getFechanac())) + ";"
                                                 + formato.format(solicitud.getFechaSolicitud()) + "\n";
                                     }
                                 }
@@ -722,7 +733,7 @@ public class SIMOP {
             }
         }
         
-        return "";
+        return "fail";
     }
 
     /**
@@ -748,8 +759,9 @@ public class SIMOP {
                         salida += medico.getCedulaMedico() + ";"
                                 + medico.getUsuarioID().getNombres() + ";"
                                 + medico.getApellidos() + ";"
-                                + medico.getSexo() + ";"
-                                + medico.getNacionalidad() + "\n";
+                                + medico.getUsuarioID().getTelefono() + ";"
+                                + medico.getUsuarioID().getEmail() + ";"
+                                + medico.getSexo() + "\n";
                     }
                 }
                 
@@ -757,7 +769,7 @@ public class SIMOP {
             }
         }
         
-        return null;
+        return "fail";
     }
 
     /**
@@ -1191,6 +1203,9 @@ public class SIMOP {
                         
                         Antecedente antecedente = ejbAntecedente.find(Integer.parseInt(idAntecedente));
                         
+                        contenido = contenido.replaceAll("\n", " ");
+                        contenido  = contenido.trim();
+                        
                         Diagnostico diagnostico = new Diagnostico();
                         
                         diagnostico.setFecha(Calendar.getInstance().getTime());
@@ -1547,8 +1562,6 @@ public class SIMOP {
                 if(usuario.getRoll().equals("paciente") || usuario.getRoll().equals("medico")){
                     
                     return GCM.send("prueba", usuario.getGcmRegId(), mensaje) ? "ok" : "fail";
-                    
-                    //return "ok";
                 }
                 
                 return "fail";
