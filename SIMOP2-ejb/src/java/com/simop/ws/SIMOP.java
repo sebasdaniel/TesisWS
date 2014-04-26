@@ -1609,7 +1609,7 @@ public class SIMOP {
     }
 
     /**
-     * Web service operation
+     * Metodo para guardar el codigo de registro de GCM de un determidado usuario, sea paciente o medico
      */
     @WebMethod(operationName = "registrarGCM")
     public String registrarGCM(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
@@ -1657,6 +1657,83 @@ public class SIMOP {
             }
         }
         return "fail";
+    }
+
+    /**
+     * Metodo mediante el cual se pueden obtener los datos de una cuenta dada
+     */
+    @WebMethod(operationName = "obtenerDatosCuenta")
+    public String obtenerDatosCuenta(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave) {
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)){
+                
+                switch(usuario.getRoll()){
+                    
+                    case "paciente":
+                        for(Paciente paciente : usuario.getPacienteList()){
+                            
+                            if(paciente.getUsuarioID().getId() == usuario.getId()){
+                                
+                                String salida = paciente.getPacientePK().getNumid() + ";"
+                                        + paciente.getPacientePK().getTipoid() + ";"
+                                        + paciente.getUsuarioID().getNombres() + ";"
+                                        + paciente.getApellidos() + ";"
+                                        + paciente.getSexo() + ";"
+                                        + paciente.getFechanac() + ";"
+                                        + paciente.getUsuarioID().getDireccion() + ";"
+                                        + paciente.getUsuarioID().getTelefono() + ";"
+                                        + paciente.getUsuarioID().getEmail() + ";"
+                                        + paciente.getUsuarioID().getClave() + ";"
+                                        + paciente.getUsuarioID().getMunicipioIdmunicipio().getNombre();
+                                        
+                                return salida;
+                            }
+                        }
+                        break;
+                    case "medico":
+                        for(Medico medico : usuario.getMedicoList()){
+                            
+                            if(medico.getUsuarioID().getId() == usuario.getId()){
+                                
+                                String salida = medico.getCedulaMedico() + ";"
+                                        + medico.getUsuarioID().getNombres() + ";"
+                                        + medico.getApellidos() + ";"
+                                        + medico.getSexo() + ";"
+                                        + medico.getNumTP() + ";"
+                                        + medico.getNacionalidad() + ";"
+                                        + medico.getUsuarioID().getDireccion() + ";"
+                                        + medico.getUsuarioID().getTelefono() + ";"
+                                        + medico.getUsuarioID().getEmail() + ";"
+                                        + medico.getUsuarioID().getClave() + ";"
+                                        + medico.getUsuarioID().getMunicipioIdmunicipio().getNombre();
+                                        
+                                return salida;
+                            }
+                        }
+                        break;
+                    case "consultorio":
+                        for(Consultorio consultorio : usuario.getConsultorioList()){
+                            
+                            if(consultorio.getUsuarioID().getId() == usuario.getId()){
+                                
+                                String salida = consultorio.getIdconsultorio() + ";"
+                                        + consultorio.getUsuarioID().getNombres() + ";"
+                                        + consultorio.getUsuarioID().getDireccion() + ";"
+                                        + consultorio.getUsuarioID().getTelefono() + ";"
+                                        + consultorio.getUsuarioID().getEmail() + ";"
+                                        + consultorio.getUsuarioID().getClave() + ";"
+                                        + consultorio.getUsuarioID().getMunicipioIdmunicipio().getNombre();
+                                
+                                return salida;
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+        return null;
     }
     
 }
