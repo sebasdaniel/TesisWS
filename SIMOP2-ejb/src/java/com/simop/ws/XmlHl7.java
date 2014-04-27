@@ -175,7 +175,7 @@ public class XmlHl7 {
             Element nodoFamily = document.createElement("family");
 //            Text nodoValorFamily = document.createTextNode(apellido1Paciente); // Apellido
 //            nodoGiven.appendChild(nodoValorFamily);
-            nodoGiven.appendChild(document.createTextNode(apellido1Paciente));
+            nodoFamily.appendChild(document.createTextNode(apellido1Paciente));
             
             nodoName.appendChild(nodoFamily);
             
@@ -188,7 +188,6 @@ public class XmlHl7 {
 
                 nodoName.appendChild(nodoFamily);
             }
-            
             
             nodoPatient.appendChild(nodoName);
             
