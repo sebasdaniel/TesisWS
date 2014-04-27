@@ -7,6 +7,10 @@
 package com.simop.ws;
 
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -28,9 +32,26 @@ import org.w3c.dom.Text;
  */
 public class XmlHl7 {
     
+    private String municipioPaciente;
+    private String departamentoPaciente;
+    private String nombre1Paciente;
+    private String nombre2Paciente;
+    private String apellido1Paciente;
+    private String apellido2Paciente;
+    private String codigoGeneroPaciente; // F, M, ND
+    private String generoPaciente;
+    private String telefonoConsultorio; // 123.45.67
+    private String municipioConsultorio;
+    private String departamentoConsultorio;
+    private ArrayList<String[]> datosHistorial;
+    
     private String salida = null;
     
     public XmlHl7(){
+        
+    }
+    
+    public void procesarXmlHl7(){
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -72,14 +93,15 @@ public class XmlHl7 {
             
             raiz.appendChild(nodoCode);
             
+            // cabecera
             Element nodoTitle = document.createElement("title");
-            Text nodoValorTitle = document.createTextNode("HOJA DE EVOLUCION");
+            Text nodoValorTitle = document.createTextNode("HISTORIAL");
             nodoTitle.appendChild(nodoValorTitle);
             
             raiz.appendChild(nodoTitle);
             
             Element nodoEffectiveTime = document.createElement("effectiveTime");
-            nodoEffectiveTime.setAttribute("value", "20140311195200");
+            nodoEffectiveTime.setAttribute("value", fechaActual());
             
             raiz.appendChild(nodoEffectiveTime);
             
@@ -87,10 +109,12 @@ public class XmlHl7 {
             nodoConfidentialityCode.setAttribute("code", "R");
             nodoConfidentialityCode.setAttribute("codeSystem", "2.16.840.1.113883.5.25");
             nodoConfidentialityCode.setAttribute("codeSystemName", "confidentiality");
-            nodoConfidentialityCode.setAttribute("displayName", "Restingido");
+            nodoConfidentialityCode.setAttribute("displayName", "Restringido");
             
             raiz.appendChild(nodoConfidentialityCode);
+            // fin cabecera
             
+            // registro clinico
             Element nodoRecordTarget = document.createElement("recordTarget");
             nodoRecordTarget.setAttribute("typeCode", "RCT");
             nodoRecordTarget.setAttribute("contextControlCode", "OP");
@@ -107,8 +131,10 @@ public class XmlHl7 {
             Element nodoAddr = document.createElement("addr");
             
             Element nodoCity = document.createElement("city");
+            nodoCity.appendChild(document.createTextNode(municipioPaciente));
             
             Element nodoState = document.createElement("state");
+            nodoState.appendChild(document.createTextNode(departamentoPaciente));
             
             nodoAddr.appendChild(nodoCity);
             nodoAddr.appendChild(nodoState);
@@ -129,43 +155,55 @@ public class XmlHl7 {
             Element nodoName = document.createElement("name");
             
             Element nodoGiven = document.createElement("given");
-            Text nodoValorGiven = document.createTextNode("Sebastian"); // Nombre
-            nodoGiven.appendChild(nodoValorGiven);
+            //Text nodoValorGiven = document.createTextNode(nombre1Paciente); // Nombre
+            //nodoGiven.appendChild(nodoValorGiven);
+            nodoGiven.appendChild(document.createTextNode(nombre1Paciente));
             
             nodoName.appendChild(nodoGiven);
             
-            nodoGiven = document.createElement("given");
-            nodoValorGiven = document.createTextNode("Daniel"); // Segundo nombre
-            nodoGiven.appendChild(nodoValorGiven);
+            if(!nombre2Paciente.isEmpty()){
+                
+                nodoGiven = document.createElement("given");
+//            nodoValorGiven = document.createTextNode(nombre2Paciente); // Segundo nombre
+//            nodoGiven.appendChild(nodoValorGiven);
+                nodoGiven.appendChild(document.createTextNode(nombre2Paciente));
+
+                nodoName.appendChild(nodoGiven);
+            }
             
-            nodoName.appendChild(nodoGiven);
             
             Element nodoFamily = document.createElement("family");
-            Text nodoValorFamily = document.createTextNode("Peña"); // Apellido
-            nodoGiven.appendChild(nodoValorFamily);
+//            Text nodoValorFamily = document.createTextNode(apellido1Paciente); // Apellido
+//            nodoGiven.appendChild(nodoValorFamily);
+            nodoGiven.appendChild(document.createTextNode(apellido1Paciente));
             
             nodoName.appendChild(nodoFamily);
             
-            nodoFamily = document.createElement("family");
-            nodoValorFamily = document.createTextNode("Peña"); // Apellido
-            nodoGiven.appendChild(nodoValorFamily);
+            if(!apellido2Paciente.isEmpty()){
+                
+                nodoFamily = document.createElement("family");
+    //            nodoValorFamily = document.createTextNode(apellido2Paciente); // Segundo Apellido
+    //            nodoGiven.appendChild(nodoValorFamily);
+                nodoFamily.appendChild(document.createTextNode(apellido2Paciente));
+
+                nodoName.appendChild(nodoFamily);
+            }
             
-            nodoName.appendChild(nodoFamily);
             
             nodoPatient.appendChild(nodoName);
             
             Element nodoAdministrativeGenderCode = document.createElement("administrativeGenderCode");
-            nodoAdministrativeGenderCode.setAttribute("code", "F");
+            nodoAdministrativeGenderCode.setAttribute("code", codigoGeneroPaciente);
             nodoAdministrativeGenderCode.setAttribute("codeSystem", "2.16.840.1.113883.5.1");
             nodoAdministrativeGenderCode.setAttribute("codeSystemName", "AdministrativeGender");
-            nodoAdministrativeGenderCode.setAttribute("displayName", "MASCULINO");
+            nodoAdministrativeGenderCode.setAttribute("displayName", generoPaciente);
             
             nodoPatient.appendChild(nodoAdministrativeGenderCode);
             
-            Element nodoBirthTime = document.createElement("birthTime");
-            nodoBirthTime.setAttribute("value", "19800720");
-            
-            nodoPatient.appendChild(nodoBirthTime);
+//            Element nodoBirthTime = document.createElement("birthTime");
+//            nodoBirthTime.setAttribute("value", "19800720");
+//            
+//            nodoPatient.appendChild(nodoBirthTime);
             
             nodoPatientRole.appendChild(nodoPatient);
             
@@ -187,24 +225,24 @@ public class XmlHl7 {
             nodoProviderOrganization.appendChild(nodoName);
             
             Element nodoTelecom = document.createElement("telecom");
-            nodoTelecom.setAttribute("value", "tel: +57(4) 773.55.54");
+            nodoTelecom.setAttribute("value", "tel: +57(4) " + telefonoConsultorio);
             
             nodoProviderOrganization.appendChild(nodoTelecom);
             
-            nodoTelecom = document.createElement("telecom");
-            nodoTelecom.setAttribute("value", "fax: +57(4) 773.51.61");
-            
-            nodoProviderOrganization.appendChild(nodoTelecom);
+//            nodoTelecom = document.createElement("telecom");
+//            nodoTelecom.setAttribute("value", "fax: +57(4) 773.51.61");
+//            
+//            nodoProviderOrganization.appendChild(nodoTelecom);
             
             nodoAddr = document.createElement("addr");
             
             nodoCity = document.createElement("city");
-            nodoCity.appendChild(document.createTextNode("Lorica"));
+            nodoCity.appendChild(document.createTextNode(municipioConsultorio));
             
             nodoAddr.appendChild(nodoCity);
             
             nodoState = document.createElement("state");
-            nodoState.appendChild(document.createTextNode("Cordoba"));
+            nodoState.appendChild(document.createTextNode(departamentoConsultorio));
             
             nodoAddr.appendChild(nodoState);
             
@@ -218,13 +256,15 @@ public class XmlHl7 {
             nodoRecordTarget.appendChild(nodoPatientRole);
             
             raiz.appendChild(nodoRecordTarget);
+            // fin registro clinico
             
+            // datos del autor
             Element nodoAuthor = document.createElement("author");
             nodoAuthor.setAttribute("typeCode", "AUT");
             nodoAuthor.setAttribute("contextControlCode", "OP");
             
             Element nodoTime = document.createElement("time");
-            nodoTime.setAttribute("value", "20140311195200");
+            nodoTime.setAttribute("value", fechaActual());
             
             nodoAuthor.appendChild(nodoTime);
             
@@ -242,18 +282,22 @@ public class XmlHl7 {
             nodoAssignedPerson.setAttribute("determinerCode", "INSTANCE");
             
             nodoName = document.createElement("name");
+            
             nodoGiven = document.createElement("given");
+            nodoGiven.appendChild(document.createTextNode("SIMOP"));
             nodoName.appendChild(nodoGiven);
             
-            nodoFamily = document.createElement("family");
-            nodoName.appendChild(nodoFamily);
+//            nodoFamily = document.createElement("family");
+//            nodoName.appendChild(nodoFamily);
             
             nodoAssignedPerson.appendChild(nodoName);
             nodoAssignedAuthor.appendChild(nodoAssignedPerson);
             nodoAuthor.appendChild(nodoAssignedAuthor);
             
             raiz.appendChild(nodoAuthor);
+            // fin datos autor
             
+            // datos encargado
             Element nodoCustodian = document.createElement("custodian");
             nodoCustodian.setAttribute("typeCode", "CST");
             
@@ -279,7 +323,9 @@ public class XmlHl7 {
             nodoCustodian.appendChild(nodoAssignedCustodian);
             
             raiz.appendChild(nodoCustodian);
+            // fin datos encargado
             
+            // cuerpo
             Element nodoComponent = document.createElement("component");
             nodoComponent.setAttribute("typeCode", "COMP");
             nodoComponent.setAttribute("contextConductionInd", "true");
@@ -345,55 +391,81 @@ public class XmlHl7 {
             
             Element nodoTbody = document.createElement("tbody");
             
-            nodoTr = document.createElement("tr");
+            for(String[] registro : datosHistorial){
+                
+                nodoTr = document.createElement("tr");
             
-            Element nodoTd = document.createElement("td");
-            nodoTd.appendChild(document.createTextNode("Presión"));
-            nodoTr.appendChild(nodoTd);
+                Element nodoTd = document.createElement("td");
+                nodoTd.appendChild(document.createTextNode(registro[0]));
+                nodoTr.appendChild(nodoTd);
+
+                nodoTd = document.createElement("td");
+                nodoTd.appendChild(document.createTextNode(registro[1]));
+                nodoTr.appendChild(nodoTd);
+
+                nodoTd = document.createElement("td");
+                nodoTd.appendChild(document.createTextNode(registro[2]));
+                nodoTr.appendChild(nodoTd);
+
+                nodoTd = document.createElement("td");
+                nodoTd.appendChild(document.createTextNode(registro[3]));
+                nodoTr.appendChild(nodoTd);
+
+                nodoTd = document.createElement("td");
+                nodoTd.appendChild(document.createTextNode(registro[4]));
+                nodoTr.appendChild(nodoTd);
+
+                nodoTd = document.createElement("td");
+                nodoTd.appendChild(document.createTextNode(registro[5]));
+                nodoTr.appendChild(nodoTd);
+
+                nodoTbody.appendChild(nodoTr);
+                
+            }
             
-            nodoTd = document.createElement("th");
-            nodoTd.appendChild(document.createTextNode("100/60"));
-            nodoTr.appendChild(nodoTd);
-            
-            nodoTd = document.createElement("th");
-            nodoTd.appendChild(document.createTextNode("mmHg"));
-            nodoTr.appendChild(nodoTd);
-            
-            nodoTd = document.createElement("th");
-            nodoTd.appendChild(document.createTextNode("120/80"));
-            nodoTr.appendChild(nodoTd);
-            
-            nodoTd = document.createElement("th");
-            nodoTd.appendChild(document.createTextNode("Bajo"));
-            nodoTr.appendChild(nodoTd);
-            
-            nodoTd = document.createElement("th");
-            nodoTd.appendChild(document.createTextNode("prueba realizada en reposo"));
-            nodoTr.appendChild(nodoTd);
-            
-            nodoTbody.appendChild(nodoTr);
+//            nodoTr = document.createElement("tr");
+//            
+//            Element nodoTd = document.createElement("td");
+//            nodoTd.appendChild(document.createTextNode("Presión"));
+//            nodoTr.appendChild(nodoTd);
+//            
+//            nodoTd = document.createElement("td");
+//            nodoTd.appendChild(document.createTextNode("100/60"));
+//            nodoTr.appendChild(nodoTd);
+//            
+//            nodoTd = document.createElement("td");
+//            nodoTd.appendChild(document.createTextNode("mmHg"));
+//            nodoTr.appendChild(nodoTd);
+//            
+//            nodoTd = document.createElement("td");
+//            nodoTd.appendChild(document.createTextNode("120/80"));
+//            nodoTr.appendChild(nodoTd);
+//            
+//            nodoTd = document.createElement("td");
+//            nodoTd.appendChild(document.createTextNode("Bajo"));
+//            nodoTr.appendChild(nodoTd);
+//            
+//            nodoTd = document.createElement("td");
+//            nodoTd.appendChild(document.createTextNode("prueba realizada en reposo"));
+//            nodoTr.appendChild(nodoTd);
+//            
+//            nodoTbody.appendChild(nodoTr);
             
             nodoTable.appendChild(nodoTbody);
+            nodoText.appendChild(nodoTable);
             
-            Element nodoParagraph = document.createElement("paragraph");
-            nodoParagraph.appendChild(document.createTextNode("Se le recomienda ingerir de manera urgente un alimento"
-                    + " con alto contenido en azúcar"));
+//            Element nodoParagraph = document.createElement("paragraph");
+//            nodoParagraph.appendChild(document.createTextNode("Se le recomienda ingerir de manera urgente un alimento"
+//                    + " con alto contenido en azúcar"));
+//            
+//            nodoText.appendChild(nodoParagraph);
             
-            nodoText.appendChild(nodoParagraph);
             nodoSection.appendChild(nodoText);
             nodoComponent2.appendChild(nodoSection);
             nodoStructuredBody.appendChild(nodoComponent2);
             nodoComponent.appendChild(nodoStructuredBody);
             
             raiz.appendChild(nodoComponent);
-            
-            
-//            Text nodoValorCampo = document.createTextNode("Contenido del elemento hijo");
-//            
-//            nodoNombreCampo.setAttribute("ejAtributo", "si funciona");
-//            nodoNombreCampo.appendChild(nodoValorCampo);
-//            
-//            raiz.appendChild(nodoNombreCampo);
             
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer transformer;
@@ -403,7 +475,7 @@ public class XmlHl7 {
                 // transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
                 StringWriter writer = new StringWriter();
                 transformer.transform(new DOMSource(document), new StreamResult(writer));
-                salida = writer.getBuffer().toString();
+                setSalida(writer.getBuffer().toString());
                 
             } catch (TransformerException e) {
                 System.err.println("Ha ocurrido una exception:\n" + e);
@@ -417,5 +489,105 @@ public class XmlHl7 {
     
     public String getXmlInString(){
         return salida;
+    }
+
+    private String fechaActual() {
+        
+        Date fecha = Calendar.getInstance().getTime();
+        
+        SimpleDateFormat formato = new SimpleDateFormat("yyyyMMddHHmmss");
+        
+        return formato.format(fecha);
+    }
+
+    /**
+     * @param municipioPaciente the municipioPaciente to set
+     */
+    public void setMunicipioPaciente(String municipioPaciente) {
+        this.municipioPaciente = municipioPaciente;
+    }
+
+    /**
+     * @param departamentoPaciente the departamentoPaciente to set
+     */
+    public void setDepartamentoPaciente(String departamentoPaciente) {
+        this.departamentoPaciente = departamentoPaciente;
+    }
+
+    /**
+     * @param codigoGeneroPaciente the codigoGeneroPaciente to set
+     */
+    public void setCodigoGeneroPaciente(String codigoGeneroPaciente) {
+        this.codigoGeneroPaciente = codigoGeneroPaciente;
+    }
+
+    /**
+     * @param generoPaciente the generoPaciente to set
+     */
+    public void setGeneroPaciente(String generoPaciente) {
+        this.generoPaciente = generoPaciente;
+    }
+
+    /**
+     * @param telefonoConsultorio the telefonoConsultorio to set
+     */
+    public void setTelefonoConsultorio(String telefonoConsultorio) {
+        this.telefonoConsultorio = telefonoConsultorio;
+    }
+
+    /**
+     * @param municipioConsultorio the municipioConsultorio to set
+     */
+    public void setMunicipioConsultorio(String municipioConsultorio) {
+        this.municipioConsultorio = municipioConsultorio;
+    }
+
+    /**
+     * @param departamentoConsultorio the departamentoConsultorio to set
+     */
+    public void setDepartamentoConsultorio(String departamentoConsultorio) {
+        this.departamentoConsultorio = departamentoConsultorio;
+    }
+
+    /**
+     * @param datosHistorial the datosHistorial to set
+     */
+    public void setDatosHistorial(ArrayList<String[]> datosHistorial) {
+        this.datosHistorial = datosHistorial;
+    }
+
+    /**
+     * @param salida the salida to set
+     */
+    public void setSalida(String salida) {
+        this.salida = salida;
+    }
+
+    /**
+     * @param nombre1Paciente the nombre1Paciente to set
+     */
+    public void setNombre1Paciente(String nombre1Paciente) {
+        this.nombre1Paciente = nombre1Paciente;
+    }
+
+    /**
+     * @param nombre2Paciente the nombre2Paciente to set
+     */
+    public void setNombre2Paciente(String nombre2Paciente) {
+        this.nombre2Paciente = nombre2Paciente;
+    }
+
+    /**
+     * @param apellido1Paciente the apellido1Paciente to set
+     */
+    public void setApellido1Paciente(String apellido1Paciente) {
+        this.apellido1Paciente = apellido1Paciente;
+    }
+
+    /**
+     * @param apellido2Paciente the apellido2Paciente to set
+     */
+    public void setApellido2Paciente(String apellido2Paciente) {
+        this.apellido2Paciente = apellido2Paciente;
     }
 }
