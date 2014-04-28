@@ -1871,7 +1871,7 @@ public class SIMOP {
                                         + medico.getUsuarioID().getClave() + ";"
                                         + medico.getUsuarioID().getMunicipioIdmunicipio().getDepartamentoIddepartamento()
                                                 .getIddepartamento() + ";"
-                                        + medico.getUsuarioID().getMunicipioIdmunicipio().getNombre();
+                                        + medico.getUsuarioID().getMunicipioIdmunicipio().getIdmunicipio();
                                         
                                 return salida;
                             }
@@ -1890,7 +1890,7 @@ public class SIMOP {
                                         + consultorio.getUsuarioID().getClave() + ";"
                                         + consultorio.getUsuarioID().getMunicipioIdmunicipio().getDepartamentoIddepartamento()
                                                 .getIddepartamento() + ";"
-                                        + consultorio.getUsuarioID().getMunicipioIdmunicipio().getNombre();
+                                        + consultorio.getUsuarioID().getMunicipioIdmunicipio().getIdmunicipio();
                                 
                                 return salida;
                             }
