@@ -1869,6 +1869,8 @@ public class SIMOP {
                                         + medico.getUsuarioID().getTelefono() + ";"
                                         + medico.getUsuarioID().getEmail() + ";"
                                         + medico.getUsuarioID().getClave() + ";"
+                                        + medico.getUsuarioID().getMunicipioIdmunicipio().getDepartamentoIddepartamento()
+                                                .getIddepartamento() + ";"
                                         + medico.getUsuarioID().getMunicipioIdmunicipio().getNombre();
                                         
                                 return salida;
@@ -1886,6 +1888,8 @@ public class SIMOP {
                                         + consultorio.getUsuarioID().getTelefono() + ";"
                                         + consultorio.getUsuarioID().getEmail() + ";"
                                         + consultorio.getUsuarioID().getClave() + ";"
+                                        + consultorio.getUsuarioID().getMunicipioIdmunicipio().getDepartamentoIddepartamento()
+                                                .getIddepartamento() + ";"
                                         + consultorio.getUsuarioID().getMunicipioIdmunicipio().getNombre();
                                 
                                 return salida;
