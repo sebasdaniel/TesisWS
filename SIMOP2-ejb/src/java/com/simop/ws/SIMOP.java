@@ -1580,7 +1580,7 @@ public class SIMOP {
     @WebMethod(operationName = "registrarConsultorio")
     public String registrarConsultorio(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
             @WebParam(name = "nombre") String nombre, @WebParam(name = "direccion") String direccion,
-            @WebParam(name = "telefono") int telefono, @WebParam(name = "idMunicipio") int idMunicipio) {
+            @WebParam(name = "telefono") String telefono, @WebParam(name = "idMunicipio") int idMunicipio) {
         
         Municipio municipio = ejbMunicipio.find(idMunicipio);
         
@@ -1615,7 +1615,7 @@ public class SIMOP {
             @WebParam(name = "tipoId") String tipoId, @WebParam(name = "numeroId") int numeroId,
             @WebParam(name = "nombres") String nombres, @WebParam(name = "apellidos") String apellidos,
             @WebParam(name = "sexo") String sexo, @WebParam(name = "fechaNacimiento") String fechaNacimiento,
-            @WebParam(name = "direccion") String direccion, @WebParam(name = "telefono") int telefono,
+            @WebParam(name = "direccion") String direccion, @WebParam(name = "telefono") String telefono,
             @WebParam(name = "idMunicipio") int idMunicipio) {
         
         Municipio municipio = ejbMunicipio.find(idMunicipio);
@@ -1732,7 +1732,7 @@ public class SIMOP {
             @WebParam(name = "apellidos") String apellidos, @WebParam(name = "sexo") String sexo,
             @WebParam(name = "numeroTP") String numeroTP, @WebParam(name = "nacionalidad") String nacionalidad,
             @WebParam(name = "especializacion") String especializacion, @WebParam(name = "direccion") String direccion,
-            @WebParam(name = "telefono") int telefono, @WebParam(name = "idMunicipio") int idMunicipio) {
+            @WebParam(name = "telefono") String telefono, @WebParam(name = "idMunicipio") int idMunicipio) {
         
         Municipio municipio = ejbMunicipio.find(idMunicipio);
         
@@ -1950,7 +1950,7 @@ public class SIMOP {
     public String actualizarConsultorio(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
             @WebParam(name = "nuevoCorreo") String nuevoCorreo, @WebParam(name = "nuevaClave") String nuevaClave,
             @WebParam(name = "nombre") String nombre, @WebParam(name = "direccion") String direccion,
-            @WebParam(name = "telefono") int telefono, @WebParam(name = "idMunicipio") int idMunicipio) {
+            @WebParam(name = "telefono") String telefono, @WebParam(name = "idMunicipio") int idMunicipio) {
         
         Municipio municipio = ejbMunicipio.find(idMunicipio);
         

@@ -64,8 +64,9 @@ public class Usuario implements Serializable {
     private String direccion;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "telefono")
-    private int telefono;
+    private String telefono;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -105,7 +106,7 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(Integer id, String nombres, String direccion, int telefono, String roll, String email, String clave) {
+    public Usuario(Integer id, String nombres, String direccion, String telefono, String roll, String email, String clave) {
         this.id = id;
         this.nombres = nombres;
         this.direccion = direccion;
@@ -139,11 +140,11 @@ public class Usuario implements Serializable {
         this.direccion = direccion;
     }
 
-    public int getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
