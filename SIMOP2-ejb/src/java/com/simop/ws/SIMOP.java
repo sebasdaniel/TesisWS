@@ -225,8 +225,11 @@ public class SIMOP {
         }
         // fin obtener tip
         
-        nota = nota.replaceAll("\n", " ");
-        nota = nota.trim();
+        if(nota != null && !nota.isEmpty()){
+            
+            nota = nota.replaceAll("\n", " ");
+            nota = nota.trim();
+        }
         
         chequeo.setDescripcion(descripcion);
         chequeo.setFecha(dFecha);
