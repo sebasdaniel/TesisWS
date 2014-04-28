@@ -6,6 +6,24 @@
       <xsd:import namespace="http://ws.simop.com/" schemaLocation="SIMOP_schema1.xsd"/>
     </xsd:schema>
   </types>
+  <message name="listaMedicos">
+    <part name="parameters" element="tns:listaMedicos"/>
+  </message>
+  <message name="listaMedicosResponse">
+    <part name="parameters" element="tns:listaMedicosResponse"/>
+  </message>
+  <message name="buscarMedico">
+    <part name="parameters" element="tns:buscarMedico"/>
+  </message>
+  <message name="buscarMedicoResponse">
+    <part name="parameters" element="tns:buscarMedicoResponse"/>
+  </message>
+  <message name="registrarGCM">
+    <part name="parameters" element="tns:registrarGCM"/>
+  </message>
+  <message name="registrarGCMResponse">
+    <part name="parameters" element="tns:registrarGCMResponse"/>
+  </message>
   <message name="guardarChequeo">
     <part name="parameters" element="tns:guardarChequeo"/>
   </message>
@@ -150,25 +168,19 @@
   <message name="actualizarConsultorioResponse">
     <part name="parameters" element="tns:actualizarConsultorioResponse"/>
   </message>
-  <message name="listaMedicos">
-    <part name="parameters" element="tns:listaMedicos"/>
-  </message>
-  <message name="listaMedicosResponse">
-    <part name="parameters" element="tns:listaMedicosResponse"/>
-  </message>
-  <message name="buscarMedico">
-    <part name="parameters" element="tns:buscarMedico"/>
-  </message>
-  <message name="buscarMedicoResponse">
-    <part name="parameters" element="tns:buscarMedicoResponse"/>
-  </message>
-  <message name="registrarGCM">
-    <part name="parameters" element="tns:registrarGCM"/>
-  </message>
-  <message name="registrarGCMResponse">
-    <part name="parameters" element="tns:registrarGCMResponse"/>
-  </message>
   <portType name="SIMOP">
+    <operation name="listaMedicos">
+      <input wsam:Action="http://ws.simop.com/SIMOP/listaMedicosRequest" message="tns:listaMedicos"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/listaMedicosResponse" message="tns:listaMedicosResponse"/>
+    </operation>
+    <operation name="buscarMedico">
+      <input wsam:Action="http://ws.simop.com/SIMOP/buscarMedicoRequest" message="tns:buscarMedico"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/buscarMedicoResponse" message="tns:buscarMedicoResponse"/>
+    </operation>
+    <operation name="registrarGCM">
+      <input wsam:Action="http://ws.simop.com/SIMOP/registrarGCMRequest" message="tns:registrarGCM"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/registrarGCMResponse" message="tns:registrarGCMResponse"/>
+    </operation>
     <operation name="guardarChequeo">
       <input wsam:Action="http://ws.simop.com/SIMOP/guardarChequeoRequest" message="tns:guardarChequeo"/>
       <output wsam:Action="http://ws.simop.com/SIMOP/guardarChequeoResponse" message="tns:guardarChequeoResponse"/>
@@ -265,21 +277,36 @@
       <input wsam:Action="http://ws.simop.com/SIMOP/actualizarConsultorioRequest" message="tns:actualizarConsultorio"/>
       <output wsam:Action="http://ws.simop.com/SIMOP/actualizarConsultorioResponse" message="tns:actualizarConsultorioResponse"/>
     </operation>
-    <operation name="listaMedicos">
-      <input wsam:Action="http://ws.simop.com/SIMOP/listaMedicosRequest" message="tns:listaMedicos"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/listaMedicosResponse" message="tns:listaMedicosResponse"/>
-    </operation>
-    <operation name="buscarMedico">
-      <input wsam:Action="http://ws.simop.com/SIMOP/buscarMedicoRequest" message="tns:buscarMedico"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/buscarMedicoResponse" message="tns:buscarMedicoResponse"/>
-    </operation>
-    <operation name="registrarGCM">
-      <input wsam:Action="http://ws.simop.com/SIMOP/registrarGCMRequest" message="tns:registrarGCM"/>
-      <output wsam:Action="http://ws.simop.com/SIMOP/registrarGCMResponse" message="tns:registrarGCMResponse"/>
-    </operation>
   </portType>
   <binding name="SIMOPPortBinding" type="tns:SIMOP">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="listaMedicos">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="buscarMedico">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="registrarGCM">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
     <operation name="guardarChequeo">
       <soap:operation soapAction=""/>
       <input>
@@ -488,33 +515,6 @@
       </output>
     </operation>
     <operation name="actualizarConsultorio">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="listaMedicos">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="buscarMedico">
-      <soap:operation soapAction=""/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="registrarGCM">
       <soap:operation soapAction=""/>
       <input>
         <soap:body use="literal"/>

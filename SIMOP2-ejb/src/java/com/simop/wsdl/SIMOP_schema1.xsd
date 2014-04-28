@@ -123,6 +123,20 @@
     </xs:sequence>
   </xs:complexType>
 
+  <xs:complexType name="buscarConsultorio">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="nombre" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="buscarConsultorioResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="hacerDiagnostico">
     <xs:sequence>
       <xs:element name="correo" type="xs:string" minOccurs="0"/>
@@ -133,20 +147,6 @@
   </xs:complexType>
 
   <xs:complexType name="hacerDiagnosticoResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="buscarConsultorio">
-    <xs:sequence>
-      <xs:element name="correo" type="xs:string" minOccurs="0"/>
-      <xs:element name="clave" type="xs:string" minOccurs="0"/>
-      <xs:element name="nombre" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="buscarConsultorioResponse">
     <xs:sequence>
       <xs:element name="return" type="xs:string" minOccurs="0"/>
     </xs:sequence>
@@ -167,23 +167,6 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="registrarConsultorio">
-    <xs:sequence>
-      <xs:element name="correo" type="xs:string" minOccurs="0"/>
-      <xs:element name="clave" type="xs:string" minOccurs="0"/>
-      <xs:element name="nombre" type="xs:string" minOccurs="0"/>
-      <xs:element name="direccion" type="xs:string" minOccurs="0"/>
-      <xs:element name="telefono" type="xs:int"/>
-      <xs:element name="idMunicipio" type="xs:int"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="registrarConsultorioResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
   <xs:complexType name="listaMedicoConsultorio">
     <xs:sequence>
       <xs:element name="correo" type="xs:string" minOccurs="0"/>
@@ -192,6 +175,23 @@
   </xs:complexType>
 
   <xs:complexType name="listaMedicoConsultorioResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="registrarConsultorio">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="nombre" type="xs:string" minOccurs="0"/>
+      <xs:element name="direccion" type="xs:string" minOccurs="0"/>
+      <xs:element name="telefono" type="xs:string" minOccurs="0"/>
+      <xs:element name="idMunicipio" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="registrarConsultorioResponse">
     <xs:sequence>
       <xs:element name="return" type="xs:string" minOccurs="0"/>
     </xs:sequence>
@@ -221,18 +221,6 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="listaMunicipios">
-    <xs:sequence>
-      <xs:element name="idDepartamento" type="xs:int"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="listaMunicipiosResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-
   <xs:complexType name="obtenerDatosCuenta">
     <xs:sequence>
       <xs:element name="correo" type="xs:string" minOccurs="0"/>
@@ -241,6 +229,18 @@
   </xs:complexType>
 
   <xs:complexType name="obtenerDatosCuentaResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="listaMunicipios">
+    <xs:sequence>
+      <xs:element name="idDepartamento" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="listaMunicipiosResponse">
     <xs:sequence>
       <xs:element name="return" type="xs:string" minOccurs="0"/>
     </xs:sequence>
@@ -283,7 +283,7 @@
       <xs:element name="sexo" type="xs:string" minOccurs="0"/>
       <xs:element name="fechaNacimiento" type="xs:string" minOccurs="0"/>
       <xs:element name="direccion" type="xs:string" minOccurs="0"/>
-      <xs:element name="telefono" type="xs:int"/>
+      <xs:element name="telefono" type="xs:string" minOccurs="0"/>
       <xs:element name="idMunicipio" type="xs:int"/>
     </xs:sequence>
   </xs:complexType>
@@ -321,7 +321,7 @@
       <xs:element name="nacionalidad" type="xs:string" minOccurs="0"/>
       <xs:element name="especializacion" type="xs:string" minOccurs="0"/>
       <xs:element name="direccion" type="xs:string" minOccurs="0"/>
-      <xs:element name="telefono" type="xs:int"/>
+      <xs:element name="telefono" type="xs:string" minOccurs="0"/>
       <xs:element name="idMunicipio" type="xs:int"/>
     </xs:sequence>
   </xs:complexType>
@@ -340,7 +340,7 @@
       <xs:element name="nuevaClave" type="xs:string" minOccurs="0"/>
       <xs:element name="nombre" type="xs:string" minOccurs="0"/>
       <xs:element name="direccion" type="xs:string" minOccurs="0"/>
-      <xs:element name="telefono" type="xs:int"/>
+      <xs:element name="telefono" type="xs:string" minOccurs="0"/>
       <xs:element name="idMunicipio" type="xs:int"/>
     </xs:sequence>
   </xs:complexType>
