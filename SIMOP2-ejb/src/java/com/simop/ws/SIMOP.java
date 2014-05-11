@@ -558,16 +558,16 @@ public class SIMOP {
 
                                         Paciente p = temp.getPaciente();
                                         
-                                        boolean tieneMedico = false;
+//                                        boolean tieneMedico = false;
+//                                        
+//                                        for(Atiende mp : p.getAtiendeList()){
+//                                            
+//                                            if(mp.getMedico() != null){
+//                                                tieneMedico = true;
+//                                            }
+//                                        }
                                         
-                                        for(Atiende mp : p.getAtiendeList()){
-                                            
-                                            if(mp.getMedico() != null){
-                                                tieneMedico = true;
-                                            }
-                                        }
-                                        
-                                        if(!tieneMedico){
+//                                        if(!tieneMedico){
                                             
                                             salida += p.getPacientePK().getTipoid() + ";"
                                                     + p.getPacientePK().getNumid() + ";"
@@ -577,7 +577,7 @@ public class SIMOP {
                                                     + p.getUsuarioID().getEmail() + ";"
                                                     + p.getSexo() + ";"
                                                     + Edad.calcularEdad(formato.format(p.getFechanac())) + "\n";
-                                        }
+//                                        }
                                         
                                     }
                                 }
@@ -619,6 +619,78 @@ public class SIMOP {
                         }
                     }
                 }
+
+            }
+        }
+        
+        return "fail";
+    }
+
+    /**
+     * Operacion para obtener el listado de paciente de un consultorio que no tengan medicos asignados
+     */
+    
+    @WebMethod(operationName = "listaPacientesNoMedico")
+    public String listaPacientesNoMedico(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave) {
+        
+        for (Usuario user : ejbUsuario.findAll()) {
+
+            if (user.getEmail().equals(correo) && user.getClave().equals(clave)
+                    && user.getRoll().equals("consultorio")) {
+                
+                SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                
+//                if(user.getRoll().equals("consultorio")){
+                    
+                List<Consultorio> con = user.getConsultorioList();
+
+                for (Consultorio c : con) {
+
+                    if (c.getUsuarioID().getId() == user.getId()) {
+                        
+//                            if(soloConsultorio){
+
+                        List<SolicitudConsultorio> solicitud = ejbSolicitudConsultorio.findAll();
+
+                        String salida = "";
+
+                        for(SolicitudConsultorio temp : solicitud){
+                            
+                            if(temp.getConsultorio().getIdconsultorio() == c.getIdconsultorio()
+                                    && temp.getEstado().equals("aprobado")){
+
+                                Paciente p = temp.getPaciente();
+
+                                boolean tieneMedico = false;
+
+                                for(Atiende mp : p.getAtiendeList()){
+
+                                    if(mp.getMedico() != null){
+                                        tieneMedico = true;
+                                    }
+                                }
+
+                                if(!tieneMedico){
+
+                                    salida += p.getPacientePK().getTipoid() + ";"
+                                            + p.getPacientePK().getNumid() + ";"
+                                            + p.getUsuarioID().getNombres() + ";"
+                                            + p.getApellidos() + ";"
+                                            + p.getUsuarioID().getTelefono() + ";"
+                                            + p.getUsuarioID().getEmail() + ";"
+                                            + p.getSexo() + ";"
+                                            + Edad.calcularEdad(formato.format(p.getFechanac())) + "\n";
+                                }
+
+                            }
+                        }
+
+                        return salida;
+
+//                            }
+                    }
+                }
+//                }
 
             }
         }
@@ -957,7 +1029,7 @@ public class SIMOP {
     }
 
     /**
-     * Web service operation
+     * Operacion para obtener el historial de un paciente
      */
     @WebMethod(operationName = "obtenerHistorial")
     public String obtenerHistorial(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
@@ -1127,7 +1199,139 @@ public class SIMOP {
                         
                         // encontramos al paciete
                         XmlHl7 historial = new XmlHl7();
-        
+
+                        historial.setMunicipioPaciente(paciente.getUsuarioID().getMunicipioIdmunicipio().getNombre());
+                        historial.setDepartamentoPaciente(paciente.getUsuarioID().getMunicipioIdmunicipio()
+                                .getDepartamentoIddepartamento().getNombre());
+
+                        String nombres = paciente.getUsuarioID().getNombres();
+
+                        int pos = nombres.indexOf(" ");
+
+                        if (pos == -1) {
+
+                            historial.setNombre1Paciente(nombres);
+                            historial.setNombre2Paciente("");
+                        } else {
+
+                            String[] temp = nombres.split(" ");
+                            historial.setNombre1Paciente(temp[0]);
+                            historial.setNombre2Paciente(temp[1]);
+                        }
+
+                        String apellidos = paciente.getApellidos();
+
+                        int pos2 = apellidos.indexOf(" ");
+
+                        if (pos2 == -1) {
+
+                            historial.setApellido1Paciente(apellidos);
+                            historial.setApellido2Paciente("");
+                        } else {
+
+                            String[] temp2 = apellidos.split(" ");
+                            historial.setApellido1Paciente(temp2[0]);
+                            historial.setApellido2Paciente(temp2[1]);
+                        }
+
+                        String codGenero = "" + paciente.getSexo().charAt(0);
+
+                        codGenero = codGenero.toUpperCase();
+
+                        if (codGenero.equals("F") || codGenero.equals("M")) {
+                            historial.setCodigoGeneroPaciente(codGenero);
+                        } else {
+                            historial.setCodigoGeneroPaciente("ND");
+                        }
+
+                        historial.setGeneroPaciente(paciente.getSexo());
+
+                        boolean encontroConsultorio = false;
+
+                        historial.setTelefonoConsultorio("");
+                        historial.setMunicipioConsultorio("");
+                        historial.setDepartamentoConsultorio("");
+
+                        for (Atiende atiende : paciente.getAtiendeList()) {
+
+                            if (atiende.getPaciente().getPacientePK().getNumid() == paciente.getPacientePK().getNumid()
+                                    && atiende.getPaciente().getPacientePK().getTipoid().equals(paciente
+                                            .getPacientePK().getTipoid())) {
+
+                                Consultorio consultorio = null;
+
+                                if (!atiende.getMedico().getConsultorioList().isEmpty()) {
+
+                                    consultorio = atiende.getMedico().getConsultorioList().get(0);
+                                }
+
+                                if (consultorio != null) {
+
+                                    historial.setTelefonoConsultorio("" + consultorio.getUsuarioID().getTelefono());
+                                    historial.setMunicipioConsultorio(consultorio.getUsuarioID()
+                                            .getMunicipioIdmunicipio().getNombre());
+                                    historial.setDepartamentoConsultorio(consultorio.getUsuarioID()
+                                            .getMunicipioIdmunicipio().getDepartamentoIddepartamento().getNombre());
+
+                                    encontroConsultorio = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!encontroConsultorio) {
+
+                            for (SolicitudConsultorio solicitud : paciente.getSolicitudConsultorioList()) {
+
+                                if (solicitud.getPaciente().getPacientePK().getNumid() == paciente.getPacientePK().getNumid()
+                                        && solicitud.getPaciente().getPacientePK().getTipoid().equals(paciente
+                                                .getPacientePK().getTipoid()) && solicitud.getEstado().equals("aprobado")) {
+
+                                    Usuario usuarioConsul = solicitud.getConsultorio().getUsuarioID();
+
+                                    historial.setTelefonoConsultorio("" + usuarioConsul.getTelefono());
+                                    historial.setMunicipioConsultorio(usuarioConsul.getMunicipioIdmunicipio()
+                                            .getNombre());
+                                    historial.setDepartamentoConsultorio(usuarioConsul.getMunicipioIdmunicipio()
+                                            .getDepartamentoIddepartamento().getNombre());
+
+                                    break;
+                                }
+                            }
+                        }
+
+                        ArrayList<String[]> datosHistorial = new ArrayList<>();
+
+                        for (Chequeo chequeo : paciente.getChequeoList()) {
+
+                            String[] temp = new String[6];
+
+                            temp[0] = chequeo.getTipochequeo();
+                            temp[1] = chequeo.getValor();
+                            temp[2] = chequeo.getUnidades();
+                            temp[3] = "";
+
+                            for (Tip tip : ejbTip.findAll()) {
+
+                                String tipo = temp[0].equals("arritmia") ? "ritmo_cardiaco" : temp[0];
+
+                                if (tip.getTipochequeo().equals(tipo) && tip.getEstado().equals("normal")) {
+
+                                    temp[3] = tip.getMin() + " - " + tip.getMax();
+                                    break;
+                                }
+                            }
+//                                    temp[3] = chequeo
+                            temp[4] = chequeo.getTipIdtip().getEstado();
+                            temp[5] = chequeo.getTipIdtip().getDescripcion();
+
+                            datosHistorial.add(temp);
+                        }
+
+                        historial.setDatosHistorial(datosHistorial);
+
+                        historial.procesarXmlHl7();
+
                         return historial.getXmlInString();
                         //break;
                     case 2:
@@ -1137,9 +1341,140 @@ public class SIMOP {
                             return "fail";
                         }
                         
-                        // encontramos al paciete
                         XmlHl7 historial2 = new XmlHl7();
-        
+
+                        historial2.setMunicipioPaciente(paciente2.getUsuarioID().getMunicipioIdmunicipio().getNombre());
+                        historial2.setDepartamentoPaciente(paciente2.getUsuarioID().getMunicipioIdmunicipio()
+                                .getDepartamentoIddepartamento().getNombre());
+
+                        String nombres2 = paciente2.getUsuarioID().getNombres();
+
+                        int pos3 = nombres2.indexOf(" ");
+
+                        if (pos3 == -1) {
+
+                            historial2.setNombre1Paciente(nombres2);
+                            historial2.setNombre2Paciente("");
+                        } else {
+
+                            String[] temp = nombres2.split(" ");
+                            historial2.setNombre1Paciente(temp[0]);
+                            historial2.setNombre2Paciente(temp[1]);
+                        }
+
+                        String apellidos2 = paciente2.getApellidos();
+
+                        int pos4 = apellidos2.indexOf(" ");
+
+                        if (pos4 == -1) {
+
+                            historial2.setApellido1Paciente(apellidos2);
+                            historial2.setApellido2Paciente("");
+                        } else {
+
+                            String[] temp2 = apellidos2.split(" ");
+                            historial2.setApellido1Paciente(temp2[0]);
+                            historial2.setApellido2Paciente(temp2[1]);
+                        }
+
+                        String codGenero2 = "" + paciente2.getSexo().charAt(0);
+
+                        codGenero2 = codGenero2.toUpperCase();
+
+                        if (codGenero2.equals("F") || codGenero2.equals("M")) {
+                            historial2.setCodigoGeneroPaciente(codGenero2);
+                        } else {
+                            historial2.setCodigoGeneroPaciente("ND");
+                        }
+
+                        historial2.setGeneroPaciente(paciente2.getSexo());
+
+                        boolean encontroConsultorio2 = false;
+
+                        historial2.setTelefonoConsultorio("");
+                        historial2.setMunicipioConsultorio("");
+                        historial2.setDepartamentoConsultorio("");
+
+                        for (Atiende atiende : paciente2.getAtiendeList()) {
+
+                            if (atiende.getPaciente().getPacientePK().getNumid() == paciente2.getPacientePK().getNumid()
+                                    && atiende.getPaciente().getPacientePK().getTipoid().equals(paciente2
+                                            .getPacientePK().getTipoid())) {
+
+                                Consultorio consultorio = null;
+
+                                if (!atiende.getMedico().getConsultorioList().isEmpty()) {
+
+                                    consultorio = atiende.getMedico().getConsultorioList().get(0);
+                                }
+
+                                if (consultorio != null) {
+
+                                    historial2.setTelefonoConsultorio("" + consultorio.getUsuarioID().getTelefono());
+                                    historial2.setMunicipioConsultorio(consultorio.getUsuarioID()
+                                            .getMunicipioIdmunicipio().getNombre());
+                                    historial2.setDepartamentoConsultorio(consultorio.getUsuarioID()
+                                            .getMunicipioIdmunicipio().getDepartamentoIddepartamento().getNombre());
+
+                                    encontroConsultorio2 = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!encontroConsultorio2) {
+
+                            for (SolicitudConsultorio solicitud : paciente2.getSolicitudConsultorioList()) {
+
+                                if (solicitud.getPaciente().getPacientePK().getNumid() == paciente2.getPacientePK().getNumid()
+                                        && solicitud.getPaciente().getPacientePK().getTipoid().equals(paciente2
+                                                .getPacientePK().getTipoid()) && solicitud.getEstado().equals("aprobado")) {
+
+                                    Usuario usuarioConsul = solicitud.getConsultorio().getUsuarioID();
+
+                                    historial2.setTelefonoConsultorio("" + usuarioConsul.getTelefono());
+                                    historial2.setMunicipioConsultorio(usuarioConsul.getMunicipioIdmunicipio()
+                                            .getNombre());
+                                    historial2.setDepartamentoConsultorio(usuarioConsul.getMunicipioIdmunicipio()
+                                            .getDepartamentoIddepartamento().getNombre());
+
+                                    break;
+                                }
+                            }
+                        }
+
+                        ArrayList<String[]> datosHistorial2 = new ArrayList<>();
+
+                        for (Chequeo chequeo : paciente2.getChequeoList()) {
+
+                            String[] temp = new String[6];
+
+                            temp[0] = chequeo.getTipochequeo();
+                            temp[1] = chequeo.getValor();
+                            temp[2] = chequeo.getUnidades();
+                            temp[3] = "";
+
+                            for (Tip tip : ejbTip.findAll()) {
+
+                                String tipo = temp[0].equals("arritmia") ? "ritmo_cardiaco" : temp[0];
+
+                                if (tip.getTipochequeo().equals(tipo) && tip.getEstado().equals("normal")) {
+
+                                    temp[3] = tip.getMin() + " - " + tip.getMax();
+                                    break;
+                                }
+                            }
+//                                    temp[3] = chequeo
+                            temp[4] = chequeo.getTipIdtip().getEstado();
+                            temp[5] = chequeo.getTipIdtip().getDescripcion();
+
+                            datosHistorial2.add(temp);
+                        }
+
+                        historial2.setDatosHistorial(datosHistorial2);
+
+                        historial2.procesarXmlHl7();
+
                         return historial2.getXmlInString();
                         //break;
                 }
@@ -1486,6 +1821,59 @@ public class SIMOP {
     }
     
     /**
+     * Operacion mediante la cual un consultorio puede relacionar un paciente relacionado con el conultorio a un medico
+     * de dicho consultorio
+     */
+    @WebMethod(operationName = "aprobarSolicitudCaM")
+    public String aprobarSolicitudCaM(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
+            @WebParam(name = "tipoId") String tipoId, @WebParam(name = "numeroId") String numeroId,
+            @WebParam(name = "cedulaMedico") int cedulaMedico){
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)
+                    && usuario.getRoll().equals("consultorio")){
+                
+                for(Consultorio consultorio : usuario.getConsultorioList()){
+                    
+                    if(consultorio.getUsuarioID().getId() == usuario.getId()){
+                        
+                        PacientePK ppk = new PacientePK(Integer.parseInt(numeroId), tipoId);
+                        
+                        Paciente paciente = ejbPaciente.find(ppk);
+                        
+                        if(paciente == null){
+                            return "fail";
+                        }
+                        
+                        Medico medico = ejbMedico.find(cedulaMedico);
+                        
+                        if(medico == null){
+                            return "fail";
+                        }
+                        
+                        if(medico.getConsultorioList().get(0).getIdconsultorio() == consultorio.getIdconsultorio()){
+                            
+                            Atiende atiende = new Atiende(medico.getCedulaMedico(), paciente.getPacientePK().getNumid(),
+                                    paciente.getPacientePK().getTipoid());
+                            
+                            atiende.setFechaInicioAtencion(Calendar.getInstance().getTime());
+
+                            ejbAtiende.create(atiende);
+                            
+                            return "ok";
+                        } else {
+                            return "fail";
+                        }
+                    }
+                }
+            }
+        }
+        
+        return "fail";
+    }
+    
+    /**
      * Operacion mediante la cual un medico o consultorio puede desaprobar la solicitud hecha por un paciente
      */
     @WebMethod(operationName = "rechazarSolicitud")
@@ -1521,19 +1909,19 @@ public class SIMOP {
                                 
                                 ejbSolicitudMedico.edit(solicitud);
                                 
-                                Paciente paciente = ejbPaciente.find(new PacientePK(Integer.parseInt(numeroId), tipoId));
-                                
-                                if(paciente == null){
-                                    return "fail";
-                                }
-                                
-                                Atiende atiende = new Atiende(medico.getCedulaMedico(), paciente.getPacientePK().getNumid(),
-                                        paciente.getPacientePK().getTipoid());
-//                                atiende.setMedico(medico);
-//                                atiende.setPaciente(paciente);
-                                atiende.setFechaInicioAtencion(Calendar.getInstance().getTime());
-                                
-                                ejbAtiende.create(atiende);
+//                                Paciente paciente = ejbPaciente.find(new PacientePK(Integer.parseInt(numeroId), tipoId));
+//                                
+//                                if(paciente == null){
+//                                    return "fail";
+//                                }
+//                                
+//                                Atiende atiende = new Atiende(medico.getCedulaMedico(), paciente.getPacientePK().getNumid(),
+//                                        paciente.getPacientePK().getTipoid());
+////                                atiende.setMedico(medico);
+////                                atiende.setPaciente(paciente);
+//                                atiende.setFechaInicioAtencion(Calendar.getInstance().getTime());
+//                                
+//                                ejbAtiende.create(atiende);
                                 
                                 return "ok";
                             }
@@ -1703,7 +2091,7 @@ public class SIMOP {
     }
 
     /**
-     * Web service operation
+     * Metodo para que cualquier usuario recupere su constraseña la cual sera enviada a su correo
      */
     @WebMethod(operationName = "recuperarClave")
     public String recuperarClave(@WebParam(name = "correo") String correo) {
@@ -1788,16 +2176,14 @@ public class SIMOP {
                     
                     ejbUsuario.edit(usuario);
                     
-                    //GCM.send("registro", regGCM, "mensaje que todabia no se utiliza");
-                    
                     return "ok";
                 }
                 
-                return "fail1";
+                return "fail";
             }
         }
         
-        return "fail2";
+        return "fail";
     }
 
     /**
@@ -1973,6 +2359,44 @@ public class SIMOP {
                 ejbUsuario.edit(usuario);
                 
                 return "ok";
+            }
+        }
+        
+        return "fail";
+    }
+
+    /**
+     * Metodo mediante el cual un consultorio relaciona a un medico con este
+     */
+    @WebMethod(operationName = "relacionarMedicoConsultorio")
+    public String relacionarMedicoConsultorio(@WebParam(name = "correo") String correo,
+            @WebParam(name = "clave") String clave, @WebParam(name = "cedulaMedico") int cedulaMedico) {
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)
+                    && usuario.getRoll().equals("consultorio")){
+                
+                for(Consultorio consultorio : ejbConsultorio.findAll()){
+                    
+                    if(consultorio.getUsuarioID().getId() == usuario.getId()){
+                        
+                        Medico medico = ejbMedico.find(cedulaMedico);
+                        
+                        if(medico == null){
+                            return "fail";
+                        }
+                        
+                        List<Consultorio> consultorioList = medico.getConsultorioList();
+                        consultorioList.add(consultorio);
+                        
+                        medico.setConsultorioList(consultorioList);
+                        
+                        ejbMedico.edit(medico);
+                        
+                        return "ok";
+                    }
+                }
             }
         }
         

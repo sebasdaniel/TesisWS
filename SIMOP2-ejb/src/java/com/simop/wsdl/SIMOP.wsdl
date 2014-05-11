@@ -42,6 +42,12 @@
   <message name="listaPacientesResponse">
     <part name="parameters" element="tns:listaPacientesResponse"/>
   </message>
+  <message name="listaPacientesNoMedico">
+    <part name="parameters" element="tns:listaPacientesNoMedico"/>
+  </message>
+  <message name="listaPacientesNoMedicoResponse">
+    <part name="parameters" element="tns:listaPacientesNoMedicoResponse"/>
+  </message>
   <message name="listarSolicitudes">
     <part name="parameters" element="tns:listarSolicitudes"/>
   </message>
@@ -101,6 +107,12 @@
   </message>
   <message name="aprobarSolicitudResponse">
     <part name="parameters" element="tns:aprobarSolicitudResponse"/>
+  </message>
+  <message name="aprobarSolicitudCaM">
+    <part name="parameters" element="tns:aprobarSolicitudCaM"/>
+  </message>
+  <message name="aprobarSolicitudCaMResponse">
+    <part name="parameters" element="tns:aprobarSolicitudCaMResponse"/>
   </message>
   <message name="rechazarSolicitud">
     <part name="parameters" element="tns:rechazarSolicitud"/>
@@ -168,6 +180,12 @@
   <message name="actualizarConsultorioResponse">
     <part name="parameters" element="tns:actualizarConsultorioResponse"/>
   </message>
+  <message name="relacionarMedicoConsultorio">
+    <part name="parameters" element="tns:relacionarMedicoConsultorio"/>
+  </message>
+  <message name="relacionarMedicoConsultorioResponse">
+    <part name="parameters" element="tns:relacionarMedicoConsultorioResponse"/>
+  </message>
   <portType name="SIMOP">
     <operation name="listaMedicos">
       <input wsam:Action="http://ws.simop.com/SIMOP/listaMedicosRequest" message="tns:listaMedicos"/>
@@ -192,6 +210,10 @@
     <operation name="listaPacientes">
       <input wsam:Action="http://ws.simop.com/SIMOP/listaPacientesRequest" message="tns:listaPacientes"/>
       <output wsam:Action="http://ws.simop.com/SIMOP/listaPacientesResponse" message="tns:listaPacientesResponse"/>
+    </operation>
+    <operation name="listaPacientesNoMedico">
+      <input wsam:Action="http://ws.simop.com/SIMOP/listaPacientesNoMedicoRequest" message="tns:listaPacientesNoMedico"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/listaPacientesNoMedicoResponse" message="tns:listaPacientesNoMedicoResponse"/>
     </operation>
     <operation name="listarSolicitudes">
       <input wsam:Action="http://ws.simop.com/SIMOP/listarSolicitudesRequest" message="tns:listarSolicitudes"/>
@@ -232,6 +254,10 @@
     <operation name="aprobarSolicitud">
       <input wsam:Action="http://ws.simop.com/SIMOP/aprobarSolicitudRequest" message="tns:aprobarSolicitud"/>
       <output wsam:Action="http://ws.simop.com/SIMOP/aprobarSolicitudResponse" message="tns:aprobarSolicitudResponse"/>
+    </operation>
+    <operation name="aprobarSolicitudCaM">
+      <input wsam:Action="http://ws.simop.com/SIMOP/aprobarSolicitudCaMRequest" message="tns:aprobarSolicitudCaM"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/aprobarSolicitudCaMResponse" message="tns:aprobarSolicitudCaMResponse"/>
     </operation>
     <operation name="rechazarSolicitud">
       <input wsam:Action="http://ws.simop.com/SIMOP/rechazarSolicitudRequest" message="tns:rechazarSolicitud"/>
@@ -276,6 +302,10 @@
     <operation name="actualizarConsultorio">
       <input wsam:Action="http://ws.simop.com/SIMOP/actualizarConsultorioRequest" message="tns:actualizarConsultorio"/>
       <output wsam:Action="http://ws.simop.com/SIMOP/actualizarConsultorioResponse" message="tns:actualizarConsultorioResponse"/>
+    </operation>
+    <operation name="relacionarMedicoConsultorio">
+      <input wsam:Action="http://ws.simop.com/SIMOP/relacionarMedicoConsultorioRequest" message="tns:relacionarMedicoConsultorio"/>
+      <output wsam:Action="http://ws.simop.com/SIMOP/relacionarMedicoConsultorioResponse" message="tns:relacionarMedicoConsultorioResponse"/>
     </operation>
   </portType>
   <binding name="SIMOPPortBinding" type="tns:SIMOP">
@@ -334,6 +364,15 @@
         <soap:body use="literal"/>
       </output>
     </operation>
+    <operation name="listaPacientesNoMedico">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
     <operation name="listarSolicitudes">
       <soap:operation soapAction=""/>
       <input>
@@ -416,6 +455,15 @@
       </output>
     </operation>
     <operation name="aprobarSolicitud">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="aprobarSolicitudCaM">
       <soap:operation soapAction=""/>
       <input>
         <soap:body use="literal"/>
@@ -515,6 +563,15 @@
       </output>
     </operation>
     <operation name="actualizarConsultorio">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="relacionarMedicoConsultorio">
       <soap:operation soapAction=""/>
       <input>
         <soap:body use="literal"/>

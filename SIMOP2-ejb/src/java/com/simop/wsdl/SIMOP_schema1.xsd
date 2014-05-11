@@ -7,6 +7,10 @@
 
   <xs:element name="aprobarSolicitud" type="tns:aprobarSolicitud"/>
 
+  <xs:element name="aprobarSolicitudCaM" type="tns:aprobarSolicitudCaM"/>
+
+  <xs:element name="aprobarSolicitudCaMResponse" type="tns:aprobarSolicitudCaMResponse"/>
+
   <xs:element name="aprobarSolicitudResponse" type="tns:aprobarSolicitudResponse"/>
 
   <xs:element name="buscarConsultorio" type="tns:buscarConsultorio"/>
@@ -46,6 +50,10 @@
   <xs:element name="listaMunicipiosResponse" type="tns:listaMunicipiosResponse"/>
 
   <xs:element name="listaPacientes" type="tns:listaPacientes"/>
+
+  <xs:element name="listaPacientesNoMedico" type="tns:listaPacientesNoMedico"/>
+
+  <xs:element name="listaPacientesNoMedicoResponse" type="tns:listaPacientesNoMedicoResponse"/>
 
   <xs:element name="listaPacientesResponse" type="tns:listaPacientesResponse"/>
 
@@ -104,6 +112,10 @@
   <xs:element name="registrarPaciente" type="tns:registrarPaciente"/>
 
   <xs:element name="registrarPacienteResponse" type="tns:registrarPacienteResponse"/>
+
+  <xs:element name="relacionarMedicoConsultorio" type="tns:relacionarMedicoConsultorio"/>
+
+  <xs:element name="relacionarMedicoConsultorioResponse" type="tns:relacionarMedicoConsultorioResponse"/>
 
   <xs:element name="validarUsuario" type="tns:validarUsuario"/>
 
@@ -234,6 +246,22 @@
     </xs:sequence>
   </xs:complexType>
 
+  <xs:complexType name="aprobarSolicitudCaM">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="tipoId" type="xs:string" minOccurs="0"/>
+      <xs:element name="numeroId" type="xs:string" minOccurs="0"/>
+      <xs:element name="cedulaMedico" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="aprobarSolicitudCaMResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="listaMunicipios">
     <xs:sequence>
       <xs:element name="idDepartamento" type="xs:int"/>
@@ -304,6 +332,20 @@
   </xs:complexType>
 
   <xs:complexType name="obtenerAlertasPacienteResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="relacionarMedicoConsultorio">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+      <xs:element name="cedulaMedico" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="relacionarMedicoConsultorioResponse">
     <xs:sequence>
       <xs:element name="return" type="xs:string" minOccurs="0"/>
     </xs:sequence>
@@ -515,6 +557,19 @@
   </xs:complexType>
 
   <xs:complexType name="hacerSolicitudResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="listaPacientesNoMedico">
+    <xs:sequence>
+      <xs:element name="correo" type="xs:string" minOccurs="0"/>
+      <xs:element name="clave" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="listaPacientesNoMedicoResponse">
     <xs:sequence>
       <xs:element name="return" type="xs:string" minOccurs="0"/>
     </xs:sequence>

@@ -350,7 +350,7 @@ public class XmlHl7 {
             nodoSection.appendChild(nodoCode);
             
             nodoTitle = document.createElement("title");
-            nodoTitle.appendChild(document.createTextNode("NOTA DE EVOLUCIÓN"));
+            nodoTitle.appendChild(document.createTextNode("NOTA DE EVOLUCION"));
             
             nodoSection.appendChild(nodoTitle);
             
@@ -381,7 +381,7 @@ public class XmlHl7 {
             nodoTr.appendChild(nodoTh);
             
             nodoTh = document.createElement("th");
-            nodoTh.appendChild(document.createTextNode("Descripción"));
+            nodoTh.appendChild(document.createTextNode("Descripcion"));
             nodoTr.appendChild(nodoTh);
             
             nodoThead.appendChild(nodoTr);
