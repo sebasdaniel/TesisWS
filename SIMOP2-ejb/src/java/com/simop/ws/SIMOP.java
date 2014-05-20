@@ -251,6 +251,7 @@ public class SIMOP {
             Antecedente antecedente = new Antecedente();
             antecedente.setChequeoIdchequeo(chequeo);
             antecedente.setPaciente(usuarioPaciente);
+            antecedente.setVista(Boolean.FALSE);
             ejbAntecedente.create(antecedente);
             
             for(Atiende atiende : usuarioPaciente.getAtiendeList()){
@@ -1562,7 +1563,7 @@ public class SIMOP {
                         }
                         
                         if(misPacientes.isEmpty()){
-                            return "";
+                            return "fail";
                         }
                         
                         String salida = "";
@@ -1606,9 +1607,121 @@ public class SIMOP {
             }
         }
         
-        return "";
+        return "fail";
     }
     
+    /**
+     * Operacion mediante la cual un medico obtiene una lista de los antecedentes que no haya visto de todos sus pacientes
+     */
+    @WebMethod(operationName = "obtenerAlertasNoVistas")
+    public String obtenerAlertasNoVistas(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave) {
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)
+                    && usuario.getRoll().equals("medico")){
+                
+                List<Medico> medicos = usuario.getMedicoList();
+                
+                for(Medico medico : medicos){
+                    
+                    if(medico.getUsuarioID().getId() == usuario.getId()){
+                        
+                        List<Atiende> atenciones = ejbAtiende.findAll();
+                        
+                        List<Paciente> misPacientes = new ArrayList<>();
+                        
+                        for(Atiende atencion : atenciones){
+                            
+                            if(atencion.getMedico().getCedulaMedico() == medico.getCedulaMedico()){
+                                
+                                misPacientes.add(atencion.getPaciente());
+                            }
+                        }
+                        
+                        if(misPacientes.isEmpty()){
+                            return "fail";
+                        }
+                        
+                        String salida = "";
+                        
+                        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
+                        
+                        List<Antecedente> antecedentes = ejbAntecedente.findAll();
+                        
+                        for(Paciente paciente : misPacientes){
+                            
+                            for(Antecedente antecedente : antecedentes){
+                                
+                                Paciente temp = antecedente.getPaciente();
+                                
+                                if(temp.getPacientePK().getNumid() == paciente.getPacientePK().getNumid() &&
+                                        temp.getPacientePK().getTipoid().equals(paciente.getPacientePK().getTipoid())
+                                        && antecedente.getVista() == Boolean.FALSE){
+                                    
+                                    Chequeo c = antecedente.getChequeoIdchequeo();
+                                    
+                                    salida += antecedente.getIdantecedente() + ";"
+                                            + temp.getPacientePK().getTipoid() + ";"
+                                            + temp.getPacientePK().getNumid() + ";"
+                                            + temp.getUsuarioID().getNombres() + " "
+                                            + temp.getApellidos() + ";"
+                                            + formatoFecha.format(c.getFecha()) + ";"
+                                            + formatoHora.format(c.getHora()) + ";"
+                                            + c.getTipochequeo() + ";"
+                                            + c.getValor() + ";"
+                                            + c.getUnidades() + ";"
+                                            + c.getTipIdtip().getEstado() + ";"
+                                            + c.getLatitud() + ";"
+                                            + c.getLongitud() + "\n";
+                                }
+                            }
+                        }
+                        
+                        return salida;
+                    }
+                }
+                
+            }
+        }
+        
+        return "fail";
+    }
+    
+    /**
+     * Metodo a traves del cual se establece una alerta como vista
+     * @param correo
+     * @param clave
+     * @param idAntecedente
+     * @return 
+     */
+    @WebMethod(operationName = "alertaVista")
+    public String alertaVista(@WebParam(name = "correo") String correo, @WebParam(name = "clave") String clave,
+            @WebParam(name = "idAntecedente") int idAntecedente){
+        
+        for(Usuario usuario : ejbUsuario.findAll()){
+            
+            if(usuario.getEmail().equals(correo) && usuario.getClave().equals(clave)
+                    && usuario.getRoll().equals("medico")){
+                
+                Antecedente antecedente = ejbAntecedente.find(idAntecedente);
+                
+                if(antecedente == null){
+                    return "fail";
+                }
+                
+                antecedente.setVista(Boolean.TRUE);
+                
+                ejbAntecedente.edit(antecedente);
+                
+                return "ok";
+            }
+        }
+        
+        return "fail";
+    }
+     
     /**
      * Operacion mediante la cual un medico obtiene una lista de los antecedentes de un paciente determinado
      */
@@ -2225,12 +2338,14 @@ public class SIMOP {
                             
                             if(paciente.getUsuarioID().getId() == usuario.getId()){
                                 
+                                SimpleDateFormat formato = new SimpleDateFormat("yyy-MM-dd");
+                                
                                 String salida = paciente.getPacientePK().getNumid() + ";"
                                         + paciente.getPacientePK().getTipoid() + ";"
                                         + paciente.getUsuarioID().getNombres() + ";"
                                         + paciente.getApellidos() + ";"
                                         + paciente.getSexo() + ";"
-                                        + paciente.getFechanac() + ";"
+                                        + formato.format(paciente.getFechanac()) + ";"
                                         + paciente.getUsuarioID().getDireccion() + ";"
                                         + paciente.getUsuarioID().getTelefono() + ";"
                                         + paciente.getUsuarioID().getEmail() + ";"
